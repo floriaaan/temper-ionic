@@ -9,8 +9,8 @@ export class Probe extends React.Component {
     this.state = {
       name: "CPU de Turing",
       user: 1,
-      lastmeasure: {},
       state: false,
+      lastmeasure: {},
       loading: true,
     };
   }
@@ -20,17 +20,20 @@ export class Probe extends React.Component {
 
   render() {
     return (
-      <Box w="lg" borderColor="gray.100" borderWidth="1px" p={4} rounded="lg">
+      <Box w="lg" borderWidth="10px" p={4}>
         <Skeleton isLoaded={!this.state.loading}>
           <Heading>{this.state.name}</Heading>
+        </Skeleton>
+        <Skeleton isLoaded={!this.state.loading}>
           <Stack isInline>
             <Badge variantColor={this.state.state ? "green" : "red"}>
               {this.state.state ? "Activée" : "Désactivée"}
             </Badge>
           </Stack>
+        </Skeleton>
+        <Skeleton isLoaded={!this.state.loading}>
           <Text fontSize="md">
-            {this.state.lastmeasure.temp}°C -{" "}
-            {this.state.lastmeasure.humid}%
+            {this.state.lastmeasure.temp}°C - {this.state.lastmeasure.humid}%
           </Text>
         </Skeleton>
       </Box>
