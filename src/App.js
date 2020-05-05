@@ -1,25 +1,18 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.scss";
+import { ThemeProvider, ColorModeProvider, Flex } from "@chakra-ui/core";
+import { Probe } from "./components/Probe/Probe";
+import { temper } from "./themes/temper"
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={temper}>
+      <ColorModeProvider>
+        <Flex justify="center">
+          <Probe />
+        </Flex>
+      </ColorModeProvider>
+    </ThemeProvider>
   );
 }
 
