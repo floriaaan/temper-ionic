@@ -254,5 +254,53 @@ class Probe(Resource):
             }, 400
 
 
+@api.route("/temper/api/v1/probe/<int:id>/toggle")
+class ProbeChangeState(Resource):
+    @api.response(200, 'Probe : State of probe changed')
+    @api.response(400, 'Probe : Error')
+    @api.response(403, 'Probe : Error, forbidden access')
+    def put(self, id):
+        """
+        Change state of one probe (active or not)
+        :param id:
+        :return:
+        """
+        try:
+            dbCursor.execute("SELECT state FROM probes WHERE id = %s" % id)
+            activity = dbCursor.fetchone()[0]
+            if (activity == 1):
+                dbCursor.execute(
+                    "UPDATE probes SET state = 0 WHERE id = %s" % id)
+                temperDB.commit()
+                return {
+                    'response': {
+                        'id': id,
+                        'state': 0
+                    },
+                    'error': {'flag': False}
+                }, 200
+
+            elif (activity == 0):
+                dbCursor.execute(
+                    "UPDATE probes SET state = 1 WHERE id = %s" % id)
+                temperDB.commit()
+                return {
+                    'response': {
+                        'id': id,
+                        'state': 1
+                    },
+                    'error': {'flag': False}
+                }, 200
+
+        except Exception as e:
+            return {
+                'response': {
+                    'id': id,
+                    'state': 'undefined'
+                },
+                'error': {'flag': True, 'type': str(e)}
+            }, 400
+
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", threaded=True)

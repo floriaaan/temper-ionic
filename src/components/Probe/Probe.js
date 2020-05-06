@@ -1,6 +1,15 @@
 import React from "react";
-import { Box, Skeleton, Heading, Text, Stack, Badge } from "@chakra-ui/core";
-import { retrieveProbe } from "../../assets/api.js";
+import {
+  Box,
+  Skeleton,
+  Heading,
+  Text,
+  Stack,
+  Badge,
+  Button,
+
+} from "@chakra-ui/core";
+import { retrieveProbe, toggleState } from "../../assets/api.js";
 import "./Probe.scss";
 
 export class Probe extends React.Component {
@@ -13,10 +22,9 @@ export class Probe extends React.Component {
       gps: {},
       loading: true,
     };
+    retrieveProbe(this)
   }
-  componentDidMount() {
-    retrieveProbe(this);
-  }
+
 
   render() {
     return (
@@ -40,7 +48,7 @@ export class Probe extends React.Component {
             {this.state.lastmeasure.humidity !== 0
               ? this.state.lastmeasure.humidity + "%"
               : "❌"}{" "}
-            {this.state.lastmeasure.date !== 'None'
+            {this.state.lastmeasure.date !== "None"
               ? "at " + this.state.lastmeasure.date
               : "at ❌"}
           </Text>
@@ -58,6 +66,17 @@ export class Probe extends React.Component {
               </span>
             </Text>
           )}
+        </Skeleton>
+        <Skeleton isLoaded={!this.state.loading}>
+          <Button
+            leftIcon="drag-handle"
+            variantColor={this.state.state ? "red" : "green"}
+            variant="ghost"
+            borderWidth="0px"
+            onClick={() => toggleState(this)}
+          >
+            Toggle {this.state.name}
+          </Button>
         </Skeleton>
       </Box>
     );

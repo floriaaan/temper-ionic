@@ -1,5 +1,5 @@
 export function retrieveProbe(probe) {
-  fetch("http://localhost:5000/temper/api/v1/probe/"+ probe.state.id)
+  fetch("http://localhost:5000/temper/api/v1/probe/" + probe.state.id)
     .then((res) => res.json())
     .then(
       (result) => {
@@ -16,14 +16,9 @@ export function retrieveProbe(probe) {
           },
           lastmeasure: {
             temperature:
-              Math.round(
-                result.response.lastmeasure.temperature *
-                  100
-              ) / 100,
+              Math.round(result.response.lastmeasure.temperature * 100) / 100,
             humidity:
-              Math.round(
-                result.response.lastmeasure.humidity * 100
-              ) / 100,
+              Math.round(result.response.lastmeasure.humidity * 100) / 100,
             date: result.response.lastmeasure.date,
           },
           loading: false,
@@ -43,21 +38,36 @@ export function retrieveProbe(probe) {
 }
 
 export function retrieveUserProbes(list) {
-  fetch("http://localhost:5000/temper/api/v1/probe/user/" + list.state.user)
+  return fetch("http://localhost:5000/temper/api/v1/probe/user/" + list.props.user)
     .then((res) => res.json())
     .then(
       (result) => {
-        list.setState({
-          probes: result.response
-        })
+        return result.response
       },
       // Remarque : il est important de traiter les erreurs ici
       // au lieu d'utiliser un bloc catch(), pour ne pas passer à la trappe
       // des exceptions provenant de réels bugs du composant.
-      (error) => {
-        list.setState({
-          probes: [1,2]
-        })
+      () => {
+        return []
+      }
+    );
+}
+
+export function toggleState(probe) {
+  fetch(
+    "http://localhost:5000/temper/api/v1/probe/" + probe.state.id + "/toggle",
+    { method: "PUT" }
+  )
+    .then((res) => res.json())
+    .then(
+      (result) => {
+        probe.setState({
+          state: result.response.state,
+        });
+      },
+
+      () => {
+        retrieveProbe(probe);
       }
     );
 }

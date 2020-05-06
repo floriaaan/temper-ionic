@@ -7,14 +7,12 @@ export class ProbeList extends React.Component {
     super(props);
     this.state = {
       user: this.props.user,
-      probes: []
+      probes: retrieveUserProbes(this),
     };
-    retrieveUserProbes(this);
   }
 
   render() {
-    return (
-    this.state.probes.map((id) => <Probe id={id} />)
-    );
+    console.log(this.state.probes)
+    return this.state.probes.map((id, key) => <Probe key={key} id={id} />);
   }
 }
