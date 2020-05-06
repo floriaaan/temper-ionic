@@ -1,5 +1,5 @@
 import pymysql
-import json
+from datetime import datetime
 from flask import Flask
 from flask_restx import reqparse, Api, Resource, fields
 from flask_cors import CORS
@@ -32,41 +32,6 @@ api = Api(app=app,
           validate=True)
 cors = CORS(app)
 
-@api.route("/temper/api/v1/probe/<int:id>/measures")
-class Measure(Resource):
-    @api.response(200, 'Measure : Measure posted')
-    @api.response(400, 'Measure : Error')
-    def get(self, id):
-        """
-        Get all measures of probe corresponding to passed id
-        :param id:
-        :return:
-        """
-        
-        try:
-            result = []
-            dbCursor.execute("SELECT * from measures WHERE probe = '%s'" % id)
-            array = dbCursor.fetchall()
-
-            for i in array:
-                result.append({
-                    'id': i[0],
-                    'probe' : i[1],
-                    'temperature' : i[2],
-                    'humidity' : i[3],
-                    'date' : i[4]
-                })
-
-            return {
-                'response': result,
-                'error': {'flag': False}
-            }, 201
-
-        except Exception as e:
-
-            return {
-                'error': {'flag': True, 'type': json.dumps(str(e))}
-            }, 500
 
 @api.route("/temper/api/v1/measure/")
 class MeasurePost(Resource):
@@ -83,12 +48,14 @@ class MeasurePost(Resource):
         probe = api.payload["probe"]
         temperature = api.payload["temperature"]
         humidity = api.payload["humidity"]
+        dateNow = datetime.today()
+        dateNow = dateNow.strftime("%Y-%m-%d %H:%M:%S")
 
         try:
             dbCursor.execute(
-                "INSERT INTO measures (probe, temperature, humidity)"
-                " VALUES ('%s', '%s', '%s')"
-                % (probe, temperature, humidity))
+                "INSERT INTO measures (probe, temperature, humidity, date)"
+                " VALUES ('%s', '%s', '%s', '%s')"
+                % (probe, temperature, humidity, dateNow))
             temperDB.commit()
 
             return {
@@ -105,41 +72,33 @@ class MeasurePost(Resource):
         except Exception as e:
 
             return {
-                'error': {'flag': True, 'type': json.dumps(str(e))}
+                'error': {'flag': True, 'type': str(e)}
             }, 500
 
-@api.route("/temper/api/v1/probe/all")
-class ProbeList(Resource):
-    @api.response(200, 'Probe : List of all probes obtained')
-    @api.response(400, 'Probe : Error')
-    def get(self):
+
+@api.route("/temper/api/v1/probe/<int:id>/measures")
+class ProbeMeasures(Resource):
+    @api.response(200, 'Measure : Measure posted')
+    @api.response(400, 'Measure : Error')
+    def get(self, id):
         """
-        Get all probes of database
+        Get all measures of probe corresponding to passed id
+        :param id:
         :return:
         """
-        
+
         try:
             result = []
-            dbCursor.execute("SELECT * from probes")
+            dbCursor.execute("SELECT * from measures WHERE probe = '%s'" % id)
             array = dbCursor.fetchall()
 
             for i in array:
-                dbCursor.execute("SELECT * from measures WHERE probe = '%s' ORDER BY measures.id DESC LIMIT 1" % i[0])
-                lastMeasure = dbCursor.fetchone()
                 result.append({
                     'id': i[0],
-                    'name' : i[1],
-                    'user' : i[2],
-                    'gps_lon' : i[3],
-                    'gps_lat' : i[4],
-                    'state' : i[5],
-                    'lastmeasure': {
-                        'id': lastMeasure[0],
-                        'probe' : lastMeasure[1],
-                        'temperature' : lastMeasure[2],
-                        'humidity' : lastMeasure[3],
-                        'date' : lastMeasure[4]
-                    }
+                    'probe': i[1],
+                    'temperature': i[2],
+                    'humidity': i[3],
+                    'date': str(i[4])
                 })
 
             return {
@@ -150,8 +109,149 @@ class ProbeList(Resource):
         except Exception as e:
 
             return {
-                'error': {'flag': True, 'type': json.dumps(str(e))}
+                'error': {'flag': True, 'type': str(e)}
             }, 500
+
+
+@api.route("/temper/api/v1/probe/all")
+class ProbeList(Resource):
+    @api.response(200, 'Probe : List of all probes obtained')
+    @api.response(400, 'Probe : Error')
+    def get(self):
+        """
+        Get all probes of database
+        :return:
+        """
+
+        try:
+            result = []
+            dbCursor.execute("SELECT * from probes")
+            array = dbCursor.fetchall()
+
+            for i in array:
+                dbCursor.execute(
+                    "SELECT * from measures WHERE probe = '%s' ORDER BY measures.id DESC LIMIT 1" % i[0])
+                lastMeasure = dbCursor.fetchone()
+
+                if (lastMeasure != None):
+                    result.append({
+                        'id': i[0],
+                        'name': i[1],
+                        'user': i[2],
+                        'state': i[5],
+                        'gps': {
+                            'lon': i[3],
+                            'lat': i[4],
+                        },
+                        'lastmeasure': {
+                            'id': lastMeasure[0],
+                            'probe': lastMeasure[1],
+                            'temperature': lastMeasure[2],
+                            'humidity': lastMeasure[3],
+                            'date': str(lastMeasure[4])
+                        }
+                    })
+                else:
+                    result.append({
+                        'id': i[0],
+                        'name': i[1],
+                        'user': i[2],
+                        'state': i[5],
+                        'gps': {
+                            'lon': i[3],
+                            'lat': i[4],
+                        },
+                        'lastmeasure': {
+                            'id': None,
+                            'probe': None,
+                            'temperature': None,
+                            'humidity': None,
+                            'date': None
+                        }
+                    })
+
+            return {
+                'response': result,
+                'error': {'flag': False}
+            }, 200
+
+        except Exception as e:
+
+            return {
+                'error': {'flag': True, 'type': str(e)}
+            }, 400
+
+
+@api.route("/temper/api/v1/probe/user/<int:id>")
+class ProbeUser(Resource):
+    @api.response(200, 'Probe : List of user probes obtained')
+    @api.response(400, 'Probe : Error')
+    def get(self, id):
+        """
+        Get all probes id of a specified User
+        """
+        try:
+            dbCursor.execute("SELECT id FROM probes WHERE user = %s " % id)
+            array = dbCursor.fetchall()
+            result = []
+            for i in array:
+                result.append(i[0])
+
+            return {
+                'response': result,
+                'error': {'flag': False}
+            }, 200
+
+        except Exception as e:
+
+            return {
+                'error': {'flag': True, 'type': str(e)}
+            }, 400
+
+
+@api.route("/temper/api/v1/probe/<int:id>")
+class Probe(Resource):
+    @api.response(200, 'Probe : Probe obtained')
+    @api.response(400, 'Probe : Error')
+    def get(self, id):
+        """
+        Get specified probe
+        """
+        try:
+            dbCursor.execute(
+                "SELECT * FROM probes WHERE id = %s LIMIT 1 " % id)
+            probe = dbCursor.fetchone()
+            dbCursor.execute(
+                "SELECT * from measures WHERE probe = '%s' ORDER BY measures.id DESC LIMIT 1" % probe[0])
+            lastMeasure = dbCursor.fetchone()
+            result = {
+                'id': probe[0],
+                'name': probe[1],
+                'user': probe[2],
+                'state': probe[5],
+                'gps': {
+                    'lon': probe[3],
+                    'lat': probe[4],
+                },
+                'lastmeasure': {
+                    'id': lastMeasure[0],
+                    'probe': lastMeasure[1],
+                    'temperature': lastMeasure[2],
+                    'humidity': lastMeasure[3],
+                    'date': str(lastMeasure[4])
+                }
+            }
+
+            return {
+                'response': result,
+                'error': {'flag': False}
+            }, 200
+
+        except Exception as e:
+
+            return {
+                'error': {'flag': True, 'type': str(e)}
+            }, 400
 
 
 if __name__ == '__main__':

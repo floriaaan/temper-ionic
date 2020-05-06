@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.scss";
 import { ThemeProvider, ColorModeProvider, Flex } from "@chakra-ui/core";
-import { Probe } from "./components/Probe/Probe";
+import { ProbeList } from "./components/Probe/ProbeList";
 import { temper } from "./themes/temper"
 
 function App() {
@@ -9,7 +9,7 @@ function App() {
     <ThemeProvider theme={temper}>
       <ColorModeProvider>
         <Flex justify="center">
-          <Probe />
+          <ProbeList user="1"/>
         </Flex>
       </ColorModeProvider>
     </ThemeProvider>

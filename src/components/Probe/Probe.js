@@ -7,10 +7,10 @@ export class Probe extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "CPU de Turing",
-      user: 1,
+      id: this.props.id,
       state: false,
       lastmeasure: {},
+      gps: {},
       loading: true,
     };
   }
@@ -27,14 +27,37 @@ export class Probe extends React.Component {
         <Skeleton isLoaded={!this.state.loading}>
           <Stack isInline>
             <Badge variantColor={this.state.state ? "green" : "red"}>
-              {this.state.state ? "Activée" : "Désactivée"}
+              {this.state.state ? "Active" : "Disabled"}
             </Badge>
           </Stack>
         </Skeleton>
         <Skeleton isLoaded={!this.state.loading}>
           <Text fontSize="md">
-            {this.state.lastmeasure.temp}°C - {this.state.lastmeasure.humid}%
+            {this.state.lastmeasure.temperature !== 0
+              ? this.state.lastmeasure.temperature + "°C"
+              : "❌"}{" "}
+            -{" "}
+            {this.state.lastmeasure.humidity !== 0
+              ? this.state.lastmeasure.humidity + "%"
+              : "❌"}{" "}
+            {this.state.lastmeasure.date !== 'None'
+              ? "at " + this.state.lastmeasure.date
+              : "at ❌"}
           </Text>
+        </Skeleton>
+        <Skeleton isLoaded={!this.state.loading}>
+          {this.state.gps.lon && this.state.gps.lat ? (
+            <Text fontSize="xs">
+              {this.state.gps.lon} - {this.state.gps.lat}
+            </Text>
+          ) : (
+            <Text fontSize="xs">
+              No location{" "}
+              <span role="img" aria-label="No location">
+                ❌
+              </span>
+            </Text>
+          )}
         </Skeleton>
       </Box>
     );
