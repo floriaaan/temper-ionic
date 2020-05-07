@@ -11,6 +11,7 @@ export function retrieveProbe(probe) {
           user: result.response.user,
           state: result.response.state,
           gps: {
+            show: false,
             lon: result.response.gps.lon,
             lat: result.response.gps.lat,
           },
@@ -38,17 +39,15 @@ export function retrieveProbe(probe) {
 }
 
 export function retrieveUserProbes(list) {
-  return fetch("http://localhost:5000/temper/api/v1/probe/user/" + list.props.user)
+  fetch("http://localhost:5000/temper/api/v1/probe/user/" + list.props.user)
     .then((res) => res.json())
     .then(
       (result) => {
-        return result.response
+        list.setState({probes : result.response})
       },
-      // Remarque : il est important de traiter les erreurs ici
-      // au lieu d'utiliser un bloc catch(), pour ne pas passer à la trappe
-      // des exceptions provenant de réels bugs du composant.
-      () => {
-        return []
+      (error) => {
+        console.error(error)
+        list.setState({probes : []})
       }
     );
 }

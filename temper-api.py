@@ -6,15 +6,16 @@ from flask_cors import CORS
 
 try:
     temperDB = pymysql.connect(
-        host="localhost",
-        user="root",
-        passwd="",
+        host="mysql-floriaaan.alwaysdata.net",
+        user="floriaaan_temper",
+        passwd="temper-projPerso",
         charset="utf8",
-        db="temper"
+        db="floriaaan_temper"
     )
     dbCursor = temperDB.cursor()
 except:
-    print("Connection failed!")
+    print("Connection to database failed!")
+    raise Exception
 
 
 app = Flask(__name__)

@@ -1,5 +1,6 @@
 import React from "react";
 import { Probe } from "./Probe";
+import { Divider, Flex } from "@chakra-ui/core";
 import { retrieveUserProbes } from "../../assets/api.js";
 
 export class ProbeList extends React.Component {
@@ -7,12 +8,28 @@ export class ProbeList extends React.Component {
     super(props);
     this.state = {
       user: this.props.user,
-      probes: retrieveUserProbes(this),
+      probes: [],
     };
+    
+  }
+
+  componentDidMount() {
+    retrieveUserProbes(this)
   }
 
   render() {
-    console.log(this.state.probes)
-    return this.state.probes.map((id, key) => <Probe key={key} id={id} />);
+    
+    return (
+      <Flex direction="column">
+      {this.state.probes.map((id, key) => {
+        return (
+          <React.Fragment key={key}>
+          <Probe id={id} />
+          <Divider mt={4} />
+          </React.Fragment>
+        )
+      })}
+      </Flex>
+    );
   }
 }
