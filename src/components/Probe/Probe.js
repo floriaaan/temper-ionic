@@ -8,7 +8,13 @@ import {
   Badge,
   Button,
   Collapse,
+  List,
+  ListIcon,
+  ListItem,
 } from "@chakra-ui/core";
+import { FaTemperatureLow, FaUmbrella, FaClock } from "react-icons/fa";
+import moment from "moment";
+//import 'moment/locale/fr';
 import { Map, TileLayer, Marker, Popup } from "react-leaflet";
 import { retrieveProbe, toggleState } from "../../assets/api.js";
 import "./Probe.scss";
@@ -56,18 +62,38 @@ export class Probe extends React.Component {
           </Stack>
         </Skeleton>
         <Skeleton isLoaded={!this.state.loading} mt="15px">
-          <Text fontSize="md">
-            {this.state.lastmeasure.temperature !== 0
-              ? this.state.lastmeasure.temperature + "°C"
-              : "❌"}{" "}
-            -{" "}
-            {this.state.lastmeasure.humidity !== 0
-              ? this.state.lastmeasure.humidity + "%"
-              : "❌"}{" "}
-            {this.state.lastmeasure.date !== "None"
-              ? "at " + this.state.lastmeasure.date
-              : "at ❌"}
-          </Text>
+          <List spacing={3}>
+            {this.state.lastmeasure.temperature !== 0 ? (
+              <ListItem>
+                <ListIcon icon={FaTemperatureLow} color="teal.300" />
+                {this.state.lastmeasure.temperature + "°C"}
+              </ListItem>
+            ) : (
+              <ListItem>
+                <ListIcon icon={FaTemperatureLow} color="red.500" />❌
+              </ListItem>
+            )}
+            {this.state.lastmeasure.humidity !== 0 ? (
+              <ListItem>
+                <ListIcon icon={FaUmbrella} color="teal.500" />
+                {this.state.lastmeasure.humidity + "%"}
+              </ListItem>
+            ) : (
+              <ListItem>
+                <ListIcon icon={FaUmbrella} color="red.500" />❌
+              </ListItem>
+            )}
+            {this.state.lastmeasure.date !== "None" ? (
+              <ListItem>
+                <ListIcon icon={FaClock} color="teal.700" />
+                {moment(this.state.lastmeasure.date).fromNow()}
+              </ListItem>
+            ) : (
+              <ListItem>
+                <ListIcon icon={FaClock} color="red.500" />❌
+              </ListItem>
+            )}
+          </List>
         </Skeleton>
 
         <Skeleton isLoaded={!this.state.loading} mt="15px">
@@ -94,14 +120,20 @@ export class Probe extends React.Component {
         <Collapse mt={4} isOpen={this.state.gps.show}>
           <Skeleton isLoaded={!this.state.loading} mt="7px">
             {this.state.gps.lon && this.state.gps.lat ? (
-              <Map center={[this.state.gps.lon, this.state.gps.lat]} zoom="13">
+              <Map center={[this.state.gps.lat, this.state.gps.lon]} zoom="15">
                 <TileLayer
                   attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                <Marker position={[this.state.gps.lon, this.state.gps.lat]}>
+                <Marker position={[this.state.gps.lat, this.state.gps.lon]}>
                   <Popup>
-                    A pretty CSS3 popup. <br /> Easily customizable.
+                    <Button
+                      variantColor={this.state.state ? "red" : "green"}
+                      variant="ghost"
+                      onClick={() => toggleState(this)}
+                    >
+                      {this.state.state ? 'Turn off' : 'Turn on'}
+                    </Button>
                   </Popup>
                 </Marker>
               </Map>
