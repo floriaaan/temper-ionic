@@ -15,6 +15,7 @@ export function retrieveProbe(probe) {
             lon: result.response.gps.lon,
             lat: result.response.gps.lat,
           },
+          category: result.response.category,
           lastmeasure: {
             temperature:
               Math.round(result.response.lastmeasure.temperature * 100) / 100,

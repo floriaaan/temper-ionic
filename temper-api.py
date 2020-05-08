@@ -4,13 +4,17 @@ from flask import Flask
 from flask_restx import reqparse, Api, Resource, fields
 from flask_cors import CORS
 
+from dotenv import load_dotenv
+load_dotenv()
+import os
+
 try:
     temperDB = pymysql.connect(
-        host="mysql-floriaaan.alwaysdata.net",
-        user="floriaaan_temper",
-        passwd="temper-projPerso",
+        host=os.getenv('DB_HOST'),
+        user=os.getenv('DB_USER'),
+        passwd=os.getenv('DB_PASS'),
         charset="utf8",
-        db="floriaaan_temper"
+        db=os.getenv('DB_NAME')
     )
     dbCursor = temperDB.cursor()
 except:
@@ -140,6 +144,7 @@ class ProbeList(Resource):
                         'name': i[1],
                         'user': i[2],
                         'state': i[5],
+                        'category': i[6],
                         'gps': {
                             'lon': i[3],
                             'lat': i[4],
@@ -230,6 +235,7 @@ class Probe(Resource):
                 'name': probe[1],
                 'user': probe[2],
                 'state': probe[5],
+                'category': probe[6],
                 'gps': {
                     'lon': probe[3],
                     'lat': probe[4],

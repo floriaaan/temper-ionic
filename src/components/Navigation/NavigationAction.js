@@ -35,7 +35,7 @@ export class NavigationAction extends React.Component {
           textTransform="uppercase"
           mt="1"
         >
-          {[...this.children]}
+          {this.props.children}
         </Text>
       </Flex>
     );

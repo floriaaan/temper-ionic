@@ -9,7 +9,7 @@ export class Navigation extends React.Component {
         backgroundColor="brand.700"
         paddingBottom="env(safe-area-inset-bottom)"
       >
-        {[...this.children]}
+        {this.props.children}
       </Flex>
     );
   }

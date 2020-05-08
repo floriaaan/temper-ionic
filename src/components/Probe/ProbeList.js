@@ -1,5 +1,7 @@
 import React from "react";
 import { Probe } from "./Probe";
+// eslint-disable-next-line
+import { ProbeAdd } from "./ProbeAdd";
 import { Divider, Flex } from "@chakra-ui/core";
 import { retrieveUserProbes } from "../../assets/api.js";
 
@@ -29,6 +31,7 @@ export class ProbeList extends React.Component {
           </React.Fragment>
         )
       })}
+      <ProbeAdd user="1" />
       </Flex>
     );
   }

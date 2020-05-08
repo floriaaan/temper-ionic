@@ -56,6 +56,7 @@ export class Probe extends React.Component {
         </Skeleton>
         <Skeleton isLoaded={!this.state.loading} mt="3px" ml="20px">
           <Stack isInline>
+            <Badge variantColor="yellow">{this.state.category}</Badge>
             <Badge variantColor={this.state.state ? "green" : "red"}>
               {this.state.state ? "Active" : "Disabled"}
             </Badge>
@@ -132,7 +133,7 @@ export class Probe extends React.Component {
                       variant="ghost"
                       onClick={() => toggleState(this)}
                     >
-                      {this.state.state ? 'Turn off' : 'Turn on'}
+                      {this.state.state ? "Turn off" : "Turn on"}
                     </Button>
                   </Popup>
                 </Marker>
