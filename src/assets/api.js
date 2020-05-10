@@ -1,5 +1,5 @@
 export function retrieveProbe(probe) {
-  fetch("http://localhost:5000/temper/api/v1/probe/" + probe.state.id)
+  fetch("http://floriaaan.alwaysdata.net/temper/api/v1/probe/" + probe.state.id)
     .then((res) => res.json())
     .then(
       (result) => {
@@ -40,7 +40,7 @@ export function retrieveProbe(probe) {
 }
 
 export function retrieveUserProbes(list) {
-  fetch("http://localhost:5000/temper/api/v1/probe/user/" + list.props.user)
+  fetch("http://floriaaan.alwaysdata.net/temper/api/v1/probe/user/" + list.props.user)
     .then((res) => res.json())
     .then(
       (result) => {
@@ -55,7 +55,7 @@ export function retrieveUserProbes(list) {
 
 export function toggleState(probe) {
   fetch(
-    "http://localhost:5000/temper/api/v1/probe/" + probe.state.id + "/toggle",
+    "http://floriaaan.alwaysdata.net/temper/api/v1/probe/" + probe.state.id + "/toggle",
     { method: "PUT" }
   )
     .then((res) => res.json())

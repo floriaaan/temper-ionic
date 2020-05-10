@@ -11,6 +11,8 @@ import {
   useDisclosure,
   ColorModeProvider
 } from "@chakra-ui/core";
+import { TextField } from '@rmwc/textfield';
+import '@rmwc/textfield/styles';
 
 export function ProbeAdd() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -31,7 +33,9 @@ export function ProbeAdd() {
         <ModalContent>
           <ModalHeader>Modal Title</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>Text</ModalBody>
+          <ModalBody>
+          <TextField outlined label="Probe Name" />
+          </ModalBody>
 
           <ModalFooter>
             <Button variantColor="blue" mr={3} onClick={onClose}>
