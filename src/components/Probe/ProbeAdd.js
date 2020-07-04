@@ -9,10 +9,13 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  ColorModeProvider
+  ColorModeProvider,
+  FormControl,
+  FormLabel,
+  FormHelperText,
+  Input
+
 } from "@chakra-ui/core";
-import { TextField } from '@rmwc/textfield';
-import '@rmwc/textfield/styles';
 
 export function ProbeAdd() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -31,17 +34,23 @@ export function ProbeAdd() {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader>Add your probe</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-          <TextField outlined label="Probe Name" />
+            <FormControl>
+              <FormLabel htmlFor="name">Probe's name</FormLabel>
+              <Input type="text" id="name" aria-describedby="name-helper-text" />
+              <FormHelperText id="name-helper-text">
+                Helpful for knowing which probe is what <span role="img" aria-label="funny">😁</span>
+              </FormHelperText>
+            </FormControl>
           </ModalBody>
 
           <ModalFooter>
-            <Button variantColor="blue" mr={3} onClick={onClose}>
+            <Button variant="outline" variantColor="blue" mr={3} onClick={onClose}>
               Close
             </Button>
-            <Button variant="ghost">Secondary Action</Button>
+            <Button variant="solid" variantColor="green">Create</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

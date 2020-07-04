@@ -1,27 +1,27 @@
 export function retrieveProbe(probe) {
-  fetch("http://floriaaan.alwaysdata.net/temper/api/v1/probe/" + probe.state.id)
+  fetch("http://localhost:8000/api/v1/probe/" + probe.state.id)
     .then((res) => res.json())
     .then(
       (result) => {
         probe.setState({
-          id: result.response.id,
-          name: result.response.name
-            ? result.response.name
-            : "Sonde #" + result.response.id,
-          user: result.response.user,
-          state: result.response.state,
+          id: result.response.data.id,
+          name: result.response.data.name
+            ? result.response.data.name
+            : "Sonde #" + result.response.data.id,
+          user: result.response.data.user,
+          state: result.response.data.state,
           gps: {
             show: false,
-            lon: result.response.gps.lon,
-            lat: result.response.gps.lat,
+            lon: result.response.data.gps.lon,
+            lat: result.response.data.gps.lat,
           },
-          category: result.response.category,
+          category: result.response.data.category,
           lastmeasure: {
             temperature:
-              Math.round(result.response.lastmeasure.temperature * 100) / 100,
+              Math.round(result.response.data.lastmeasure.temperature * 100) / 100,
             humidity:
-              Math.round(result.response.lastmeasure.humidity * 100) / 100,
-            date: result.response.lastmeasure.date,
+              Math.round(result.response.data.lastmeasure.humidity * 100) / 100,
+            date: result.response.data.lastmeasure.date,
           },
           loading: false,
         });
@@ -40,11 +40,11 @@ export function retrieveProbe(probe) {
 }
 
 export function retrieveUserProbes(list) {
-  fetch("http://floriaaan.alwaysdata.net/temper/api/v1/probe/user/" + list.props.user)
+  fetch("http://localhost:8000/api/v1/probe/user/" + list.props.user)
     .then((res) => res.json())
     .then(
       (result) => {
-        list.setState({probes : result.response})
+        list.setState({probes : result.response.data})
       },
       (error) => {
         console.error(error)
@@ -55,14 +55,14 @@ export function retrieveUserProbes(list) {
 
 export function toggleState(probe) {
   fetch(
-    "http://floriaaan.alwaysdata.net/temper/api/v1/probe/" + probe.state.id + "/toggle",
+    "http://localhost:8000/api/v1/probe/" + probe.state.id + "/toggle",
     { method: "PUT" }
   )
     .then((res) => res.json())
     .then(
       (result) => {
         probe.setState({
-          state: result.response.state,
+          state: result.response.data.state,
         });
       },
 

@@ -4,17 +4,17 @@ from flask import Flask
 from flask_restx import reqparse, Api, Resource, fields
 from flask_cors import CORS
 
-from dotenv import load_dotenv
-load_dotenv()
-import os
+#from dotenv import load_dotenv
+#load_dotenv()
+#import os
 
 try:
     temperDB = pymysql.connect(
-        host=os.getenv('DB_HOST'),
-        user=os.getenv('DB_USER'),
-        passwd=os.getenv('DB_PASS'),
+        host="mysql-floriaaan.alwaysdata.net",
+        user="floriaaan_temper",
+        passwd="temper-projPerso",
         charset="utf8",
-        db=os.getenv('DB_NAME')
+        db="floriaaan_temper"
     )
     dbCursor = temperDB.cursor()
 except:
