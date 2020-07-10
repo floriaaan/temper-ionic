@@ -19,7 +19,7 @@ const ProbeList: React.FC<ContainerProps> = ({ user }) => {
 
   useEffect(() => {
     async function fetchData() {
-      await fetch("http://localhost:8000/api/v1/probe/user/" + user)
+      await fetch("http://"+ window.location.hostname +":8000/api/v1/probe/user/" + user)
         .then((res) => res.json())
         .then((res) => {
           setList(res.response.data);
@@ -28,13 +28,21 @@ const ProbeList: React.FC<ContainerProps> = ({ user }) => {
     }
 
     fetchData();
-  }, []);
+  }, [user]);
 
   return (
     <IonContent>
       {!loading ? (
         <>
           <IonGrid>
+            {/*list.map((id, key) => {
+              
+              return (
+                <React.Fragment key={key}>
+                  <Probe id={id} />
+                </React.Fragment>
+              );
+            })*/}
             <IonRow>
               <IonCol size-md="4">
                 <Probe id={list[0]}></Probe>
@@ -46,13 +54,19 @@ const ProbeList: React.FC<ContainerProps> = ({ user }) => {
                 <Probe id={list[2]}></Probe>
               </IonCol>
             </IonRow>
+
+            <IonRow>
+              <IonCol>
+                <Probe id={list[3]}></Probe>
+              </IonCol>
+            </IonRow>
           </IonGrid>
         </>
       ) : (
         <>
           <IonSkeletonText
             animated
-            style={{ heigth: "100px" }}
+            style={{ height: "100px" }}
           ></IonSkeletonText>
         </>
       )}

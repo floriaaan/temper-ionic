@@ -10,8 +10,9 @@ import {
   IonTabs
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { ellipse, square, thermometerOutline } from 'ionicons/icons';
+import { ellipse, square, thermometerOutline, mapOutline } from 'ionicons/icons';
 import ProbeList from './pages/ProbeList';
+import Map from './pages/Map';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -38,7 +39,7 @@ const App: React.FC = () => (
       <IonTabs>
         <IonRouterOutlet>
           <Route path="/probes" component={ProbeList} exact={true} />
-          <Route path="/tab2" component={ProbeList} exact={true} />
+          <Route path="/map" component={Map} exact={true} />
           <Route path="/tab3" component={ProbeList} />
           <Route path="/" render={() => <Redirect to="/probes" />} exact={true} />
         </IonRouterOutlet>
@@ -47,9 +48,9 @@ const App: React.FC = () => (
             <IonIcon icon={thermometerOutline} />
             <IonLabel>Probes</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="tab2" href="/tab2">
-            <IonIcon icon={ellipse} />
-            <IonLabel>Tab 2</IonLabel>
+          <IonTabButton tab="map" href="/map">
+            <IonIcon icon={mapOutline} />
+            <IonLabel>Map</IonLabel>
           </IonTabButton>
           <IonTabButton tab="tab3" href="/tab3">
             <IonIcon icon={square} />

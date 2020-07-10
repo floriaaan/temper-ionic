@@ -1,37 +1,106 @@
 import React, { useState } from "react";
-import { IonPage, IonFab,IonFabList, IonFabButton, IonIcon, IonModal, IonButton } from "@ionic/react";
-import { arrowUpCircle, logoInstagram, logoTwitter, add } from 'ionicons/icons';
+import {
+  IonPage,
+  IonFab,
+  IonFabList,
+  IonFabButton,
+  IonIcon,
+  IonModal,
+  IonButton,
+  IonContent,
+  IonItemDivider,
+  IonItem,
+  IonInput,
+} from "@ionic/react";
+import { arrowUpCircle, logoInstagram, logoTwitter, add } from "ionicons/icons";
 import List from "../components/Probe/ProbeList";
+
+import "./ProbeList.css";
 
 const ProbeList: React.FC = () => {
   const [showAddModal, setShowAddModal] = useState(false);
+  const [inputName, setInputName] = useState<string>();
+  const [inputCategory, setInputCategory] = useState<string>();
+
+  const handlePost = () => {
+    //TODO: add a loader
+    async function post() {
+      await fetch("http://"+ window.location.hostname +":8000/api/v1/probe/", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user: 1,
+          name: inputName,
+          category: inputCategory,
+        }),
+      })
+        .then((res) => res.json())
+        .then((result) => {});
+    }
+
+    post();
+    setShowAddModal(false);
+  };
 
   return (
-    <IonPage>
-      <List user={1}></List>
+    <div className="bg-primary">
+      <IonPage className="bg-primary">
+        <List user={1}></List>
 
-      <IonFab horizontal="end" vertical="bottom" slot="fixed">
-        <IonFabButton color="dark">
-          <IonIcon icon={arrowUpCircle}></IonIcon>
-        </IonFabButton>
-        <IonFabList side="top">
-          <IonFabButton color="light" onClick={() => setShowAddModal(true)}>
-            <IonIcon icon={add}></IonIcon>
+        <IonFab horizontal="end" vertical="bottom" slot="fixed">
+          <IonFabButton color="dark">
+            <IonIcon icon={arrowUpCircle}></IonIcon>
           </IonFabButton>
-          <IonFabButton color="light">
-            <IonIcon icon={logoTwitter}></IonIcon>
-          </IonFabButton>
-          <IonFabButton color="light">
-            <IonIcon icon={logoInstagram}></IonIcon>
-          </IonFabButton>
-        </IonFabList>
-      </IonFab>
+          <IonFabList side="top">
+            <IonFabButton color="light" onClick={() => setShowAddModal(true)}>
+              <IonIcon icon={add}></IonIcon>
+            </IonFabButton>
+            <IonFabButton color="light">
+              <IonIcon icon={logoTwitter}></IonIcon>
+            </IonFabButton>
+            <IonFabButton color="light" onClick={() => ''}>
+              <IonIcon icon={logoInstagram}></IonIcon>
+            </IonFabButton>
+          </IonFabList>
+        </IonFab>
 
-      <IonModal isOpen={showAddModal}>
-        <p>This is modal content</p>
-        <IonButton onClick={() => setShowAddModal(false)}>Close Modal</IonButton>
-      </IonModal>
-    </IonPage>
+        <IonModal isOpen={showAddModal}>
+          <IonContent className="ion-padding">
+            <IonItemDivider>Probe's name</IonItemDivider>
+            <IonItem>
+              <IonInput
+                value={inputName}
+                placeholder="Probe's name"
+                onIonChange={(e) => setInputName(e.detail.value!)}
+              ></IonInput>
+            </IonItem>
+            <IonItemDivider></IonItemDivider>
+            <IonItemDivider>Probe's category</IonItemDivider>
+            <IonItem>
+              <IonInput
+                value={inputCategory}
+                placeholder="Probe's category"
+                onIonChange={(e) => setInputCategory(e.detail.value!)}
+              ></IonInput>
+            </IonItem>
+            <IonItemDivider></IonItemDivider>
+            <IonButton color="success" onClick={() => handlePost()}>
+              Validate
+            </IonButton>
+            <IonButton
+              color="secondary"
+              slot="end"
+              onClick={() => setShowAddModal(false)}
+            >
+              Close
+            </IonButton>
+          </IonContent>
+        </IonModal>
+      </IonPage>
+    </div>
   );
 };
 

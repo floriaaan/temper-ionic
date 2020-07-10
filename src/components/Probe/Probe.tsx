@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Probe.css";
+import "leaflet/dist/leaflet.css"
 
 import {
   IonCard,
@@ -21,7 +22,21 @@ import {
   flashOffOutline,
   flashOutline,
 } from "ionicons/icons";
+
+
 import moment from "moment";
+import L from 'leaflet';
+import { Map, TileLayer, Marker } from "react-leaflet";
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+
+let DefaultIcon = L.icon({
+    iconUrl: icon,
+    shadowUrl: iconShadow
+});
+
+L.Marker.prototype.options.icon = DefaultIcon;
+
 
 interface ContainerProps {
   id: number;
@@ -36,22 +51,21 @@ const Probe: React.FC<ContainerProps> = ({ id }) => {
     humidity: null,
     date: null,
   });
+  const [gps, setGPS] = useState({
+    lon: 0,
+    lat: 0,
+  });
   const [loading, setLoading] = useState(true);
 
   const handleToggle = () => {
     async function toggleState() {
-      await fetch(
-        "http://localhost:8000/api/v1/probe/" + id + "/toggle",
-        {
-          method: "PUT",
-        }
-      )
+      await fetch("http://"+ window.location.hostname +":8000/api/v1/probe/" + id + "/toggle", {
+        method: "PUT",
+      })
         .then((res) => res.json())
-        .then(
-          (result) => {
-            setState(result.response.data.state);
-          }
-        );
+        .then((result) => {
+          setState(result.response.data.state);
+        });
     }
 
     toggleState();
@@ -59,19 +73,20 @@ const Probe: React.FC<ContainerProps> = ({ id }) => {
 
   useEffect(() => {
     async function fetchData() {
-      await fetch("http://localhost:8000/api/v1/probe/" + id)
+      await fetch("http://"+ window.location.hostname +":8000/api/v1/probe/" + id)
         .then((res) => res.json())
         .then((res) => {
           setName(res.response.data.name);
           setState(res.response.data.state);
           setCategory(res.response.data.category);
           setLastMeasure(res.response.data.lastmeasure);
+          setGPS(res.response.data.gps);
           setLoading(false);
         });
     }
 
     fetchData();
-  }, []);
+  }, [id]);
 
   return (
     <IonCard>
@@ -140,6 +155,23 @@ const Probe: React.FC<ContainerProps> = ({ id }) => {
               </>
             ) : (
               <> </>
+            )}
+            {gps.lon && gps.lat ? (
+              <Map center={[gps.lon, gps.lat]} zoom={15}>
+                <TileLayer
+                  attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                <Marker position={[gps.lon, gps.lat]}>
+                </Marker>
+              </Map>
+            ) : (
+              <IonLabel>
+                No Location{" "}
+                <span role="img" aria-label="No location">
+                  ❌
+                </span>
+              </IonLabel>
             )}
             <IonButton
               expand="block"
