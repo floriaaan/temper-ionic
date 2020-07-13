@@ -5,12 +5,13 @@ import "./Map.css";
 import {
   IonContent,
   IonSkeletonText,
+  IonButton,
 } from "@ionic/react";
 
 import "leaflet/dist/leaflet.css";
 
 import L from "leaflet";
-import { Map, TileLayer, Marker } from "react-leaflet";
+import { Map, TileLayer, Marker, Popup } from "react-leaflet";
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
 
@@ -29,8 +30,8 @@ const MapComponent: React.FC<ContainerProps> = ({ user }) => {
   const [loading, setLoading] = useState(true);
   const [gpsArray, setGPSArray] = useState([
     {
-      lon: 0,
-      lat: 0,
+      lon: 0.0,
+      lat: 0.0,
     },
   ]);
 
@@ -48,18 +49,19 @@ const MapComponent: React.FC<ContainerProps> = ({ user }) => {
               .then((res) => res.json())
               .then((res) => {
                 if(res.response.data.gps.lon && res.response.data.gps.lat) {
-                    setGPSArray([...gpsArray, res.response.data.gps]);
+                    setGPSArray(gpsArray.concat(res.response.data.gps));
                 }
                 
               });
+            
           });
           setLoading(false);
         });
     }
 
     fetchData();
+    // eslint-disable-next-line
   }, [user]);
-
   return (
     <IonContent>
       {!loading ? (
@@ -69,12 +71,18 @@ const MapComponent: React.FC<ContainerProps> = ({ user }) => {
               attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
+            {console.log(gpsArray)}
             {gpsArray.map((id, key) => {
               return (
                 <React.Fragment key={key}>
                   <Marker
                     position={[gpsArray[key].lon, gpsArray[key].lat]}
-                  ></Marker>
+                  >
+                    <Popup>
+                    <IonButton>Coucou</IonButton>
+                  </Popup>
+                  </Marker>
+                  
                 </React.Fragment>
               );
             })}
@@ -84,7 +92,15 @@ const MapComponent: React.FC<ContainerProps> = ({ user }) => {
         <>
           <IonSkeletonText
             animated
-            style={{ height: "100vh" }}
+            style={{ height: "15vh" }}
+          ></IonSkeletonText>
+          <IonSkeletonText
+            animated
+            style={{ height: "45vh" }}
+          ></IonSkeletonText>
+          <IonSkeletonText
+            animated
+            style={{ height: "30vh" }}
           ></IonSkeletonText>
         </>
       )}

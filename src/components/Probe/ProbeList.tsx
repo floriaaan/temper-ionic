@@ -19,7 +19,9 @@ const ProbeList: React.FC<ContainerProps> = ({ user }) => {
 
   useEffect(() => {
     async function fetchData() {
-      await fetch("http://"+ window.location.hostname +":8000/api/v1/probe/user/" + user)
+      await fetch(
+        "http://" + window.location.hostname + ":8000/api/v1/probe/user/" + user
+      )
         .then((res) => res.json())
         .then((res) => {
           setList(res.response.data);
@@ -30,43 +32,43 @@ const ProbeList: React.FC<ContainerProps> = ({ user }) => {
     fetchData();
   }, [user]);
 
+  let probeCards = list.map((id, key) => {
+    return (
+      <IonCol sizeLg="4" key={key}>
+        <Probe id={id} />
+      </IonCol>
+    );
+  });
+
   return (
     <IonContent>
       {!loading ? (
         <>
           <IonGrid>
-            {/*list.map((id, key) => {
-              
-              return (
-                <React.Fragment key={key}>
-                  <Probe id={id} />
-                </React.Fragment>
-              );
-            })*/}
-            <IonRow>
-              <IonCol size-md="4">
-                <Probe id={list[0]}></Probe>
-              </IonCol>
-              <IonCol size-md="4">
-                <Probe id={list[1]}></Probe>
-              </IonCol>
-              <IonCol size-md="4">
-                <Probe id={list[2]}></Probe>
-              </IonCol>
-            </IonRow>
-
-            <IonRow>
-              <IonCol>
-                <Probe id={list[3]}></Probe>
-              </IonCol>
-            </IonRow>
+            <IonRow>{probeCards}</IonRow>
           </IonGrid>
         </>
       ) : (
         <>
           <IonSkeletonText
             animated
-            style={{ height: "100px" }}
+            style={{ height: "20vh" }}
+          ></IonSkeletonText>
+          <IonSkeletonText
+            animated
+            style={{ height: "10vh" }}
+          ></IonSkeletonText>
+          <IonSkeletonText
+            animated
+            style={{ height: "30vh" }}
+          ></IonSkeletonText>
+          <IonSkeletonText
+            animated
+            style={{ height: "5vh" }}
+          ></IonSkeletonText>
+          <IonSkeletonText
+            animated
+            style={{ height: "15vh" }}
           ></IonSkeletonText>
         </>
       )}

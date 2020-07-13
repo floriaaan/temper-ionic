@@ -226,3 +226,14 @@ http://ionicframework.com/docs/theming/ */
     --ion-tab-bar-background: #1f1f1f;
   }
 }
+
+@font-face {
+  font-family: "Nunito";
+  src: url("../../node_modules/typeface-nunito/files/nunito-latin-400.woff2") format("woff2"),
+         url("../../node_modules/typeface-nunito/files/nunito-latin-400.woff2") format("woff");
+ }
+
+html, html.md, html.ios, body {
+  font-family: Nunito, sans-serif !important;
+}
+

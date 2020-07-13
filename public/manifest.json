@@ -1,6 +1,6 @@
 {
-  "short_name": "Ionic App",
-  "name": "My Ionic App",
+  "short_name": "Temper",
+  "name": "Temper : Your Home companion",
   "icons": [
     {
       "src": "assets/icon/favicon.png",

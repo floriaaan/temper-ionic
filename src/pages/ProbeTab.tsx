@@ -15,9 +15,9 @@ import {
 import { arrowUpCircle, logoInstagram, logoTwitter, add } from "ionicons/icons";
 import List from "../components/Probe/ProbeList";
 
-import "./ProbeList.css";
+import "./ProbeTab.css";
 
-const ProbeList: React.FC = () => {
+const ProbeTab: React.FC = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [inputName, setInputName] = useState<string>();
   const [inputCategory, setInputCategory] = useState<string>();
@@ -104,4 +104,4 @@ const ProbeList: React.FC = () => {
   );
 };
 
-export default ProbeList;
+export default ProbeTab;

@@ -29,6 +29,7 @@ import L from 'leaflet';
 import { Map, TileLayer, Marker } from "react-leaflet";
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import { useHistory } from "react-router-dom";
 
 let DefaultIcon = L.icon({
     iconUrl: icon,
@@ -59,7 +60,7 @@ const Probe: React.FC<ContainerProps> = ({ id }) => {
 
   const handleToggle = () => {
     async function toggleState() {
-      await fetch("http://"+ window.location.hostname +":8000/api/v1/probe/" + id + "/toggle", {
+      await fetch("http://" + window.location.hostname + ":8000/api/v1/probe/" + id + "/toggle", {
         method: "PUT",
       })
         .then((res) => res.json())
@@ -73,7 +74,7 @@ const Probe: React.FC<ContainerProps> = ({ id }) => {
 
   useEffect(() => {
     async function fetchData() {
-      await fetch("http://"+ window.location.hostname +":8000/api/v1/probe/" + id)
+      await fetch("http://" + window.location.hostname + ":8000/api/v1/probe/" + id)
         .then((res) => res.json())
         .then((res) => {
           setName(res.response.data.name);
@@ -87,6 +88,9 @@ const Probe: React.FC<ContainerProps> = ({ id }) => {
 
     fetchData();
   }, [id]);
+
+  const history = useHistory();
+  const navigateTo = () => history.push('/probe/' + id);
 
   return (
     <IonCard>
@@ -102,60 +106,60 @@ const Probe: React.FC<ContainerProps> = ({ id }) => {
               {state ? "Active" : "Disabled"}
             </IonBadge>
 
-            <IonButton fill="outline" slot="end">
+            <IonButton fill="outline" slot="end" onClick={() => navigateTo()}>
               View
             </IonButton>
           </IonItem>
 
           <IonCardContent>
             {lastMeasure.temperature &&
-            lastMeasure.humidity &&
-            lastMeasure.date ? (
-              <>
-                <IonListHeader lines="full">
-                  <IonLabel>Last Measures</IonLabel>
-                  <IonButton>See All</IonButton>
-                </IonListHeader>
-                <IonList>
-                  <IonItem>
-                    <IonLabel>
-                      <h2>
-                        <IonIcon
-                          icon={thermometerOutline}
-                          className="ion-margin-horizontal"
-                          color="primary"
-                        ></IonIcon>
-                        {lastMeasure.temperature
-                          ? lastMeasure.temperature + " °C"
-                          : "No temperature ❌"}
-                      </h2>
-                      <h3>
-                        <IonIcon
-                          icon={rainyOutline}
-                          className="ion-margin-horizontal"
-                          color="secondary"
-                        ></IonIcon>
-                        {lastMeasure.humidity
-                          ? lastMeasure.humidity + " %"
-                          : "No humidity ❌"}
-                      </h3>
-                      <p>
-                        <IonIcon
-                          icon={timeOutline}
-                          className="ion-margin-horizontal"
-                          color="tertiary"
-                        ></IonIcon>
-                        {lastMeasure.date
-                          ? moment(lastMeasure.date).fromNow()
-                          : "No date ❌"}
-                      </p>
-                    </IonLabel>
-                  </IonItem>
-                </IonList>
-              </>
-            ) : (
-              <> </>
-            )}
+              lastMeasure.humidity &&
+              lastMeasure.date ? (
+                <>
+                  <IonListHeader lines="full">
+                    <IonLabel>Last Measures</IonLabel>
+                    <IonButton>See All</IonButton>
+                  </IonListHeader>
+                  <IonList>
+                    <IonItem>
+                      <IonLabel>
+                        <h2>
+                          <IonIcon
+                            icon={thermometerOutline}
+                            className="ion-margin-horizontal"
+                            color="primary"
+                          ></IonIcon>
+                          {lastMeasure.temperature
+                            ? lastMeasure.temperature + " °C"
+                            : "No temperature ❌"}
+                        </h2>
+                        <h3>
+                          <IonIcon
+                            icon={rainyOutline}
+                            className="ion-margin-horizontal"
+                            color="secondary"
+                          ></IonIcon>
+                          {lastMeasure.humidity
+                            ? lastMeasure.humidity + " %"
+                            : "No humidity ❌"}
+                        </h3>
+                        <p>
+                          <IonIcon
+                            icon={timeOutline}
+                            className="ion-margin-horizontal"
+                            color="tertiary"
+                          ></IonIcon>
+                          {lastMeasure.date
+                            ? moment(lastMeasure.date).fromNow()
+                            : "No date ❌"}
+                        </p>
+                      </IonLabel>
+                    </IonItem>
+                  </IonList>
+                </>
+              ) : (
+                <> </>
+              )}
             {gps.lon && gps.lat ? (
               <Map center={[gps.lon, gps.lat]} zoom={15}>
                 <TileLayer
@@ -166,13 +170,13 @@ const Probe: React.FC<ContainerProps> = ({ id }) => {
                 </Marker>
               </Map>
             ) : (
-              <IonLabel>
-                No Location{" "}
-                <span role="img" aria-label="No location">
-                  ❌
+                <IonLabel>
+                  No Location{" "}
+                  <span role="img" aria-label="No location">
+                    ❌
                 </span>
-              </IonLabel>
-            )}
+                </IonLabel>
+              )}
             <IonButton
               expand="block"
               color={state ? "danger" : "success"}
@@ -189,19 +193,19 @@ const Probe: React.FC<ContainerProps> = ({ id }) => {
           </IonCardContent>
         </>
       ) : (
-        <>
-          <IonItem>
-            <IonSkeletonText animated></IonSkeletonText>
-          </IonItem>
+          <>
+            <IonItem>
+              <IonSkeletonText animated></IonSkeletonText>
+            </IonItem>
 
-          <IonCardContent>
-            <IonSkeletonText
-              animated
-              style={{ heigth: "100px" }}
-            ></IonSkeletonText>
-          </IonCardContent>
-        </>
-      )}
+            <IonCardContent>
+              <IonSkeletonText
+                animated
+                style={{ heigth: "100px" }}
+              ></IonSkeletonText>
+            </IonCardContent>
+          </>
+        )}
     </IonCard>
   );
 };
