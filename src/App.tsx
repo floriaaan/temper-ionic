@@ -10,14 +10,15 @@ import {
   IonTabs,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { thermometerOutline, mapOutline, peopleOutline } from "ionicons/icons";
+import { Routes, RoutesTab } from "./routes/web";
+//import { thermometerOutline, mapOutline, peopleOutline } from "ionicons/icons";
 
 import { ThemeProvider, ColorModeProvider, CSSReset } from "@chakra-ui/core";
 
-import ProbeTab from "./pages/ProbeTab";
+/*import ProbeTab from "./pages/ProbeTab";
 import MapTab from "./pages/MapTab";
 import UserTab from "./pages/UserTab";
-import ProbePage from "./pages/ProbePage";
+import ProbePage from "./pages/ProbePage";*/
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -49,10 +50,16 @@ const App: React.FC = () => (
         <IonReactRouter>
           <IonTabs>
             <IonRouterOutlet>
-              <Route path="/probes" component={ProbeTab} exact={true} />
-              <Route path="/map" component={MapTab} exact={true} />
-              <Route path="/probe/:id" component={ProbePage} exact={true} />
-              <Route path="/user" component={UserTab} />
+              {Routes.map((obj, key) => {
+                return (
+                  <Route
+                    path={obj.path}
+                    component={obj.component}
+                    exact={true}
+                  />
+                );
+              })}
+
               <Route
                 path="/"
                 render={() => <Redirect to="/probes" />}
@@ -60,18 +67,14 @@ const App: React.FC = () => (
               />
             </IonRouterOutlet>
             <IonTabBar slot="bottom">
-              <IonTabButton tab="probes" href="/probes">
-                <IonIcon icon={thermometerOutline} />
-                <IonLabel>Probes</IonLabel>
-              </IonTabButton>
-              <IonTabButton tab="map" href="/map">
-                <IonIcon icon={mapOutline} />
-                <IonLabel>Map</IonLabel>
-              </IonTabButton>
-              <IonTabButton tab="user" href="/user">
-                <IonIcon icon={peopleOutline} />
-                <IonLabel>User</IonLabel>
-              </IonTabButton>
+              {RoutesTab.map((obj, key) => {
+                return (
+                  <IonTabButton tab={obj.label.toLowerCase()} href={obj.path}>
+                    <IonIcon icon={obj.icon} />
+                    <IonLabel>{obj.label}</IonLabel>
+                  </IonTabButton>
+                );
+              })}
             </IonTabBar>
           </IonTabs>
         </IonReactRouter>
