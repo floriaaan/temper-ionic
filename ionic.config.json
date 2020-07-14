@@ -1,0 +1,7 @@
+{
+  "name": "temper-ionic",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}

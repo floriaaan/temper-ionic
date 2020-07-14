@@ -1,5 +1,4 @@
 import { theme } from "@chakra-ui/core";
-import "./temper.scss"
 
 export const temper = {
   ...theme,
