@@ -5,9 +5,9 @@ export function retrieveProbe(probe) {
       (result) => {
         probe.setState({
           id: result.response.data.id,
-          name: result.response.data.name
-            ? result.response.data.name
-            : "Sonde #" + result.response.data.id,
+          name: result.response.data.name ?
+            result.response.data.name :
+            "Sonde #" + result.response.data.id,
           user: result.response.data.user,
           state: result.response.data.state,
           gps: {
@@ -17,10 +17,8 @@ export function retrieveProbe(probe) {
           },
           category: result.response.data.category,
           lastmeasure: {
-            temperature:
-              Math.round(result.response.data.lastmeasure.temperature * 100) / 100,
-            humidity:
-              Math.round(result.response.data.lastmeasure.humidity * 100) / 100,
+            temperature: Math.round(result.response.data.lastmeasure.temperature * 100) / 100,
+            humidity: Math.round(result.response.data.lastmeasure.humidity * 100) / 100,
             date: result.response.data.lastmeasure.date,
           },
           loading: false,
@@ -44,20 +42,25 @@ export function retrieveUserProbes(list) {
     .then((res) => res.json())
     .then(
       (result) => {
-        list.setState({probes : result.response.data})
+        list.setState({
+          probes: result.response.data
+        })
       },
       (error) => {
         console.error(error)
-        list.setState({probes : []})
+        list.setState({
+          probes: []
+        })
       }
     );
 }
 
 export function toggleState(probe) {
   fetch(
-    "http://localhost:8000/api/v1/probe/" + probe.state.id + "/toggle",
-    { method: "PUT" }
-  )
+      "http://localhost:8000/api/v1/probe/" + probe.state.id + "/toggle", {
+        method: "PUT"
+      }
+    )
     .then((res) => res.json())
     .then(
       (result) => {
@@ -70,4 +73,34 @@ export function toggleState(probe) {
         retrieveProbe(probe);
       }
     );
+}
+
+export function store(obj) {
+  console.log('de', obj);
+  
+  /*fetch(
+      "http://localhost:8000/api/v1/probe/", {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          a: 1,
+          b: 'Textual content'
+        })
+      }
+    )
+    .then((res) => res.json())
+    .then(
+      (result) => {
+        probe.setState({
+          state: result.response.data.state,
+        });
+      },
+
+      () => {
+        retrieveProbe(probe);
+      }
+    );*/
 }

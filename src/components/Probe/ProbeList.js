@@ -2,7 +2,7 @@ import React from "react";
 import { Probe } from "./Probe";
 // eslint-disable-next-line
 import { ProbeAdd } from "./ProbeAdd";
-import { Divider, Flex } from "@chakra-ui/core";
+import { Grid } from "@chakra-ui/core";
 import { retrieveUserProbes } from "../../assets/api.js";
 
 export class ProbeList extends React.Component {
@@ -22,17 +22,20 @@ export class ProbeList extends React.Component {
   render() {
     
     return (
-      <Flex direction="column">
+      <>
+      <Grid templateColumns="repeat(3, 1fr)" gap={6}>
       {this.state.probes.map((id, key) => {
         return (
           <React.Fragment key={key}>
           <Probe id={id} />
-          <Divider mt={4} />
           </React.Fragment>
         )
       })}
-      <ProbeAdd user="1" />
-      </Flex>
+      
+        <ProbeAdd user="1" />
+      </Grid>
+      </>
+      
     );
   }
 }

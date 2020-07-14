@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   Button,
   Modal,
@@ -17,9 +17,13 @@ import {
 
 } from "@chakra-ui/core";
 
-export function ProbeAdd() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+import { store } from "../../assets/api.js";
 
+export function ProbeAdd(props) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [ name, setName ] = useState();
+  
+  
   return (
     <>
       <Button
@@ -39,7 +43,8 @@ export function ProbeAdd() {
           <ModalBody>
             <FormControl>
               <FormLabel htmlFor="name">Probe's name</FormLabel>
-              <Input type="text" id="name" aria-describedby="name-helper-text" />
+              <Input type="text" id="name" aria-describedby="name-helper-text" value={name}
+                onChange={event => setName(event.target.value)} />
               <FormHelperText id="name-helper-text">
                 Helpful for knowing which probe is what <span role="img" aria-label="funny">😁</span>
               </FormHelperText>
@@ -50,7 +55,7 @@ export function ProbeAdd() {
             <Button variant="outline" variantColor="blue" mr={3} onClick={onClose}>
               Close
             </Button>
-            <Button variant="solid" variantColor="green">Create</Button>
+            <Button variant="solid" variantColor="green" onClick={() => store(props)}>Create</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
