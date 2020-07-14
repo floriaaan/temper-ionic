@@ -56,6 +56,7 @@ const App: React.FC = () => (
                     path={obj.path}
                     component={obj.component}
                     exact={true}
+                    key={key}
                   />
                 );
               })}
@@ -69,7 +70,7 @@ const App: React.FC = () => (
             <IonTabBar slot="bottom">
               {RoutesTab.map((obj, key) => {
                 return (
-                  <IonTabButton tab={obj.label.toLowerCase()} href={obj.path}>
+                  <IonTabButton tab={obj.label.toLowerCase()} href={obj.path} key={key}>
                     <IonIcon icon={obj.icon} />
                     <IonLabel>{obj.label}</IonLabel>
                   </IonTabButton>
