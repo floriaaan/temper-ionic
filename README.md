@@ -23,5 +23,5 @@
 ## Purpose of Temper
 
 The purpose of Temper is to provide an upgrade of an old project, Atmos Home.
-It allows me to develop my skills in Node, React and it also trains me to Ionic
+It allows me to develop my skills in Node, React and it also trains me to Ionic.
 As it is open-source, feel free to contribute at Temper.

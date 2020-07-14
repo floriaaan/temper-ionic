@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import "./Map.css";
-
-import {
-  IonContent,
-  IonSkeletonText,
-  IonButton,
-} from "@ionic/react";
+import { IonContent, IonSkeletonText, IonButton } from "@ionic/react";
 
 import "leaflet/dist/leaflet.css";
 
@@ -48,12 +42,10 @@ const MapComponent: React.FC<ContainerProps> = ({ user }) => {
             )
               .then((res) => res.json())
               .then((res) => {
-                if(res.response.data.gps.lon && res.response.data.gps.lat) {
-                    setGPSArray(gpsArray.concat(res.response.data.gps));
+                if (res.response.data.gps.lon && res.response.data.gps.lat) {
+                  setGPSArray(gpsArray.concat(res.response.data.gps));
                 }
-                
               });
-            
           });
           setLoading(false);
         });
@@ -66,7 +58,7 @@ const MapComponent: React.FC<ContainerProps> = ({ user }) => {
     <IonContent>
       {!loading ? (
         <>
-          <Map center={[43, 1]} zoom={3}>
+          <Map center={[43, 1]} zoom={3} style={{height: '98%', width: '99%'}}>
             <TileLayer
               attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -75,14 +67,11 @@ const MapComponent: React.FC<ContainerProps> = ({ user }) => {
             {gpsArray.map((id, key) => {
               return (
                 <React.Fragment key={key}>
-                  <Marker
-                    position={[gpsArray[key].lon, gpsArray[key].lat]}
-                  >
+                  <Marker position={[gpsArray[key].lon, gpsArray[key].lat]}>
                     <Popup>
-                    <IonButton>Coucou</IonButton>
-                  </Popup>
+                      <IonButton>Coucou</IonButton>
+                    </Popup>
                   </Marker>
-                  
                 </React.Fragment>
               );
             })}

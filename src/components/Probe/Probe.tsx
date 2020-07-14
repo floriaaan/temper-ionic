@@ -9,11 +9,11 @@ import {
   IonButton,
   IonCardContent,
   IonSkeletonText,
-  IonBadge,
   IonCardTitle,
   IonList,
   IonListHeader,
   IonIcon,
+  IonChip,
 } from "@ionic/react";
 import {
   thermometerOutline,
@@ -25,11 +25,14 @@ import {
 
 
 import moment from "moment";
+
+import "leaflet/dist/leaflet.css"
 import L from 'leaflet';
-import { Map, TileLayer, Marker } from "react-leaflet";
+import { Map, TileLayer, Marker, Popup } from "react-leaflet";
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import { useHistory } from "react-router-dom";
+import { Button, Heading } from "@chakra-ui/core";
 
 let DefaultIcon = L.icon({
     iconUrl: icon,
@@ -97,14 +100,16 @@ const Probe: React.FC<ContainerProps> = ({ id }) => {
       {!loading ? (
         <>
           <IonItem>
-            <IonCardTitle>{name ? name : "Sonde #" + id}</IonCardTitle>
-            <IonBadge className="ion-margin-horizontal" color="warning">
+            <Heading as="h3" size="md">
+                      {name ? name : "Sonde #" + id}
+                    </Heading>
+            <IonChip outline={true} className="ion-margin-horizontal" color="warning">
               {category}
-            </IonBadge>
+            </IonChip>
 
-            <IonBadge color={state ? "success" : "danger"}>
+            <IonChip color={state ? "success" : "danger"}>
               {state ? "Active" : "Disabled"}
-            </IonBadge>
+            </IonChip>
 
             <IonButton fill="outline" slot="end" onClick={() => navigateTo()}>
               View
@@ -161,14 +166,23 @@ const Probe: React.FC<ContainerProps> = ({ id }) => {
                 <> </>
               )}
             {gps.lon && gps.lat ? (
-              <Map center={[gps.lon, gps.lat]} zoom={15}>
-                <TileLayer
-                  attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                <Marker position={[gps.lon, gps.lat]}>
-                </Marker>
-              </Map>
+              <Map center={[gps.lat, gps.lon]} zoom={4} style={{height: '200px', width: '99%'}}>
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              {" "}
+              <Marker position={[gps.lat, gps.lon]}>
+                <Popup>
+                  <Button
+                    variantColor={state ? "red" : "green"}
+                    variant="ghost"
+                    onClick={() => handleToggle()}
+                  >
+                    {state ? "Turn off" : "Turn on"}
+                  </Button>
+                </Popup>
+              </Marker>
+            </Map>
             ) : (
                 <IonLabel>
                   No Location{" "}

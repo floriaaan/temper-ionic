@@ -12,8 +12,9 @@ import {
   IonItem,
   IonInput,
 } from "@ionic/react";
-import { arrowUpCircle, logoInstagram, logoTwitter, add } from "ionicons/icons";
+import { arrowUpCircle, logoInstagram, logoTwitter, add, qrCodeOutline } from "ionicons/icons";
 import List from "../components/Probe/ProbeList";
+import Swal from 'sweetalert2';
 
 import "./ProbeTab.css";
 
@@ -58,8 +59,8 @@ const ProbeTab: React.FC = () => {
             <IonFabButton color="light" onClick={() => setShowAddModal(true)}>
               <IonIcon icon={add}></IonIcon>
             </IonFabButton>
-            <IonFabButton color="light">
-              <IonIcon icon={logoTwitter}></IonIcon>
+            <IonFabButton color="light" onClick={() => Swal.fire('QR Code', 'Clicked on QRCode', 'success')}>
+              <IonIcon icon={qrCodeOutline}></IonIcon>
             </IonFabButton>
             <IonFabButton color="light" onClick={() => ''}>
               <IonIcon icon={logoInstagram}></IonIcon>
