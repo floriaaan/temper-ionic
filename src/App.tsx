@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Redirect, Route } from "react-router-dom";
 import {
   IonApp,
@@ -10,7 +10,7 @@ import {
   IonTabs,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { Routes, RoutesTab } from "./routes/web";
+import { Routes, RoutesTab, RoutesAuth } from "./routes/web";
 //import { thermometerOutline, mapOutline, peopleOutline } from "ionicons/icons";
 
 import { ThemeProvider, ColorModeProvider, CSSReset } from "@chakra-ui/core";
@@ -41,47 +41,106 @@ import "bootstrap/dist/css/bootstrap.min.css";
 /* Theme variables */
 import { temper } from "./theme/temper";
 import "./theme/variables.css";
+import { auth_middleware } from "./middleware/auth";
 
-const App: React.FC = () => (
-  <IonApp>
-    <ThemeProvider theme={temper}>
-      <CSSReset />
-      <ColorModeProvider>
-        <IonReactRouter>
-          <IonTabs>
-            <IonRouterOutlet>
-              {Routes.map((obj, key) => {
-                return (
-                  <Route
-                    path={obj.path}
-                    component={obj.component}
-                    exact={true}
-                    key={key}
-                  />
-                );
-              })}
+const logged = (
+  <ThemeProvider theme={temper}>
+    <CSSReset />
+    <ColorModeProvider>
+      <IonReactRouter>
+        <IonTabs>
+          <IonRouterOutlet>
+            {Routes.map((obj, key) => {
+              return (
+                <Route
+                  path={obj.path}
+                  component={obj.component}
+                  exact={true}
+                  key={key}
+                />
+              );
+            })}
 
-              <Route
-                path="/"
-                render={() => <Redirect to="/probes" />}
-                exact={true}
-              />
-            </IonRouterOutlet>
-            <IonTabBar slot="bottom">
-              {RoutesTab.map((obj, key) => {
-                return (
-                  <IonTabButton tab={obj.label.toLowerCase()} href={obj.path} key={key}>
-                    <IonIcon icon={obj.icon} />
-                    <IonLabel>{obj.label}</IonLabel>
-                  </IonTabButton>
-                );
-              })}
-            </IonTabBar>
-          </IonTabs>
-        </IonReactRouter>
-      </ColorModeProvider>
-    </ThemeProvider>
-  </IonApp>
+            <Route
+              path="/"
+              render={() => <Redirect to="/probes" />}
+              exact={true}
+            />
+          </IonRouterOutlet>
+          <IonTabBar slot="bottom">
+            {RoutesTab.map((obj, key) => {
+              return (
+                <IonTabButton
+                  tab={obj.label.toLowerCase()}
+                  href={obj.path}
+                  key={key}
+                >
+                  <IonIcon icon={obj.icon} />
+                  <IonLabel>{obj.label}</IonLabel>
+                </IonTabButton>
+              );
+            })}
+          </IonTabBar>
+        </IonTabs>
+      </IonReactRouter>
+    </ColorModeProvider>
+  </ThemeProvider>
 );
+
+const notLogged = (
+  <ThemeProvider theme={temper}>
+    <CSSReset />
+    <ColorModeProvider>
+      <IonReactRouter>
+        <IonTabs>
+          <IonRouterOutlet>
+          {RoutesAuth.map((obj, key) => {
+              return (
+                <Route
+                  path={obj.path}
+                  component={obj.component}
+                  exact={true}
+                  key={key}
+                />
+              );
+            })}
+            <Route
+              path="/"
+              render={() => <Redirect to="/login" />}
+              exact={true}
+            />
+          </IonRouterOutlet>
+          <IonTabBar slot="bottom">
+          {RoutesAuth.map((obj, key) => {
+              return (
+                <IonTabButton
+                  tab={obj.label.toLowerCase()}
+                  href={obj.path}
+                  key={key}
+                >
+                  <IonIcon icon={obj.icon} />
+                  <IonLabel>{obj.label}</IonLabel>
+                </IonTabButton>
+              );
+            })}
+          </IonTabBar>
+        </IonTabs>
+      </IonReactRouter>
+    </ColorModeProvider>
+  </ThemeProvider>
+);
+
+const App: React.FC = () => {
+  localStorage.setItem("auth.logged", '1');
+  const [auth, setAuth] = useState({
+    logged: localStorage.getItem("auth.logged"),
+  });
+  console.log(auth);
+
+  //auth_middleware();
+  
+
+  return <IonApp>{auth.logged ? logged : notLogged}</IonApp>;
+};
 
 export default App;

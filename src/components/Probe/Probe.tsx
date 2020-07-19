@@ -9,7 +9,6 @@ import {
   IonButton,
   IonCardContent,
   IonSkeletonText,
-  IonCardTitle,
   IonList,
   IonListHeader,
   IonIcon,

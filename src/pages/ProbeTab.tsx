@@ -12,7 +12,7 @@ import {
   IonItem,
   IonInput,
 } from "@ionic/react";
-import { arrowUpCircle, logoInstagram, logoTwitter, add, qrCodeOutline } from "ionicons/icons";
+import { arrowUpCircle, logoInstagram, add, qrCodeOutline } from "ionicons/icons";
 import List from "../components/Probe/ProbeList";
 import Swal from 'sweetalert2';
 

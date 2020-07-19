@@ -30,16 +30,6 @@ const UserTab: React.FC = () => {
   });
   const [darkMode, setDarkMode] = useState(false);
 
-  const fetchUser = async () => {
-    await fetch(
-      "http://" + window.location.hostname + ":8000/api/v1/user/infos/" + 1
-    )
-      .then((res) => res.json())
-      .then((res) => {
-        setUser(res.response.data);
-      });
-  };
-
   const handleDarkMode = (checked: boolean) => {
     setDarkMode(checked);
     document.body.classList.toggle("dark", checked);
@@ -88,6 +78,7 @@ const UserTab: React.FC = () => {
       .then((res) => res.json())
       .then((result) => {
         //localstorage wipe
+        localStorage.setItem('auth.logged', '0');
         setUser({ name: "", token: "", email: "" });
       });
   };
