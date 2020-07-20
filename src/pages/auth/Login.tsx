@@ -6,20 +6,49 @@ import {
   IonLabel,
   IonInput,
   IonButton,
+  IonAlert,
 } from "@ionic/react";
 import { Image, Heading } from "@chakra-ui/core";
 
 const Login: React.FC = () => {
   const succesfullyLogged = () => {
-    localStorage.setItem("auth.logged", '1');
+    localStorage.setItem("auth.logged", "1");
     window.location.pathname = "/probes";
   };
 
   const [login, setLogin] = useState<string>();
   const [password, setPassword] = useState<string>();
 
+  const [showError, setShowError] = useState(false);
+  const [error, setError] = useState({
+    logging: false,
+    logging_msg: "",
+  });
+
   const handlePost = () => {
-    succesfullyLogged();
+    fetch("http://" + window.location.hostname + ":8000/api/v1/user/connect/", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user: 1,
+        login: login,
+        password: password,
+      }),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        if (!result.response || !result.response.data.token) {
+          let keys = Object.keys(result);
+          setError({ logging: true, logging_msg: result[keys[0]] });
+          setShowError(true);
+        } else {
+          localStorage.setItem("auth", JSON.stringify(result.response.data));
+          succesfullyLogged();
+        }
+      });
   };
 
   return (
@@ -56,6 +85,7 @@ const Login: React.FC = () => {
             <IonButton
               expand="block"
               color="primary"
+              fill="outline"
               onClick={() => handlePost()}
             >
               Connect to Temper
@@ -63,6 +93,14 @@ const Login: React.FC = () => {
           </div>
         </div>
       </IonContent>
+      <IonAlert
+        isOpen={showError}
+        onDidDismiss={() => setShowError(false)}
+        cssClass="my-custom-class"
+        header={"Login : Error"}
+        message={error.logging_msg}
+        buttons={["OK, I'll focus"]}
+      />
     </IonPage>
   );
 };

@@ -32,33 +32,21 @@ const UserTab: React.FC = () => {
 
   const handleDarkMode = (checked: boolean) => {
     setDarkMode(checked);
+    localStorage.setItem('darkMode', `${checked}`);
     document.body.classList.toggle("dark", checked);
   };
 
   const login = async () => {
-    await fetch(
-      "http://" + window.location.hostname + ":8000/api/v1/user/connect/",
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          login: "floriaaan",
-          password: "azerty",
-        }),
-      }
-    )
-      .then((res) => res.json())
-      .then((result) => {
-        //localstorage add token
-        setUser({
-          name: result.response.data.user.name,
-          token: result.response.data.token,
-          email: result.response.data.user.email,
-        });
-      });
+    let auth_json = JSON.parse(
+      localStorage.getItem("auth") ||
+        `{"user": {"name": "","email": ""},"token": ""}`
+    );
+    console.log(auth_json)
+    setUser({
+      name: auth_json.user.name,
+      token: auth_json.token,
+      email: auth_json.user.email,
+    });
   };
 
   const logout = async () => {
@@ -78,9 +66,11 @@ const UserTab: React.FC = () => {
       .then((res) => res.json())
       .then((result) => {
         //localstorage wipe
-        localStorage.setItem('auth.logged', '0');
+        localStorage.setItem("auth.logged", "0");
+        localStorage.setItem("auth", "");
         setUser({ name: "", token: "", email: "" });
-        window.location.href = "http://" + window.location.hostname + ":3000/login";
+        window.location.href =
+          "http://" + window.location.hostname + ":3000/login";
       });
   };
 

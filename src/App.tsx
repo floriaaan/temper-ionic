@@ -135,14 +135,10 @@ const App: React.FC = () => {
   if (!localStorage.getItem("auth.logged")) {
     localStorage.setItem("auth.logged", "0");
   }
-
-  const [auth, setAuth] = useState({
-    logged: localStorage.getItem("auth.logged"),
-  });
-
+  
   auth_middleware();
 
-  return <IonApp>{auth.logged === "1" ? logged : notLogged}</IonApp>;
+  return <IonApp>{localStorage.getItem("auth.logged") === "1" ? logged : notLogged}</IonApp>;
 };
 
 export default App;
