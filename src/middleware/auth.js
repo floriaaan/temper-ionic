@@ -1,8 +1,14 @@
-import { useHistory } from "react-router-dom";
+let auth_routes = [
+    '/register',
+    '/login',
+    '/forgot',
+];
+
+
+
 export const auth_middleware = () => {
     let logged = localStorage.getItem('auth.logged');
-    const history = useHistory();
-    if (logged !== '1') {
-        history.push('/');
+    if (logged !== '1' && !auth_routes.includes(window.location.pathname)) {
+        window.location.pathname = "/login";
     }
 }

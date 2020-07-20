@@ -80,6 +80,7 @@ const UserTab: React.FC = () => {
         //localstorage wipe
         localStorage.setItem('auth.logged', '0');
         setUser({ name: "", token: "", email: "" });
+        window.location.href = "http://" + window.location.hostname + ":3000/login";
       });
   };
 

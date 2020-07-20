@@ -13,12 +13,14 @@ import {
   IonInput,
 } from "@ionic/react";
 import { arrowUpCircle, logoInstagram, add, qrCodeOutline } from "ionicons/icons";
-import List from "../components/Probe/ProbeList";
+import List from "../../components/Probe/ProbeList";
 import Swal from 'sweetalert2';
 
 import "./ProbeTab.css";
+import { auth_middleware } from "../../middleware/auth";
 
 const ProbeTab: React.FC = () => {
+  auth_middleware();
   const [showAddModal, setShowAddModal] = useState(false);
   const [inputName, setInputName] = useState<string>();
   const [inputCategory, setInputCategory] = useState<string>();

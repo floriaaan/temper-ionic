@@ -102,7 +102,7 @@ const Probe: React.FC<ContainerProps> = ({ id }) => {
             <Heading as="h3" size="md">
                       {name ? name : "Sonde #" + id}
                     </Heading>
-            <IonChip outline={true} className="ion-margin-horizontal" color="warning">
+            <IonChip outline={true} className="ion-margin-horizontal" color="tertiary">
               {category}
             </IonChip>
 

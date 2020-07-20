@@ -42,6 +42,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { temper } from "./theme/temper";
 import "./theme/variables.css";
 import { auth_middleware } from "./middleware/auth";
+//import { auth_middleware } from "./middleware/auth";
 
 const logged = (
   <ThemeProvider theme={temper}>
@@ -94,7 +95,7 @@ const notLogged = (
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-          {RoutesAuth.map((obj, key) => {
+            {RoutesAuth.map((obj, key) => {
               return (
                 <Route
                   path={obj.path}
@@ -111,7 +112,7 @@ const notLogged = (
             />
           </IonRouterOutlet>
           <IonTabBar slot="bottom">
-          {RoutesAuth.map((obj, key) => {
+            {RoutesAuth.map((obj, key) => {
               return (
                 <IonTabButton
                   tab={obj.label.toLowerCase()}
@@ -131,16 +132,17 @@ const notLogged = (
 );
 
 const App: React.FC = () => {
-  localStorage.setItem("auth.logged", '1');
+  if (!localStorage.getItem("auth.logged")) {
+    localStorage.setItem("auth.logged", "0");
+  }
+
   const [auth, setAuth] = useState({
     logged: localStorage.getItem("auth.logged"),
   });
-  console.log(auth);
 
-  //auth_middleware();
-  
+  auth_middleware();
 
-  return <IonApp>{auth.logged ? logged : notLogged}</IonApp>;
+  return <IonApp>{auth.logged === "1" ? logged : notLogged}</IonApp>;
 };
 
 export default App;

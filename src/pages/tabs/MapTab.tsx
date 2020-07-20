@@ -1,6 +1,6 @@
 import React from "react";
 import { IonPage } from "@ionic/react";
-import MapComponent from "../components/Map/Map";
+import MapComponent from "../../components/Map/Map";
 
 const MapTab: React.FC = () => {
   return (

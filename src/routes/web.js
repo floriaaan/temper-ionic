@@ -1,12 +1,15 @@
-import ProbeTab from "../pages/ProbeTab";
-import MapTab from "../pages/MapTab";
-import UserTab from "../pages/UserTab";
+import ProbeTab from "../pages/tabs/ProbeTab";
+import MapTab from "../pages/tabs/MapTab";
+import UserTab from "../pages/tabs/UserTab";
+
 import ProbePage from "../pages/ProbePage";
 
-import { thermometerOutline, mapOutline, peopleOutline, fingerPrintOutline, keyOutline, personAddOutline } from "ionicons/icons";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import Forgot from "../pages/auth/Forgot";
+
+import { thermometerOutline, mapOutline, peopleOutline, fingerPrintOutline, keyOutline, personAddOutline } from "ionicons/icons";
+
 
 export const RoutesTab = [{
     path : '/probes',
