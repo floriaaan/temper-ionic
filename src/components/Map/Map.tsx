@@ -17,10 +17,10 @@ let DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 interface ContainerProps {
-  user: number;
+  token: string;
 }
 
-const MapComponent: React.FC<ContainerProps> = ({ user }) => {
+const MapComponent: React.FC<ContainerProps> = ({ token }) => {
   const [loading, setLoading] = useState(true);
   const [gpsArray, setGPSArray] = useState([
     {
@@ -32,7 +32,7 @@ const MapComponent: React.FC<ContainerProps> = ({ user }) => {
   useEffect(() => {
     async function fetchData() {
       await fetch(
-        "http://" + window.location.hostname + ":8000/api/v1/probe/user/" + user
+        "http://" + window.location.hostname + ":8000/api/v1/probe/user/" + token
       )
         .then((res) => res.json())
         .then((res) => {
@@ -53,14 +53,14 @@ const MapComponent: React.FC<ContainerProps> = ({ user }) => {
 
     fetchData();
     // eslint-disable-next-line
-  }, [user]);
+  }, [token]);
   return (
     <IonContent>
       {!loading ? (
         <>
           <Map center={[43, 1]} zoom={3} style={{height: '98%', width: '99%'}}>
             <TileLayer
-              attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+              attribution='Temper 💞'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             {console.log(gpsArray)}

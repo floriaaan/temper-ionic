@@ -10,17 +10,18 @@ import {
 import Probe from "./Probe";
 
 interface ContainerProps {
-  user: number;
+  token: string;
 }
 
-const ProbeList: React.FC<ContainerProps> = ({ user }) => {
+const ProbeList: React.FC<ContainerProps> = ({ token }) => {
   const [loading, setLoading] = useState(true);
   const [list, setList] = useState([]);
+  
 
   useEffect(() => {
     async function fetchData() {
       await fetch(
-        "http://" + window.location.hostname + ":8000/api/v1/probe/user/" + user
+        "http://" + window.location.hostname + ":8000/api/v1/probe/user/" + token
       )
         .then((res) => res.json())
         .then((res) => {
@@ -30,12 +31,12 @@ const ProbeList: React.FC<ContainerProps> = ({ user }) => {
     }
 
     fetchData();
-  }, [user]);
+  }, [token]);
 
-  let probeCards = list.map((id, key) => {
+  let probeCards = list.map((token, key) => {
     return (
-      <IonCol sizeLg="4" key={key}>
-        <Probe id={id} />
+      <IonCol sizeLg="4">
+        <Probe token={token} id={key + 1} />
       </IonCol>
     );
   });

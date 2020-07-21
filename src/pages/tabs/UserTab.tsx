@@ -41,7 +41,6 @@ const UserTab: React.FC = () => {
       localStorage.getItem("auth") ||
         `{"user": {"name": "","email": ""},"token": ""}`
     );
-    console.log(auth_json)
     setUser({
       name: auth_json.user.name,
       token: auth_json.token,

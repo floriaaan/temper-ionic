@@ -33,7 +33,6 @@ const Login: React.FC = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        user: 1,
         login: login,
         password: password,
       }),
@@ -41,9 +40,15 @@ const Login: React.FC = () => {
       .then((res) => res.json())
       .then((result) => {
         if (!result.response || !result.response.data.token) {
-          let keys = Object.keys(result);
-          setError({ logging: true, logging_msg: result[keys[0]] });
-          setShowError(true);
+          if (!result.response) {
+            let keys = Object.keys(result);
+            setError({ logging: true, logging_msg: result[keys[0]] });
+            setShowError(true);
+          } else {
+            setError({ logging: true, logging_msg: result.response.data });
+            setShowError(true);
+          }
+          
         } else {
           localStorage.setItem("auth", JSON.stringify(result.response.data));
           succesfullyLogged();

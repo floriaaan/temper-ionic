@@ -42,10 +42,11 @@ L.Marker.prototype.options.icon = DefaultIcon;
 
 
 interface ContainerProps {
+  token: string;
   id: number;
 }
 
-const Probe: React.FC<ContainerProps> = ({ id }) => {
+const Probe: React.FC<ContainerProps> = ({ token, id }) => {
   const [name, setName] = useState();
   const [state, setState] = useState();
   const [category, setCategory] = useState();
@@ -62,7 +63,7 @@ const Probe: React.FC<ContainerProps> = ({ id }) => {
 
   const handleToggle = () => {
     async function toggleState() {
-      await fetch("http://" + window.location.hostname + ":8000/api/v1/probe/" + id + "/toggle", {
+      await fetch("http://" + window.location.hostname + ":8000/api/v1/probe/" + token + "/toggle", {
         method: "PUT",
       })
         .then((res) => res.json())
@@ -76,7 +77,7 @@ const Probe: React.FC<ContainerProps> = ({ id }) => {
 
   useEffect(() => {
     async function fetchData() {
-      await fetch("http://" + window.location.hostname + ":8000/api/v1/probe/" + id)
+      await fetch("http://" + window.location.hostname + ":8000/api/v1/probe/" + token)
         .then((res) => res.json())
         .then((res) => {
           setName(res.response.data.name);
@@ -92,7 +93,7 @@ const Probe: React.FC<ContainerProps> = ({ id }) => {
   }, [id]);
 
   const history = useHistory();
-  const navigateTo = () => history.push('/probe/' + id);
+  const navigateTo = () => history.push('/probe/' + token);
 
   return (
     <IonCard>
@@ -168,6 +169,7 @@ const Probe: React.FC<ContainerProps> = ({ id }) => {
               <Map center={[gps.lat, gps.lon]} zoom={4} style={{height: '200px', width: '99%'}}>
               <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='Temper 💞'
               />
               {" "}
               <Marker position={[gps.lat, gps.lon]}>

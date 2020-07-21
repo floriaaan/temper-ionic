@@ -25,8 +25,13 @@ const ProbeTab: React.FC = () => {
   const [inputName, setInputName] = useState<string>();
   const [inputCategory, setInputCategory] = useState<string>();
 
+  let auth_json = JSON.parse(
+    localStorage.getItem("auth") ||
+      `{"user": {"name": "","email": ""},"token": ""}`
+  );
+
   const handlePost = () => {
-    //TODO: add a loader
+    //TODO: add a reload
     async function post() {
       await fetch("http://"+ window.location.hostname +":8000/api/v1/probe/", {
         method: "POST",
@@ -51,7 +56,7 @@ const ProbeTab: React.FC = () => {
   return (
     <div className="bg-primary">
       <IonPage className="bg-primary">
-        <List user={1}></List>
+        <List token={auth_json.token}></List>
 
         <IonFab horizontal="end" vertical="bottom" slot="fixed">
           <IonFabButton color="dark">
