@@ -35,8 +35,8 @@ const ProbeList: React.FC<ContainerProps> = ({ token }) => {
 
   let probeCards = list.map((token, key) => {
     return (
-      <IonCol sizeLg="4">
-        <Probe token={token} id={key + 1} />
+      <IonCol sizeLg="4" key={key} >
+        <Probe token={token} id={key + 1}/>
       </IonCol>
     );
   });

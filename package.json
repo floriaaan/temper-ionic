@@ -26,6 +26,7 @@
     "emotion-theming": "^10.0.27",
     "ionicons": "^5.0.0",
     "leaflet": "^1.6.0",
+    "qrcode.react": "^1.0.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-leaflet": "^2.7.0",
@@ -60,6 +61,7 @@
   },
   "devDependencies": {
     "@capacitor/cli": "2.2.1",
+    "@types/qrcode.react": "^1.0.1",
     "moment": "^2.27.0"
   },
   "description": "An Ionic project"

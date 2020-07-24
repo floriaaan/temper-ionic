@@ -90,7 +90,7 @@ const Probe: React.FC<ContainerProps> = ({ token, id }) => {
     }
 
     fetchData();
-  }, [id]);
+  }, [token]);
 
   const history = useHistory();
   const navigateTo = () => history.push('/probe/' + token);

@@ -264,3 +264,13 @@ html, html.md, html.ios, body {
   margin-top: 5px;
 }
 
+.ion-card-footer {
+  position: absolute;
+  left: 30px;
+  bottom: 20px;
+  width: 100%;
+}
+
+.has-card-footer {
+  padding-bottom: 15px;
+}
