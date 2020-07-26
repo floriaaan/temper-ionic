@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   IonPage,
+  IonContent,
   IonItemDivider,
   IonItem,
   IonLabel,
@@ -79,8 +80,11 @@ const UserTab: React.FC = () => {
   }, []);
 
   return (
-    <IonPage style={{ backgroundColor: "#222428" }}>
-      <IonCard className="shadow-lg p-0">
+    <IonPage>
+      <IonContent>
+
+      
+      <IonCard className="shadow-lg p-0 m-0">
         <IonCardHeader>
           <IonCardTitle className="display-4 text-center">
             {user.name}
@@ -127,6 +131,7 @@ const UserTab: React.FC = () => {
           <IonLabel>Settings</IonLabel>
         </IonItem>
       </IonCard>
+      </IonContent>
     </IonPage>
   );
 };

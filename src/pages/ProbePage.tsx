@@ -25,12 +25,40 @@ import {
   IonRow,
   IonCol,
   IonModal,
-  IonItemDivider
+  IonItemDivider,
+  IonRadioGroup,
+  IonListHeader,
+  IonRadio,
+  IonList,
 } from "@ionic/react";
 import { useLocation, useHistory } from "react-router-dom";
-import { arrowUpCircle, time, rainy, thermometer, trash, share, caretForwardCircle, heart, close, chevronBackOutline, ellipsisVerticalOutline, personOutline } from "ionicons/icons";
+import {
+  arrowUpCircle,
+  time,
+  rainy,
+  thermometer,
+  trash,
+  share,
+  caretForwardCircle,
+  heart,
+  close,
+  chevronBackOutline,
+  ellipsisVerticalOutline,
+  personOutline,
+} from "ionicons/icons";
 
-import { Heading, Stack, StatGroup, Stat, StatArrow, StatLabel, StatHelpText, StatNumber, Box } from "@chakra-ui/core";
+import {
+  Heading,
+  Stack,
+  StatGroup,
+  Stat,
+  StatArrow,
+  StatLabel,
+  StatHelpText,
+  StatNumber,
+  Box,
+  CSSReset,
+} from "@chakra-ui/core";
 
 import moment from "moment";
 
@@ -63,13 +91,12 @@ const ProbePage: React.FC = () => {
     lon: 0,
     lat: 0,
   });
-  const [owner, setOwner] = useState({name:'', email: '', loading: true});
+  const [owner, setOwner] = useState({ name: "", email: "", loading: true });
   const [loading, setLoading] = useState(true);
 
-  
   const [showActionSheet, setShowActionSheet] = useState(false);
   const [showQR, setShowQR] = useState(false);
-
+  const [qrJson, setQRJSON] = useState({ token: id, duration: "1day" });
 
   /*const handleScroll = (e: any) => {
     let scroll = document.querySelector("#scroll")!;
@@ -91,7 +118,9 @@ const ProbePage: React.FC = () => {
     )
       .then((res) => res.json())
       .then((res) => {
-        setMeasures(res.response.data || [{temperature: 0, humidity: 0, date : ''}]);
+        setMeasures(
+          res.response.data || [{ temperature: 0, humidity: 0, date: "" }]
+        );
       });
   };
   const fetchData = async () => {
@@ -111,11 +140,21 @@ const ProbePage: React.FC = () => {
   };
   const fetchOwner = async () => {
     await fetch(
-      "http://" + window.location.hostname + ":8000/api/v1/probe/" + id + "/owner"
+      "http://" +
+        window.location.hostname +
+        ":8000/api/v1/probe/" +
+        id +
+        "/owner"
     )
       .then((res) => res.json())
       .then((res) => {
-        setOwner({name: res.response.data.name, email: res.response.data.email, loading:false} || {name:"Unable to fetch", email: "", loading:false});
+        setOwner(
+          {
+            name: res.response.data.name,
+            email: res.response.data.email,
+            loading: false,
+          } || { name: "Unable to fetch", email: "", loading: false }
+        );
       });
   };
 
@@ -136,21 +175,22 @@ const ProbePage: React.FC = () => {
     });
   };
 
+  const isGPS = (
+    <Map center={[43, 1]} zoom={12} style={{ height: "50vh", width: "99%" }}>
+      <TileLayer
+        attribution="Temper 💞"
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      <React.Fragment>
+        {""}
+        <Marker position={[gps.lon, gps.lat]}></Marker>
+      </React.Fragment>
+    </Map>
+  );
 
-  const isGPS = (<Map center={[43, 1]} zoom={3} style={{height: '65vh', width: '99%'}}>
-<TileLayer
-  attribution='Temper 💞'
-  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-/>
-<React.Fragment>
-    {''}
-  <Marker position={[gps.lon, gps.lat]}></Marker>
-</React.Fragment>
-</Map>);
+  const notGPS = "";
 
-const notGPS = "";
-
-const map = gps.lon && gps.lat ? isGPS : notGPS;
+  const map = gps.lon && gps.lat ? isGPS : notGPS;
 
   return (
     <IonPage>
@@ -170,34 +210,45 @@ const map = gps.lon && gps.lat ? isGPS : notGPS;
           }}
         >
           <IonSlide>
-            <IonCard className="has-card-footer"
+            <IonCard
+              className="has-card-footer"
               style={{ height: "83vh", width: "90%", textAlign: "start" }}
             >
               <IonCardHeader>
                 <IonCardTitle>
                   {!loading ? (
                     <IonItem>
-                      <IonButton fill="clear" onClick={() => navigateTo('/probes')}>
-                      <IonIcon slot="icon-only" icon={chevronBackOutline}></IonIcon>
-                    </IonButton>
-                    <IonLabel>
-                      <Heading as="h1" size="2xl" className="ml-3">
-                      {name ? name : "Sonde #" + id}
-                      </Heading></IonLabel>
-                    <IonButton fill="clear" onClick={() => setShowActionSheet(true)} slot="end">
-                      <IonIcon slot="icon-only" icon={ellipsisVerticalOutline}></IonIcon>
-                    </IonButton>
-                  </IonItem>
-                    
-                      
+                      <IonButton
+                        fill="clear"
+                        onClick={() => navigateTo("/probes")}
+                      >
+                        <IonIcon
+                          slot="icon-only"
+                          icon={chevronBackOutline}
+                        ></IonIcon>
+                      </IonButton>
+                      <IonLabel>
+                        <Heading as="h1" size="2xl" className="ml-3">
+                          {name ? name : "Sonde #" + id}
+                        </Heading>
+                      </IonLabel>
+                      <IonButton
+                        fill="clear"
+                        onClick={() => setShowActionSheet(true)}
+                        slot="end"
+                      >
+                        <IonIcon
+                          slot="icon-only"
+                          icon={ellipsisVerticalOutline}
+                        ></IonIcon>
+                      </IonButton>
+                    </IonItem>
                   ) : (
                     <IonSkeletonText
                       animated
                       style={{ height: "10vh" }}
                     ></IonSkeletonText>
                   )}
-                    
-                  
                 </IonCardTitle>
 
                 <IonCardSubtitle>
@@ -220,15 +271,13 @@ const map = gps.lon && gps.lat ? isGPS : notGPS;
                 </IonCardSubtitle>
               </IonCardHeader>
               <IonCardContent>
-                
                 {!loading ? (
-                    map
+                  map
                 ) : (
                   <>
                     <IonSkeletonText animated style={{ height: "50vh" }} />
                   </>
                 )}
-                
               </IonCardContent>
 
               <IonRow className="ion-card-footer">
@@ -238,98 +287,146 @@ const map = gps.lon && gps.lat ? isGPS : notGPS;
                     className="mr-2"
                     color="tertiary"
                   ></IonIcon>
-                  {loading ? <IonSkeletonText animated style={{ width: '60%' }}></IonSkeletonText> : (createdAt ? "Created " + moment(createdAt).fromNow() : "")}
+                  {loading ? (
+                    <IonSkeletonText
+                      animated
+                      style={{ width: "60%" }}
+                    ></IonSkeletonText>
+                  ) : createdAt ? (
+                    "Created " + moment(createdAt).fromNow()
+                  ) : (
+                    ""
+                  )}
                 </IonCol>
                 <IonCol>
-                <IonIcon
+                  <IonIcon
                     icon={personOutline}
                     className="mx-2"
                     color="tertiary"
                   ></IonIcon>
-                  Owner : {owner.loading ? <IonSkeletonText animated style={{ width: '60%' }}></IonSkeletonText> : owner.name + (owner.email ? " - " + owner.email : "")}
+                  Owner :{" "}
+                  {owner.loading ? (
+                    <IonSkeletonText
+                      animated
+                      style={{ width: "60%" }}
+                    ></IonSkeletonText>
+                  ) : (
+                    owner.name + (owner.email ? " - " + owner.email : "")
+                  )}
                 </IonCol>
               </IonRow>
             </IonCard>
           </IonSlide>
           <IonSlide>
             <IonRefresher slot="fixed" onIonRefresh={doMeasuresRefresh}>
-              <IonRefresherContent>
-                
-              </IonRefresherContent>
+              <IonRefresherContent></IonRefresherContent>
             </IonRefresher>
-            <IonCard style={{ height: "83vh", width: "90%", textAlign: "start" }}>
-                  <IonCardHeader>
-                    <IonCardTitle>
-                    <Heading as="h1" size="2xl" className="ml-3">
+            <IonCard
+              style={{ height: "83vh", width: "90%", textAlign: "start" }}
+            >
+              <IonCardHeader>
+                <IonCardTitle>
+                  <Heading as="h1" size="2xl" className="ml-3">
                     Measures of {name}
-                    </Heading>
-                    </IonCardTitle>
-                    
-                  </IonCardHeader>
-                  <IonCardContent>
-                    <Stack spacing={3}>
+                  </Heading>
+                </IonCardTitle>
+              </IonCardHeader>
+              <IonCardContent>
                     {measures.map((obj, key) => {
-                      let index =  key - 1 === -1 ? 0 : key - 1  ;
-                      let tPercent = ((obj.temperature! - measures[index].temperature!)/ measures[index].temperature!) * 100;
-                      let hPercent = ((obj.humidity! - measures[index].humidity!)/ measures[index].humidity!) * 100;
+                      let index = key - 1 === -1 ? 0 : key - 1;
+                      let tPercent =
+                        ((obj.temperature! - measures[index].temperature!) /
+                          measures[index].temperature!) *
+                        100;
+                      let hPercent =
+                        ((obj.humidity! - measures[index].humidity!) /
+                          measures[index].humidity!) *
+                        100;
                       tPercent = Math.round(tPercent * 100) / 100;
                       hPercent = Math.round(hPercent * 100) / 100;
-                      
-                      return (<Box p={5} shadow="md" borderWidth="1px" key={key}>
-                      <StatGroup >
-                        <Stat>
-                          <StatLabel>
-                            <IonIcon
-                              icon={thermometer}
-                              className="mr-2"
-                              color="primary"
-                            ></IonIcon>
-                            Temperature
-                          </StatLabel>
-                      <StatNumber style={{fontSize:'1.5rem', fontWeight:"bold"}} >{obj.temperature} °C</StatNumber>
-                          <StatHelpText>
-                            <StatArrow type={tPercent >= 0 ? "increase" : "decrease"} />
-                            {tPercent} %
-                          </StatHelpText>
-                        </Stat>
-                      
-                        <Stat>
-                          <StatLabel>
-                            <IonIcon
-                              icon={rainy}
-                              className="mr-2"
-                              color="secondary"
-                            ></IonIcon>
-                            Humidty
-                          </StatLabel>
-                      <StatNumber style={{fontSize:'1.5rem', fontWeight:"bold"}} >{obj.humidity} %</StatNumber>
-                          <StatHelpText>
-                          <StatArrow type={hPercent >= 0 ? "increase" : "decrease"} />
-                            {hPercent} %
-                          </StatHelpText>
-                        </Stat>
-                        <Stat>
-                          <StatLabel>
-                            <IonIcon
-                              icon={time}
-                              className="mr-2"
-                              color="tertiary"
-                            ></IonIcon>
-                            Date
-                          </StatLabel>
-                          <StatNumber style={{fontSize:'1.5rem', fontWeight:"bold"}} >{moment(obj.date).fromNow()}</StatNumber>
-                          <StatHelpText>
-                          {moment(obj.date).format("MMMM Do YYYY, h:mm:ss a")}
-                          </StatHelpText>
-                        </Stat>
-                      </StatGroup>
-                      </Box>);
 
+                      return (
+                        <Box p={5} borderWidth="1px" key={key}>
+                          <StatGroup>
+                            <Stat>
+                              <StatLabel>
+                                <IonIcon
+                                  icon={thermometer}
+                                  className="mr-2"
+                                  color="primary"
+                                ></IonIcon>
+                                Temperature
+                              </StatLabel>
+                              <StatNumber
+                                style={{
+                                  fontSize: "1.5rem",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                {obj.temperature} °C
+                              </StatNumber>
+                              <StatHelpText>
+                                <StatArrow
+                                  type={tPercent >= 0 ? "increase" : "decrease"}
+                                />
+                                {tPercent} %
+                              </StatHelpText>
+                            </Stat>
+
+                            <Stat>
+                              <StatLabel>
+                                <IonIcon
+                                  icon={rainy}
+                                  className="mr-2"
+                                  color="secondary"
+                                ></IonIcon>
+                                Humidty
+                              </StatLabel>
+                              <StatNumber
+                                style={{
+                                  fontSize: "1.5rem",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                {obj.humidity} %
+                              </StatNumber>
+                              <StatHelpText>
+                                <StatArrow
+                                  type={hPercent >= 0 ? "increase" : "decrease"}
+                                />
+                                {hPercent} %
+                              </StatHelpText>
+                            </Stat>
+                            <Stat>
+                              <StatLabel>
+                                <IonIcon
+                                  icon={time}
+                                  className="mr-2"
+                                  color="tertiary"
+                                ></IonIcon>
+                                Date
+                              </StatLabel>
+                              <StatNumber
+                                style={{
+                                  fontSize: "1.5rem",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                {moment(obj.date).fromNow()}
+                              </StatNumber>
+                              <StatHelpText>
+                                {moment(obj.date).format(
+                                  "MMMM Do YYYY, h:mm:ss a"
+                                )}
+                              </StatHelpText>
+                            </Stat>
+                          </StatGroup>
+                        </Box>
+                      );
                     })}
-                    
-                    </Stack>
-                  </IonCardContent>
-                </IonCard>
+                  
+              </IonCardContent>
+            </IonCard>
           </IonSlide>
           <IonSlide>Settings of probe</IonSlide>
         </IonSlides>
@@ -347,69 +444,111 @@ const map = gps.lon && gps.lat ? isGPS : notGPS;
         </IonFab>
 
         <IonModal isOpen={showQR}>
+          <CSSReset></CSSReset>
           <div className="p-5">
-          <IonLabel>Share via QR Code</IonLabel>
-          <IonItemDivider></IonItemDivider>
-          <div className="w-100 my-1">
-          <QRCode value={JSON.stringify(probe)}
-            size={400}
-            includeMargin={true}
-            bgColor={"#cccccc"}
-            className="mx-auto"
-            
-            ></QRCode>
-          </div>
-          
-          <IonItemDivider></IonItemDivider>
-          <IonButton fill="outline" color="primary" expand="block" onClick={() => setShowQR(false)}>Close</IonButton>
-          
+            <IonLabel></IonLabel>
+            <Heading as="h1" size="lg">
+              Share via QR Code
+            </Heading>
+            <div className="w-100 mt-3">
+              <QRCode
+                value={JSON.stringify(qrJson)}
+                size={150}
+                includeMargin={true}
+                bgColor={"#cccccc"}
+                className="mx-auto"
+              ></QRCode>
+            </div>
+            <IonList>
+              <IonRadioGroup
+                value={qrJson.duration}
+                onIonChange={(e) =>
+                  setQRJSON({ token: id, duration: e.detail.value })
+                }
+              >
+                <IonListHeader>
+                  <IonLabel>Duration of the share</IonLabel>
+                </IonListHeader>
+
+                <IonItem>
+                  <IonLabel>1 day</IonLabel>
+                  <IonRadio slot="start" value="1day" />
+                </IonItem>
+
+                <IonItem>
+                  <IonLabel>1 week</IonLabel>
+                  <IonRadio slot="start" value="1week" />
+                </IonItem>
+
+                <IonItem>
+                  <IonLabel>1 month</IonLabel>
+                  <IonRadio slot="start" value="1month" />
+                </IonItem>
+
+                <IonItem>
+                  <IonLabel>Always</IonLabel>
+                  <IonRadio slot="start" value="always" />
+                </IonItem>
+              </IonRadioGroup>
+            </IonList>
+
+            <IonButton
+              fill="outline"
+              color="primary"
+              expand="block"
+              onClick={() => setShowQR(false)}
+            >
+              Close
+            </IonButton>
           </div>
         </IonModal>
 
         <IonActionSheet
-            isOpen={showActionSheet}
-            onDidDismiss={() => setShowActionSheet(false)}
-            buttons={[{
-              text: 'Delete',
-              role: 'destructive',
+          isOpen={showActionSheet}
+          onDidDismiss={() => setShowActionSheet(false)}
+          buttons={[
+            /*{
+              text: "Delete",
+              role: "destructive",
               icon: trash,
               handler: () => {
-                console.log('Delete clicked');
-              }
-            }, {
-              text: 'Share',
+                console.log("Delete clicked");
+              },
+            },*/
+            {
+              text: "Share",
               icon: share,
               handler: () => {
                 setShowQR(true);
-              }
-            }, {
-              text: 'Play (open modal)',
+              },
+            },
+            /*{
+              text: "Play (open modal)",
               icon: caretForwardCircle,
               handler: () => {
-                console.log('Play clicked');
-              }
-            }, {
-              text: 'Favorite',
+                console.log("Play clicked");
+              },
+            },
+            {
+              text: "Favorite",
               icon: heart,
               handler: () => {
-                console.log('Favorite clicked');
-              }
-            }, {
-              text: 'Cancel',
+                console.log("Favorite clicked");
+              },
+            },*/
+            {
+              text: "Cancel",
               icon: close,
-              role: 'cancel',
+              role: "cancel",
               handler: () => {
-                console.log('Cancel clicked');
-              }
-            }]}
-          >
-          </IonActionSheet>
+                setShowActionSheet(false);
+              },
+            },
+          ]}
+        ></IonActionSheet>
       </IonContent>
     </IonPage>
   );
 };
-
-
-
 
 export default ProbePage;

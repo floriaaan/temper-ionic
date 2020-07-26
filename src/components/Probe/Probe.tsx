@@ -13,6 +13,7 @@ import {
   IonListHeader,
   IonIcon,
   IonChip,
+  IonSpinner,
 } from "@ionic/react";
 import {
   thermometerOutline,
@@ -61,7 +62,10 @@ const Probe: React.FC<ContainerProps> = ({ token, id }) => {
   });
   const [loading, setLoading] = useState(true);
 
+  const [showSpinner, setShowSpinner] = useState(false);
+
   const handleToggle = () => {
+    setShowSpinner(true);
     async function toggleState() {
       await fetch("http://" + window.location.hostname + ":8000/api/v1/probe/" + token + "/toggle", {
         method: "PUT",
@@ -69,6 +73,7 @@ const Probe: React.FC<ContainerProps> = ({ token, id }) => {
         .then((res) => res.json())
         .then((result) => {
           setState(result.response.data.state);
+          setShowSpinner(false);
         });
     }
 
@@ -204,6 +209,8 @@ const Probe: React.FC<ContainerProps> = ({ token, id }) => {
                 slot="start"
               ></IonIcon>
               {state ? "Disable" : "Activate"}
+              {showSpinner ? <IonSpinner name="crescent" className="ml-3" /> : ""}
+              
             </IonButton>
           </IonCardContent>
         </>
