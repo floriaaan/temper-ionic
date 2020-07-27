@@ -11,10 +11,12 @@ import {
   IonItemDivider,
   IonItem,
   IonInput,
+  IonSpinner,
+  IonLabel,
 } from "@ionic/react";
 import { barcodeOutline, add, qrCodeOutline, arrowUp } from "ionicons/icons";
 import List from "../../components/Probe/ProbeList";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 import "./ProbeTab.css";
 import { auth_middleware } from "../../middleware/auth";
@@ -25,67 +27,70 @@ const ProbeTab: React.FC = () => {
   const [inputName, setInputName] = useState<string>();
   const [inputCategory, setInputCategory] = useState<string>();
 
-  
   const [showAddfromToken, setShowAddfromToken] = useState(false);
   const [inputToken, setInputToken] = useState<string>();
+
+  const [loadingPost, setLoadingPost] = useState(false);
+  const [loadingShareToken, setLoadingShareToken] = useState(false);
 
   let auth_json = JSON.parse(
     localStorage.getItem("auth") ||
       `{"user": {"name": "","email": ""},"token": ""}`
   );
 
-  const handlePost = () => {
-    //TODO: add a reload
-    async function post() {
-      await fetch("http://"+ window.location.hostname +":8000/api/v1/probe/", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          user: auth_json.token,
-          name: inputName,
-          category: inputCategory,
-        }),
-      })
-        .then((res) => res.json())
-        .then((result) => {});
-    }
+  const [auth_token, setAuthToken] = useState(auth_json.token);
 
-    post();
-    setShowAddModal(false);
+  const handlePost = () => {
+    setLoadingPost(true);
+    fetch("http://" + window.location.hostname + ":8000/api/v1/probe/", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user: auth_json.token,
+        name: inputName,
+        category: inputCategory,
+      }),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        if (result.response) {
+          setAuthToken(`${auth_json.token} `);
+        }
+        setLoadingPost(false);
+        setShowAddModal(false);
+      });
   };
 
   const handleTokenPost = () => {
-    //TODO: add a reload
-    async function post() {
-      await fetch("http://"+ window.location.hostname +":8000/api/v1/share/token", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          user: auth_json.token,
-          share: inputToken
-          
-        }),
-      })
-        .then((res) => res.json())
-        .then((result) => {});
-    }
-
-    post();
-    setShowAddfromToken(false);
+    setLoadingShareToken(true);
+    fetch("http://" + window.location.hostname + ":8000/api/v1/share/token", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user: auth_json.token,
+        share: inputToken,
+      }),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        if (result.response) {
+          setAuthToken(`${auth_json.token} `);
+        }
+        setLoadingShareToken(false);
+        setShowAddfromToken(false);
+      });
   };
-
-  
 
   return (
     <div className="bg-primary">
       <IonPage className="bg-primary">
-        <List token={auth_json.token}></List>
+        <List token={auth_token}></List>
 
         <IonFab horizontal="end" vertical="bottom" slot="fixed">
           <IonFabButton color="dark">
@@ -94,19 +99,30 @@ const ProbeTab: React.FC = () => {
           <IonFabList side="top">
             <IonFabButton color="light" onClick={() => setShowAddModal(true)}>
               <IonIcon icon={add}></IonIcon>
+              <IonLabel>Add a probe</IonLabel>
             </IonFabButton>
-            <IonFabButton color="light" onClick={() => Swal.fire('QR Code', 'Clicked on QRCode', 'success')}>
+            <IonFabButton
+              color="light"
+              onClick={() =>
+                Swal.fire("QR Code", "Clicked on QRCode", "success")
+              }
+            >
               <IonIcon icon={qrCodeOutline}></IonIcon>
             </IonFabButton>
-            <IonFabButton color="light" onClick={() => setShowAddfromToken(true)}>
+            <IonLabel>Add from QR</IonLabel>
+            <IonFabButton
+              color="light"
+              onClick={() => setShowAddfromToken(true)}
+              
+            >
               <IonIcon icon={barcodeOutline}></IonIcon>
+              Add from a friend
             </IonFabButton>
           </IonFabList>
         </IonFab>
 
         <IonModal isOpen={showAddModal}>
           <IonContent className="ion-padding">
-            <IonItemDivider>Probe's name</IonItemDivider>
             <IonItem>
               <IonInput
                 value={inputName}
@@ -114,8 +130,6 @@ const ProbeTab: React.FC = () => {
                 onIonChange={(e) => setInputName(e.detail.value!)}
               ></IonInput>
             </IonItem>
-            <IonItemDivider></IonItemDivider>
-            <IonItemDivider>Probe's category</IonItemDivider>
             <IonItem>
               <IonInput
                 value={inputCategory}
@@ -123,9 +137,13 @@ const ProbeTab: React.FC = () => {
                 onIonChange={(e) => setInputCategory(e.detail.value!)}
               ></IonInput>
             </IonItem>
-            <IonItemDivider></IonItemDivider>
             <IonButton color="success" onClick={() => handlePost()}>
               Validate
+              {loadingPost ? (
+                <IonSpinner name="crescent" className="ml-3" />
+              ) : (
+                ""
+              )}
             </IonButton>
             <IonButton
               color="secondary"
@@ -139,7 +157,6 @@ const ProbeTab: React.FC = () => {
 
         <IonModal isOpen={showAddfromToken}>
           <IonContent className="ion-padding">
-            
             <IonItem>
               <IonInput
                 value={inputToken}
@@ -150,6 +167,11 @@ const ProbeTab: React.FC = () => {
             </IonItem>
             <IonButton color="success" onClick={() => handleTokenPost()}>
               Validate
+              {loadingShareToken ? (
+                <IonSpinner name="crescent" className="ml-3" />
+              ) : (
+                ""
+              )}
             </IonButton>
             <IonButton
               color="secondary"

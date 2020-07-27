@@ -41,6 +41,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 /* Theme variables */
 import { temper } from "./theme/temper";
 import "./theme/variables.css";
+import "./theme/app.css";
 import { auth_middleware } from "./middleware/auth";
 //import { auth_middleware } from "./middleware/auth";
 

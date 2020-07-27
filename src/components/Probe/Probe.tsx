@@ -35,8 +35,8 @@ import { useHistory } from "react-router-dom";
 import { Button, Heading } from "@chakra-ui/core";
 
 let DefaultIcon = L.icon({
-    iconUrl: icon,
-    shadowUrl: iconShadow
+  iconUrl: icon,
+  shadowUrl: iconShadow
 });
 
 L.Marker.prototype.options.icon = DefaultIcon;
@@ -106,8 +106,8 @@ const Probe: React.FC<ContainerProps> = ({ token, id }) => {
         <>
           <IonItem>
             <Heading as="h3" size="md">
-                      {name ? name : "Sonde #" + id}
-                    </Heading>
+              {name ? name : "Sonde #" + id}
+            </Heading>
             <IonChip outline={true} className="ion-margin-horizontal" color="tertiary">
               {category}
             </IonChip>
@@ -117,7 +117,7 @@ const Probe: React.FC<ContainerProps> = ({ token, id }) => {
             </IonChip>
 
             <IonButton fill="outline" slot="end" onClick={() => navigateTo()}>
-              View
+              VIEW
             </IonButton>
           </IonItem>
 
@@ -171,31 +171,26 @@ const Probe: React.FC<ContainerProps> = ({ token, id }) => {
                 <> </>
               )}
             {gps.lon && gps.lat ? (
-              <Map center={[gps.lat, gps.lon]} zoom={4} style={{height: '200px', width: '99%'}}>
-              <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution='Temper 💞'
-              />
-              {" "}
-              <Marker position={[gps.lat, gps.lon]}>
-                <Popup>
-                  <Button
-                    variantColor={state ? "red" : "green"}
-                    variant="ghost"
-                    onClick={() => handleToggle()}
-                  >
-                    {state ? "Turn off" : "Turn on"}
-                  </Button>
-                </Popup>
-              </Marker>
-            </Map>
+              <Map center={[gps.lat, gps.lon]} zoom={4} style={{ height: '200px', width: '99%' }}>
+                <TileLayer
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution='Temper 💞'
+                />
+                {" "}
+                <Marker position={[gps.lat, gps.lon]}>
+                  <Popup>
+                    <Button
+                      variantColor={state ? "red" : "green"}
+                      variant="ghost"
+                      onClick={() => handleToggle()}
+                    >
+                      {state ? "Turn off" : "Turn on"}
+                    </Button>
+                  </Popup>
+                </Marker>
+              </Map>
             ) : (
-                <IonLabel>
-                  No Location{" "}
-                  <span role="img" aria-label="No location">
-                    ❌
-                </span>
-                </IonLabel>
+                ""
               )}
             <IonButton
               expand="block"
@@ -210,7 +205,7 @@ const Probe: React.FC<ContainerProps> = ({ token, id }) => {
               ></IonIcon>
               {state ? "Disable" : "Activate"}
               {showSpinner ? <IonSpinner name="crescent" className="ml-3" /> : ""}
-              
+
             </IonButton>
           </IonCardContent>
         </>

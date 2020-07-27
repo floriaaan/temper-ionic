@@ -25,7 +25,6 @@ import {
   IonRow,
   IonCol,
   IonModal,
-  IonItemDivider,
   IonRadioGroup,
   IonListHeader,
   IonRadio,
@@ -75,7 +74,6 @@ const ProbePage: React.FC = () => {
   const history = useHistory();
   const navigateTo = (url: string) => history.push(url);
 
-  const [probe, setProbe] = useState({});
   const [name, setName] = useState();
   const [createdAt, setCreatedAt] = useState("");
   const [state, setState] = useState();
@@ -134,7 +132,6 @@ const ProbePage: React.FC = () => {
         setCategory(res.response.data.category);
         setGPS(res.response.data.gps);
         setCreatedAt(res.response.data.created_at);
-        setProbe(res.response.data);
         setLoading(false);
       });
   };
@@ -332,99 +329,100 @@ const ProbePage: React.FC = () => {
                 </IonCardTitle>
               </IonCardHeader>
               <IonCardContent>
-                    {measures.map((obj, key) => {
-                      let index = key - 1 === -1 ? 0 : key - 1;
-                      let tPercent =
-                        ((obj.temperature! - measures[index].temperature!) /
-                          measures[index].temperature!) *
-                        100;
-                      let hPercent =
-                        ((obj.humidity! - measures[index].humidity!) /
-                          measures[index].humidity!) *
-                        100;
-                      tPercent = Math.round(tPercent * 100) / 100;
-                      hPercent = Math.round(hPercent * 100) / 100;
+                <Stack spacing={4}>
+                  {measures.map((obj, key) => {
+                    let index = key - 1 === -1 ? 0 : key - 1;
+                    let tPercent =
+                      ((obj.temperature! - measures[index].temperature!) /
+                        measures[index].temperature!) *
+                      100;
+                    let hPercent =
+                      ((obj.humidity! - measures[index].humidity!) /
+                        measures[index].humidity!) *
+                      100;
+                    tPercent = Math.round(tPercent * 100) / 100;
+                    hPercent = Math.round(hPercent * 100) / 100;
 
-                      return (
-                        <Box p={5} borderWidth="1px" key={key}>
-                          <StatGroup>
-                            <Stat>
-                              <StatLabel>
-                                <IonIcon
-                                  icon={thermometer}
-                                  className="mr-2"
-                                  color="primary"
-                                ></IonIcon>
-                                Temperature
-                              </StatLabel>
-                              <StatNumber
-                                style={{
-                                  fontSize: "1.5rem",
-                                  fontWeight: "bold",
-                                }}
-                              >
-                                {obj.temperature} °C
-                              </StatNumber>
-                              <StatHelpText>
-                                <StatArrow
-                                  type={tPercent >= 0 ? "increase" : "decrease"}
-                                />
-                                {tPercent} %
-                              </StatHelpText>
-                            </Stat>
+                    return (
+                      <Box p={5} borderWidth="1px" key={key}>
+                        <StatGroup>
+                          <Stat>
+                            <StatLabel>
+                              <IonIcon
+                                icon={thermometer}
+                                className="mr-2"
+                                color="primary"
+                              ></IonIcon>
+                              Temperature
+                            </StatLabel>
+                            <StatNumber
+                              style={{
+                                fontSize: "1.5rem",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              {obj.temperature} °C
+                            </StatNumber>
+                            <StatHelpText>
+                              <StatArrow
+                                type={tPercent >= 0 ? "increase" : "decrease"}
+                              />
+                              {tPercent} %
+                            </StatHelpText>
+                          </Stat>
 
-                            <Stat>
-                              <StatLabel>
-                                <IonIcon
-                                  icon={rainy}
-                                  className="mr-2"
-                                  color="secondary"
-                                ></IonIcon>
-                                Humidty
-                              </StatLabel>
-                              <StatNumber
-                                style={{
-                                  fontSize: "1.5rem",
-                                  fontWeight: "bold",
-                                }}
-                              >
-                                {obj.humidity} %
-                              </StatNumber>
-                              <StatHelpText>
-                                <StatArrow
-                                  type={hPercent >= 0 ? "increase" : "decrease"}
-                                />
-                                {hPercent} %
-                              </StatHelpText>
-                            </Stat>
-                            <Stat>
-                              <StatLabel>
-                                <IonIcon
-                                  icon={time}
-                                  className="mr-2"
-                                  color="tertiary"
-                                ></IonIcon>
-                                Date
-                              </StatLabel>
-                              <StatNumber
-                                style={{
-                                  fontSize: "1.5rem",
-                                  fontWeight: "bold",
-                                }}
-                              >
-                                {moment(obj.date).fromNow()}
-                              </StatNumber>
-                              <StatHelpText>
-                                {moment(obj.date).format(
-                                  "MMMM Do YYYY, h:mm:ss a"
-                                )}
-                              </StatHelpText>
-                            </Stat>
-                          </StatGroup>
-                        </Box>
-                      );
-                    })}
-                  
+                          <Stat>
+                            <StatLabel>
+                              <IonIcon
+                                icon={rainy}
+                                className="mr-2"
+                                color="secondary"
+                              ></IonIcon>
+                              Humidty
+                            </StatLabel>
+                            <StatNumber
+                              style={{
+                                fontSize: "1.5rem",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              {obj.humidity} %
+                            </StatNumber>
+                            <StatHelpText>
+                              <StatArrow
+                                type={hPercent >= 0 ? "increase" : "decrease"}
+                              />
+                              {hPercent} %
+                            </StatHelpText>
+                          </Stat>
+                          <Stat>
+                            <StatLabel>
+                              <IonIcon
+                                icon={time}
+                                className="mr-2"
+                                color="tertiary"
+                              ></IonIcon>
+                              Date
+                            </StatLabel>
+                            <StatNumber
+                              style={{
+                                fontSize: "1.5rem",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              {moment(obj.date).fromNow()}
+                            </StatNumber>
+                            <StatHelpText>
+                              {moment(obj.date).format(
+                                "MMMM Do YYYY, h:mm:ss a"
+                              )}
+                            </StatHelpText>
+                          </Stat>
+                        </StatGroup>
+                      </Box>
+                    );
+                  })}
+                </Stack>
               </IonCardContent>
             </IonCard>
           </IonSlide>
@@ -443,8 +441,7 @@ const ProbePage: React.FC = () => {
           </IonFabButton>
         </IonFab>
 
-        <IonModal isOpen={showQR}>
-          <CSSReset></CSSReset>
+        <IonModal isOpen={showQR} cssClass="modal-qrcode">
           <div className="p-5">
             <IonLabel></IonLabel>
             <Heading as="h1" size="lg">
@@ -455,7 +452,7 @@ const ProbePage: React.FC = () => {
                 value={JSON.stringify(qrJson)}
                 size={150}
                 includeMargin={true}
-                bgColor={"#cccccc"}
+                bgColor={"#eeeeee"}
                 className="mx-auto"
               ></QRCode>
             </div>
@@ -494,10 +491,11 @@ const ProbePage: React.FC = () => {
 
             <IonButton
               fill="outline"
-              color="primary"
+              color="danger"
               expand="block"
               onClick={() => setShowQR(false)}
             >
+              <IonIcon icon={close}></IonIcon>
               Close
             </IonButton>
           </div>
@@ -507,26 +505,19 @@ const ProbePage: React.FC = () => {
           isOpen={showActionSheet}
           onDidDismiss={() => setShowActionSheet(false)}
           buttons={[
-            /*{
+            {
               text: "Delete",
               role: "destructive",
               icon: trash,
               handler: () => {
                 console.log("Delete clicked");
               },
-            },*/
+            },
             {
-              text: "Share",
+              text: "Share with your friends",
               icon: share,
               handler: () => {
                 setShowQR(true);
-              },
-            },
-            /*{
-              text: "Play (open modal)",
-              icon: caretForwardCircle,
-              handler: () => {
-                console.log("Play clicked");
               },
             },
             {
@@ -535,7 +526,7 @@ const ProbePage: React.FC = () => {
               handler: () => {
                 console.log("Favorite clicked");
               },
-            },*/
+            },
             {
               text: "Cancel",
               icon: close,

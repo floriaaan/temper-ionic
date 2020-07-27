@@ -256,21 +256,3 @@ http://ionicframework.com/docs/theming/ */
 html, html.md, html.ios, body {
   font-family: Nunito, sans-serif !important;
 }
-
-.leaflet-container {  
-  border-radius: 0.5rem;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 5px;
-}
-
-.ion-card-footer {
-  position: absolute;
-  left: 30px;
-  bottom: 20px;
-  width: 100%;
-}
-
-.has-card-footer {
-  padding-bottom: 15px;
-}
