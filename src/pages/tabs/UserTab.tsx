@@ -25,9 +25,10 @@ import {
   settingsOutline,
   peopleCircleOutline,
   bugOutline,
+  happyOutline,
 } from "ionicons/icons";
 import { Avatar } from "@chakra-ui/core";
-import Swal from "sweetalert2";
+import { useHistory } from "react-router-dom";
 
 const UserTab: React.FC = () => {
   const [user, setUser] = useState({
@@ -37,7 +38,7 @@ const UserTab: React.FC = () => {
   });
 
   let auth_dev = localStorage.getItem("auth.dev") || "0";
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(localStorage.getItem("darkMode") === 'true' || false);
 
   const [clickForDevMode, setClickForDevMode] = useState(0);
   const [toastVisible, setToastVisible] = useState(false);
@@ -50,12 +51,14 @@ const UserTab: React.FC = () => {
     setDarkMode(checked);
     localStorage.setItem("darkMode", `${checked}`);
     document.body.classList.toggle("dark", checked);
+
+
   };
 
   const login = async () => {
     let auth_json = JSON.parse(
       localStorage.getItem("auth") ||
-        `{"user": {"name": "","email": ""},"token": ""}`
+      `{"user": {"name": "","email": ""},"token": ""}`
     );
     setUser({
       name: auth_json.user.name,
@@ -92,7 +95,6 @@ const UserTab: React.FC = () => {
   const handleClickForDevMode = () => {
     setClickForDevMode(clickForDevMode + 1);
     setToastVisible(true);
-    console.log(clickForDevMode, auth_dev);
     if (developperMode) {
       setToastMsg("You're already a developper");
     } else if (clickForDevMode === 7) {
@@ -106,8 +108,12 @@ const UserTab: React.FC = () => {
 
   useEffect(() => {
     login();
-    setDarkMode(window.matchMedia("(prefers-color-scheme: dark)").matches);
+    handleDarkMode(darkMode);
+    // eslint-disable-next-line
   }, []);
+
+  const history = useHistory();
+  const navigateTo = (url: string) => history.push(url);
 
   return (
     <IonPage>
@@ -167,29 +173,37 @@ const UserTab: React.FC = () => {
             </IonItemOptions>
           </IonItemSliding>
 
-          <IonItem button onClick={() => {}}>
+          <IonItem button onClick={() => { }}>
             <IonIcon icon={settingsOutline} slot="start"></IonIcon>
             <IonLabel>Settings</IonLabel>
           </IonItem>
+          <IonItem
+            button
+            onClick={() => {
+              navigateTo('/about');
+            }}
+          >
+            <IonIcon icon={happyOutline} slot="start"></IonIcon>
+            <IonLabel>About</IonLabel>
+          </IonItem>
           {developperMode ? (
-            <IonItem
-              button
-              onClick={() => {
-                Swal.fire({
-                  title: "About!",
-                  text: "Je te nem Ophéphéphé 💞",
-                  timer: 2000,
-                  imageUrl: "https://media1.tenor.com/images/c1b2cb88bc3cf44b10735cab46360c95/tenor.gif?itemid=13055170",
-                  imageAlt: "Love",
-                });
-              }}
-            >
-              <IonIcon icon={bugOutline} slot="start"></IonIcon>
-              <IonLabel>About</IonLabel>
-            </IonItem>
+            <>
+              <IonItemDivider></IonItemDivider>
+
+              <IonItem
+                button
+                onClick={() => {
+                  navigateTo('/dev');
+                }}
+              >
+                <IonIcon icon={bugOutline} slot="start"></IonIcon>
+                <IonLabel>Developper Tools</IonLabel>
+              </IonItem>
+            </>
           ) : (
-            ""
-          )}
+              ""
+            )}
+
         </IonCard>
         <IonToast
           isOpen={toastVisible}

@@ -29,6 +29,7 @@ import {
   IonListHeader,
   IonRadio,
   IonList,
+  IonText,
 } from "@ionic/react";
 import { useLocation, useHistory } from "react-router-dom";
 import {
@@ -38,7 +39,6 @@ import {
   thermometer,
   trash,
   share,
-  caretForwardCircle,
   heart,
   close,
   chevronBackOutline,
@@ -56,7 +56,6 @@ import {
   StatHelpText,
   StatNumber,
   Box,
-  CSSReset,
 } from "@chakra-ui/core";
 
 import moment from "moment";
@@ -109,10 +108,10 @@ const ProbePage: React.FC = () => {
   const fetchMeasures = async () => {
     await fetch(
       "http://" +
-        window.location.hostname +
-        ":8000/api/v1/measure/probe/" +
-        id +
-        "_limit=6"
+      window.location.hostname +
+      ":8000/api/v1/measure/probe/" +
+      id +
+      "_limit=6"
     )
       .then((res) => res.json())
       .then((res) => {
@@ -138,10 +137,10 @@ const ProbePage: React.FC = () => {
   const fetchOwner = async () => {
     await fetch(
       "http://" +
-        window.location.hostname +
-        ":8000/api/v1/probe/" +
-        id +
-        "/owner"
+      window.location.hostname +
+      ":8000/api/v1/probe/" +
+      id +
+      "/owner"
     )
       .then((res) => res.json())
       .then((res) => {
@@ -193,11 +192,11 @@ const ProbePage: React.FC = () => {
     <IonPage>
       <IonContent
         scrollEvents={true}
-        onIonScrollStart={() => {}}
+        onIonScrollStart={() => { }}
         onIonScroll={(e) => {
           //handleScroll(e);
         }}
-        onIonScrollEnd={() => {}}
+        onIonScrollEnd={() => { }}
       >
         <IonSlides
           pager={true}
@@ -224,11 +223,10 @@ const ProbePage: React.FC = () => {
                           icon={chevronBackOutline}
                         ></IonIcon>
                       </IonButton>
-                      <IonLabel>
-                        <Heading as="h1" size="2xl" className="ml-3">
-                          {name ? name : "Sonde #" + id}
-                        </Heading>
-                      </IonLabel>
+                      <div className="display-4 ml-3" style={{ fontFamily: 'Nunito' }}>
+                        {name ? name : "Sonde #" + id}
+                      </div>
+
                       <IonButton
                         fill="clear"
                         onClick={() => setShowActionSheet(true)}
@@ -241,11 +239,11 @@ const ProbePage: React.FC = () => {
                       </IonButton>
                     </IonItem>
                   ) : (
-                    <IonSkeletonText
-                      animated
-                      style={{ height: "10vh" }}
-                    ></IonSkeletonText>
-                  )}
+                      <IonSkeletonText
+                        animated
+                        style={{ height: "10vh" }}
+                      ></IonSkeletonText>
+                    )}
                 </IonCardTitle>
 
                 <IonCardSubtitle>
@@ -260,21 +258,21 @@ const ProbePage: React.FC = () => {
                       </IonChip>
                     </>
                   ) : (
-                    <IonSkeletonText
-                      animated
-                      style={{ height: "10vh" }}
-                    ></IonSkeletonText>
-                  )}
+                      <IonSkeletonText
+                        animated
+                        style={{ height: "10vh" }}
+                      ></IonSkeletonText>
+                    )}
                 </IonCardSubtitle>
               </IonCardHeader>
               <IonCardContent>
                 {!loading ? (
                   map
                 ) : (
-                  <>
-                    <IonSkeletonText animated style={{ height: "50vh" }} />
-                  </>
-                )}
+                    <>
+                      <IonSkeletonText animated style={{ height: "50vh" }} />
+                    </>
+                  )}
               </IonCardContent>
 
               <IonRow className="ion-card-footer">
@@ -292,8 +290,8 @@ const ProbePage: React.FC = () => {
                   ) : createdAt ? (
                     "Created " + moment(createdAt).fromNow()
                   ) : (
-                    ""
-                  )}
+                        ""
+                      )}
                 </IonCol>
                 <IonCol>
                   <IonIcon
@@ -308,8 +306,8 @@ const ProbePage: React.FC = () => {
                       style={{ width: "60%" }}
                     ></IonSkeletonText>
                   ) : (
-                    owner.name + (owner.email ? " - " + owner.email : "")
-                  )}
+                      owner.name + (owner.email ? " - " + owner.email : "")
+                    )}
                 </IonCol>
               </IonRow>
             </IonCard>
@@ -443,17 +441,19 @@ const ProbePage: React.FC = () => {
 
         <IonModal isOpen={showQR} cssClass="modal-qrcode">
           <div className="p-5">
-            <IonLabel></IonLabel>
-            <Heading as="h1" size="lg">
+
+
+            <IonText className="display-6" style={{ fontFamily: 'Nunito' }}>
               Share via QR Code
-            </Heading>
+            </IonText>
+
             <div className="w-100 mt-3">
               <QRCode
                 value={JSON.stringify(qrJson)}
                 size={150}
                 includeMargin={true}
                 bgColor={"#eeeeee"}
-                className="mx-auto"
+                className="mx-auto mb-2"
               ></QRCode>
             </div>
             <IonList>

@@ -9,6 +9,8 @@ import Register from "../pages/auth/Register";
 import Forgot from "../pages/auth/Forgot";
 
 import { thermometerOutline, mapOutline, peopleOutline, fingerPrintOutline, keyOutline, personAddOutline } from "ionicons/icons";
+import DevTools from "../pages/DevTools";
+import About from "../pages/About";
 
 
 export const RoutesTab = [{
@@ -31,6 +33,12 @@ export const RoutesTab = [{
 export const Routes = [...RoutesTab,{
     path : '/probe/:id',
     component: ProbePage
+}, {
+    path:'/dev',
+    component: DevTools
+}, {
+    path:'/about',
+    component: About
 }];
 
 export const RoutesAuth = [{

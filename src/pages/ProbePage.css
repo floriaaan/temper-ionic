@@ -1,3 +1,8 @@
 ion-slides {
     height: 100%;
 }
+
+.modal-qrcode {
+    --max-height: 100vh;
+    --height: 60vh;
+}

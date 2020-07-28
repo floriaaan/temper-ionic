@@ -8,11 +8,9 @@ import {
   IonModal,
   IonButton,
   IonContent,
-  IonItemDivider,
   IonItem,
   IonInput,
   IonSpinner,
-  IonLabel,
 } from "@ionic/react";
 import { barcodeOutline, add, qrCodeOutline, arrowUp } from "ionicons/icons";
 import List from "../../components/Probe/ProbeList";
@@ -35,7 +33,7 @@ const ProbeTab: React.FC = () => {
 
   let auth_json = JSON.parse(
     localStorage.getItem("auth") ||
-      `{"user": {"name": "","email": ""},"token": ""}`
+    `{"user": {"name": "","email": ""},"token": ""}`
   );
 
   const [auth_token, setAuthToken] = useState(auth_json.token);
@@ -88,8 +86,11 @@ const ProbeTab: React.FC = () => {
   };
 
   return (
-    <div className="bg-primary">
-      <IonPage className="bg-primary">
+    <IonPage>
+      <IonContent>
+        <div className="p-3 ml-2 mb-2 display-1" style={{fontFamily:'Nunito'}}>
+          Probes
+        </div>
         <List token={auth_token}></List>
 
         <IonFab horizontal="end" vertical="bottom" slot="fixed">
@@ -99,7 +100,6 @@ const ProbeTab: React.FC = () => {
           <IonFabList side="top">
             <IonFabButton color="light" onClick={() => setShowAddModal(true)}>
               <IonIcon icon={add}></IonIcon>
-              <IonLabel>Add a probe</IonLabel>
             </IonFabButton>
             <IonFabButton
               color="light"
@@ -109,14 +109,12 @@ const ProbeTab: React.FC = () => {
             >
               <IonIcon icon={qrCodeOutline}></IonIcon>
             </IonFabButton>
-            <IonLabel>Add from QR</IonLabel>
             <IonFabButton
               color="light"
               onClick={() => setShowAddfromToken(true)}
-              
+
             >
               <IonIcon icon={barcodeOutline}></IonIcon>
-              Add from a friend
             </IonFabButton>
           </IonFabList>
         </IonFab>
@@ -142,8 +140,8 @@ const ProbeTab: React.FC = () => {
               {loadingPost ? (
                 <IonSpinner name="crescent" className="ml-3" />
               ) : (
-                ""
-              )}
+                  ""
+                )}
             </IonButton>
             <IonButton
               color="secondary"
@@ -170,8 +168,8 @@ const ProbeTab: React.FC = () => {
               {loadingShareToken ? (
                 <IonSpinner name="crescent" className="ml-3" />
               ) : (
-                ""
-              )}
+                  ""
+                )}
             </IonButton>
             <IonButton
               color="secondary"
@@ -182,8 +180,8 @@ const ProbeTab: React.FC = () => {
             </IonButton>
           </IonContent>
         </IonModal>
-      </IonPage>
-    </div>
+      </IonContent>
+    </IonPage>
   );
 };
 

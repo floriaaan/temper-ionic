@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Redirect, Route } from "react-router-dom";
 import {
   IonApp,
@@ -133,9 +133,21 @@ const notLogged = (
 );
 
 const App: React.FC = () => {
+  const [darkMode, setDarkMode] = useState(localStorage.getItem("darkMode") === 'true' || false);
+  const handleDarkMode = (checked: boolean) => {
+    setDarkMode(checked);
+    localStorage.setItem("darkMode", `${checked}`);
+    document.body.classList.toggle("dark", checked);
+
+    
+  };
   if (!localStorage.getItem("auth.logged")) {
     localStorage.setItem("auth.logged", "0");
   }
+  useEffect(() => {
+    handleDarkMode(darkMode);
+    // eslint-disable-next-line
+  }, []);
   
   auth_middleware();
 

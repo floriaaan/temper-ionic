@@ -1,14 +1,10 @@
 {
 	"folders": [
 		{
-			"path": "."
-		},
-		{
-			"path": "..\\temper-utils"
-		},
-		{
 			"path": "..\\temper-api"
+		},
+		{
+			"path": "."
 		}
-	],
-	"settings": {}
+	]
 }
