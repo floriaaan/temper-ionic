@@ -62,9 +62,9 @@ import moment from "moment";
 
 import QRCode from "qrcode.react";
 
-import "leaflet/dist/leaflet.css";
+import "../theme/leaflet.css";
 import { Map, TileLayer, Marker } from "react-leaflet";
-import "./ProbePage.css";
+import "./Probe.css";
 
 const ProbePage: React.FC = () => {
   let location = useLocation();

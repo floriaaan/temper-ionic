@@ -13,10 +13,10 @@ import {
   IonSpinner,
 } from "@ionic/react";
 import { barcodeOutline, add, qrCodeOutline, arrowUp } from "ionicons/icons";
-import List from "../../components/Probe/ProbeList";
+import List from "../../components/Weather/List";
 import Swal from "sweetalert2";
 
-import "./ProbeTab.css";
+import "./Probe.css";
 import { auth_middleware } from "../../middleware/auth";
 
 const ProbeTab: React.FC = () => {
@@ -32,7 +32,7 @@ const ProbeTab: React.FC = () => {
   const [loadingShareToken, setLoadingShareToken] = useState(false);
 
   let auth_json = JSON.parse(
-    localStorage.getItem("auth") ||
+    sessionStorage.getItem("auth") ||
     `{"user": {"name": "","email": ""},"token": ""}`
   );
 
@@ -87,10 +87,9 @@ const ProbeTab: React.FC = () => {
 
   return (
     <IonPage>
+      
       <IonContent>
-        <div className="p-3 ml-2 mb-2 display-1" style={{fontFamily:'Nunito'}}>
-          Probes
-        </div>
+        
         <List token={auth_token}></List>
 
         <IonFab horizontal="end" vertical="bottom" slot="fixed">

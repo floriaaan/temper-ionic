@@ -1,6 +1,6 @@
 {
-  "appId": "io.ionic.starter",
-  "appName": "temper-ionic",
+  "appId": "io.floriaaan.temper",
+  "appName": "temper",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "build",

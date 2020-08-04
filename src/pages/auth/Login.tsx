@@ -9,11 +9,12 @@ import {
   IonAlert,
 } from "@ionic/react";
 import { Image, Heading } from "@chakra-ui/core";
+import { defaultRoute } from "../../routes/web";
 
 const Login: React.FC = () => {
   const succesfullyLogged = () => {
-    localStorage.setItem("auth.logged", "1");
-    window.location.pathname = "/probes";
+    sessionStorage.setItem("auth.logged", "1");
+    window.location.pathname = defaultRoute;
   };
 
   const [login, setLogin] = useState<string>();
@@ -50,7 +51,7 @@ const Login: React.FC = () => {
           }
           
         } else {
-          localStorage.setItem("auth", JSON.stringify(result.response.data));
+          sessionStorage.setItem("auth", JSON.stringify(result.response.data));
           succesfullyLogged();
         }
       });

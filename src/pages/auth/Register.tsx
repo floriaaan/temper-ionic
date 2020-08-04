@@ -98,7 +98,7 @@ const Register: React.FC = () => {
   };
 
   const succesfullyLogged = () => {
-    localStorage.setItem("auth.logged", "1");
+    sessionStorage.setItem("auth.logged", "1");
     window.location.pathname = "/probes";
   };
 
@@ -129,7 +129,7 @@ const Register: React.FC = () => {
           }
           
         } else {
-          localStorage.setItem("auth", JSON.stringify(result.response.data));
+          sessionStorage.setItem("auth", JSON.stringify(result.response.data));
           succesfullyLogged();
         }
       });

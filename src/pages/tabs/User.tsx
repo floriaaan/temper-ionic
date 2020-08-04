@@ -37,8 +37,8 @@ const UserTab: React.FC = () => {
     email: "",
   });
 
-  let auth_dev = localStorage.getItem("auth.dev") || "0";
-  const [darkMode, setDarkMode] = useState(localStorage.getItem("darkMode") === 'true' || false);
+  let auth_dev = sessionStorage.getItem("auth.dev") || "0";
+  const [darkMode, setDarkMode] = useState(sessionStorage.getItem("darkMode") === 'true' || false);
 
   const [clickForDevMode, setClickForDevMode] = useState(0);
   const [toastVisible, setToastVisible] = useState(false);
@@ -49,7 +49,7 @@ const UserTab: React.FC = () => {
 
   const handleDarkMode = (checked: boolean) => {
     setDarkMode(checked);
-    localStorage.setItem("darkMode", `${checked}`);
+    sessionStorage.setItem("darkMode", `${checked}`);
     document.body.classList.toggle("dark", checked);
 
 
@@ -57,7 +57,7 @@ const UserTab: React.FC = () => {
 
   const login = async () => {
     let auth_json = JSON.parse(
-      localStorage.getItem("auth") ||
+      sessionStorage.getItem("auth") ||
       `{"user": {"name": "","email": ""},"token": ""}`
     );
     setUser({
@@ -83,9 +83,9 @@ const UserTab: React.FC = () => {
     )
       .then((res) => res.json())
       .then((result) => {
-        //localstorage wipe
-        localStorage.setItem("auth.logged", "0");
-        localStorage.setItem("auth", "");
+        //sessionStorage wipe
+        sessionStorage.setItem("auth.logged", "0");
+        sessionStorage.setItem("auth", "");
         setUser({ name: "", token: "", email: "" });
         window.location.href =
           "http://" + window.location.hostname + ":3000/login";
@@ -99,7 +99,7 @@ const UserTab: React.FC = () => {
       setToastMsg("You're already a developper");
     } else if (clickForDevMode === 7) {
       setDevelopperMode(true);
-      localStorage.setItem("auth.dev", "1");
+      sessionStorage.setItem("auth.dev", "1");
       setToastMsg("You're now a developper! Congrats 🤴");
     } else {
       setToastMsg(`You're ${7 - clickForDevMode} steps away from Dev Mode. 🔨`);

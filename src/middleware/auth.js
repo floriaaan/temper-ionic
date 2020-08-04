@@ -7,7 +7,7 @@ let auth_routes = [
 
 
 export const auth_middleware = () => {
-    let logged = localStorage.getItem('auth.logged');
+    let logged = sessionStorage.getItem('auth.logged');
     if (logged !== '1' && !auth_routes.includes(window.location.pathname)) {
         window.location.pathname = "/login";
     }

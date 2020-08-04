@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 
-import { IonContent, IonSkeletonText, IonButton } from "@ionic/react";
+import { IonContent, IonSkeletonText, IonButton, IonBackdrop } from "@ionic/react";
 
-import "leaflet/dist/leaflet.css";
+import "../../theme/leaflet.css";
 
 import L from "leaflet";
 import { Map, TileLayer, Marker, Popup } from "react-leaflet";
@@ -22,12 +22,7 @@ interface ContainerProps {
 
 const MapComponent: React.FC<ContainerProps> = ({ token }) => {
   const [loading, setLoading] = useState(true);
-  const [gpsArray, setGPSArray] = useState([
-    {
-      lon: 0.0,
-      lat: 0.0,
-    },
-  ]);
+  const [gpsArray, setGPSArray] = useState([{ lon: 999, lat: 999 }]);
 
   useEffect(() => {
     async function fetchData() {
@@ -43,7 +38,7 @@ const MapComponent: React.FC<ContainerProps> = ({ token }) => {
               .then((res) => res.json())
               .then((res) => {
                 if (res.response.data.gps.lon && res.response.data.gps.lat) {
-                  setGPSArray(gpsArray.concat(res.response.data.gps));
+                  setGPSArray([...gpsArray, res.response.data.gps]);
                 }
               });
           });
@@ -54,47 +49,65 @@ const MapComponent: React.FC<ContainerProps> = ({ token }) => {
     fetchData();
     // eslint-disable-next-line
   }, [token]);
+
+  const gpsElements = JSON.stringify(gpsArray) !== JSON.stringify([{ lon: 999, lat: 999 }]) ?
+    (<Map center={[43, 1]} zoom={3} style={{ height: '98%', width: '99%' }}>
+      <TileLayer
+        attribution='Temper 💞'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      {gpsArray.map((obj, key) => {
+        return (
+          <React.Fragment key={key}>
+            <Marker position={[obj.lon, obj.lat]}>
+              <Popup>
+                <IonButton>Coucou</IonButton>
+              </Popup>
+            </Marker>
+          </React.Fragment>
+        );
+      })}
+    </Map>)
+    : <React.Fragment>
+
+      <IonBackdrop tappable={false} visible={true} stopPropagation={true} />
+      <Map center={[43, 1]} zoom={3} style={{ height: '98%', width: '99%', backgroundColor: 'gray', color: 'gray', opacity: '0.7' }}>
+        <TileLayer
+          attribution='Temper 💞'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+      </Map>
+      <div className="">
+        Aucun appareil localisé
+      </div>
+    </React.Fragment>;
+
   return (
     <IonContent>
       {!loading ? (
         <>
-          <Map center={[43, 1]} zoom={3} style={{height: '98%', width: '99%'}}>
-            <TileLayer
-              attribution='Temper 💞'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            {console.log(gpsArray)}
-            {gpsArray.map((id, key) => {
-              return (
-                <React.Fragment key={key}>
-                  <Marker position={[gpsArray[key].lon, gpsArray[key].lat]}>
-                    <Popup>
-                      <IonButton>Coucou</IonButton>
-                    </Popup>
-                  </Marker>
-                </React.Fragment>
-              );
-            })}
-          </Map>
+          {gpsElements}
         </>
       ) : (
-        <>
-          <IonSkeletonText
-            animated
-            style={{ height: "15vh" }}
-          ></IonSkeletonText>
-          <IonSkeletonText
-            animated
-            style={{ height: "45vh" }}
-          ></IonSkeletonText>
-          <IonSkeletonText
-            animated
-            style={{ height: "30vh" }}
-          ></IonSkeletonText>
-        </>
-      )}
-    </IonContent>
+          <>
+            <IonSkeletonText
+              animated
+              style={{ height: "15vh" }}
+            ></IonSkeletonText>
+            <IonSkeletonText
+              animated
+              style={{ height: "45vh" }}
+            ></IonSkeletonText>
+            <IonSkeletonText
+              animated
+              style={{ height: "30vh" }}
+            ></IonSkeletonText>
+          </>
+        )
+      }
+    </IonContent >
   );
 };
 
 export default MapComponent;
+

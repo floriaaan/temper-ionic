@@ -1,59 +1,88 @@
-import ProbeTab from "../pages/tabs/ProbeTab";
-import MapTab from "../pages/tabs/MapTab";
-import UserTab from "../pages/tabs/UserTab";
+import Probe from "../pages/tabs/Probe";
+import MapC from "../pages/tabs/Map";
+import User from "../pages/tabs/User";
+import Home from "../pages/tabs/Home";
 
-import ProbePage from "../pages/ProbePage";
+import ProbePage from "../pages/Probe";
 
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import Forgot from "../pages/auth/Forgot";
 
-import { thermometerOutline, mapOutline, peopleOutline, fingerPrintOutline, keyOutline, personAddOutline } from "ionicons/icons";
-import DevTools from "../pages/DevTools";
-import About from "../pages/About";
+import {
+  fingerPrintOutline,
+  keyOutline,
+  personAddOutline,
+  cloudyOutline,
+  locationOutline,
+  personCircleOutline,
+  homeOutline,
+} from "ionicons/icons";
+import DevTools from "../pages/settings/DevTools";
+import About from "../pages/settings/About";
 
+export const tabs = [
+  {
+    path: "/home",
+    component: Home,
+    icon: homeOutline,
+    label: "Home",
+  },
+  {
+    path: "/weather",
+    component: Probe,
+    icon: cloudyOutline,
+    label: "Weather",
+  },
+  {
+    path: "/map",
+    component: MapC,
+    icon: locationOutline,
+    label: "Map",
+  },
+  {
+    path: "/user",
+    component: User,
+    icon: personCircleOutline,
+    label: "User",
+  },
+];
 
-export const RoutesTab = [{
-    path : '/probes',
-    component: ProbeTab,
-    icon: thermometerOutline,
-    label: 'Probes'
-},{
-    path : '/map',
-    component: MapTab,
-    icon: mapOutline,
-    label: 'Map'
-},{
-    path : '/user',
-    component: UserTab,
-    icon: peopleOutline,
-    label: 'User'
-}];
+export const routes = [
+  ...tabs,
+  {
+    path: "/probe/:id",
+    component: ProbePage,
+  },
+  {
+    path: "/dev",
+    component: DevTools,
+  },
+  {
+    path: "/about",
+    component: About,
+  },
+];
 
-export const Routes = [...RoutesTab,{
-    path : '/probe/:id',
-    component: ProbePage
-}, {
-    path:'/dev',
-    component: DevTools
-}, {
-    path:'/about',
-    component: About
-}];
-
-export const RoutesAuth = [{
-    path : '/register',
+export const auth = [
+  {
+    path: "/register",
     component: Register,
     icon: personAddOutline,
-    label: 'Register'
-},{
-    path : '/login',
+    label: "Register",
+  },
+  {
+    path: "/login",
     component: Login,
     icon: fingerPrintOutline,
-    label: 'Login'
-},{
-    path : '/forgot',
+    label: "Login",
+  },
+  {
+    path: "/forgot",
     component: Forgot,
     icon: keyOutline,
-    label: 'Forgot my password'
-}];
+    label: "Forgot my password",
+  },
+];
+
+export const defaultRoute = "/home";

@@ -10,15 +10,10 @@ import {
   IonTabs,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { Routes, RoutesTab, RoutesAuth } from "./routes/web";
-//import { thermometerOutline, mapOutline, peopleOutline } from "ionicons/icons";
+import { routes, tabs, auth, defaultRoute } from "./routes/web";
 
 import { ThemeProvider, ColorModeProvider, CSSReset } from "@chakra-ui/core";
 
-/*import ProbeTab from "./pages/ProbeTab";
-import MapTab from "./pages/MapTab";
-import UserTab from "./pages/UserTab";
-import ProbePage from "./pages/ProbePage";*/
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -52,7 +47,7 @@ const logged = (
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-            {Routes.map((obj, key) => {
+            {routes.map((obj, key) => {
               return (
                 <Route
                   path={obj.path}
@@ -65,12 +60,12 @@ const logged = (
 
             <Route
               path="/"
-              render={() => <Redirect to="/probes" />}
+              render={() => <Redirect to={defaultRoute} />}
               exact={true}
             />
           </IonRouterOutlet>
           <IonTabBar slot="bottom">
-            {RoutesTab.map((obj, key) => {
+            {tabs.map((obj, key) => {
               return (
                 <IonTabButton
                   tab={obj.label.toLowerCase()}
@@ -96,7 +91,7 @@ const notLogged = (
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-            {RoutesAuth.map((obj, key) => {
+            {auth.map((obj, key) => {
               return (
                 <Route
                   path={obj.path}
@@ -113,7 +108,7 @@ const notLogged = (
             />
           </IonRouterOutlet>
           <IonTabBar slot="bottom">
-            {RoutesAuth.map((obj, key) => {
+            {auth.map((obj, key) => {
               return (
                 <IonTabButton
                   tab={obj.label.toLowerCase()}
@@ -133,16 +128,16 @@ const notLogged = (
 );
 
 const App: React.FC = () => {
-  const [darkMode, setDarkMode] = useState(localStorage.getItem("darkMode") === 'true' || false);
+  const [darkMode, setDarkMode] = useState(sessionStorage.getItem("darkMode") === 'true' || false);
   const handleDarkMode = (checked: boolean) => {
     setDarkMode(checked);
-    localStorage.setItem("darkMode", `${checked}`);
+    sessionStorage.setItem("darkMode", `${checked}`);
     document.body.classList.toggle("dark", checked);
 
     
   };
-  if (!localStorage.getItem("auth.logged")) {
-    localStorage.setItem("auth.logged", "0");
+  if (!sessionStorage.getItem("auth.logged")) {
+    sessionStorage.setItem("auth.logged", "0");
   }
   useEffect(() => {
     handleDarkMode(darkMode);
@@ -151,7 +146,7 @@ const App: React.FC = () => {
   
   auth_middleware();
 
-  return <IonApp>{localStorage.getItem("auth.logged") === "1" ? logged : notLogged}</IonApp>;
+  return <IonApp>{sessionStorage.getItem("auth.logged") === "1" ? logged : notLogged}</IonApp>;
 };
 
 export default App;

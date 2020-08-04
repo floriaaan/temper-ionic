@@ -15,7 +15,7 @@
   <a href="https://github.com/floriaaan/temper"><img src="https://badgen.net/github/release/floriaaan/temper/releases" alt="Latest Release"></a>
 </p>
 
-Temper is a powerful open-source domotic application to have full power on all your connected devices.
+Temper is a powerful open-source domotic application to have full power of all your connected devices.
 
 - **Do more.** With Temper, you have access to all features of your devices, even the one that you created.
 
@@ -25,7 +25,7 @@ Temper is a powerful open-source domotic application to have full power on all y
 
 ## 🚀 Run a Temper project
 
-You can run Temper in less than half an hour following these steps :
+You can run Temper in less than half an hour with these steps :
 
 1. **Download the Temper project.**
 
@@ -54,6 +54,7 @@ php artisan migrate:fresh
 npm run start
 
 // In temper-api directory
+composer install
 php -S <localhost:8000> or <0.0.0.0:8000> -t public // Depends if you want to use on any device of your network in dev mode. 
 ```
 

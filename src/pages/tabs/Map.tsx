@@ -7,7 +7,7 @@ const MapTab: React.FC = () => {
   auth_middleware();
 
   let auth_json = JSON.parse(
-    localStorage.getItem("auth") ||
+    sessionStorage.getItem("auth") ||
       `{"user": {"name": "","email": ""},"token": ""}`
   );
 
