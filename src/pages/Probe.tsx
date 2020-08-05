@@ -216,7 +216,7 @@ const ProbePage: React.FC = () => {
                     <IonItem>
                       <IonButton
                         fill="clear"
-                        onClick={() => navigateTo("/probes")}
+                        onClick={() => navigateTo('/weather')}
                       >
                         <IonIcon
                           slot="icon-only"

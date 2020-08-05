@@ -11,6 +11,7 @@ import {
   IonRow,
   IonCol,
   IonAlert,
+  IonSpinner,
 } from "@ionic/react";
 import zxcvbn from "zxcvbn";
 import { Heading, Image, Text } from "@chakra-ui/core";
@@ -38,6 +39,9 @@ const Register: React.FC = () => {
     msg: "",
     color: "",
   });
+
+  
+  const [showSpinner, setShowSpinner] = useState(false);
 
   const handlePwdChange = (value: string) => {
     setPassword(value);
@@ -103,6 +107,7 @@ const Register: React.FC = () => {
   };
 
   const handlePost = () => {
+    setShowSpinner(true);
     fetch("http://" + window.location.hostname + ":8000/api/v1/user/register/", {
       method: "POST",
       headers: {
@@ -118,6 +123,7 @@ const Register: React.FC = () => {
     })
       .then((res) => res.json())
       .then((result) => {
+        setShowSpinner(false);
         if (!result.response || !result.response.data.token) {
           if(!result.response) {
             let keys = Object.keys(result);
@@ -219,6 +225,8 @@ const Register: React.FC = () => {
               onClick={() => handlePost()}
             >
               Create an account
+              
+              {showSpinner ? <IonSpinner name="crescent" className="ml-3" /> : ""}
             </IonButton>
           </div>
         </div>

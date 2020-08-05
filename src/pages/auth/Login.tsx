@@ -7,6 +7,7 @@ import {
   IonInput,
   IonButton,
   IonAlert,
+  IonSpinner,
 } from "@ionic/react";
 import { Image, Heading } from "@chakra-ui/core";
 import { defaultRoute } from "../../routes/web";
@@ -25,8 +26,11 @@ const Login: React.FC = () => {
     logging: false,
     logging_msg: "",
   });
+  
+  const [showSpinner, setShowSpinner] = useState(false);
 
   const handlePost = () => {
+    setShowSpinner(true);
     fetch("http://" + window.location.hostname + ":8000/api/v1/user/connect/", {
       method: "POST",
       headers: {
@@ -40,6 +44,7 @@ const Login: React.FC = () => {
     })
       .then((res) => res.json())
       .then((result) => {
+        setShowSpinner(false);
         if (!result.response || !result.response.data.token) {
           if (!result.response) {
             let keys = Object.keys(result);
@@ -95,6 +100,8 @@ const Login: React.FC = () => {
               onClick={() => handlePost()}
             >
               Connect to Temper
+              
+              {showSpinner ? <IonSpinner name="crescent" className="ml-3" /> : ""}
             </IonButton>
           </div>
         </div>

@@ -16,7 +16,6 @@ import {
   IonItemOption,
   IonRow,
   IonCol,
-  IonToast,
 } from "@ionic/react";
 import {
   lockClosedOutline,
@@ -30,6 +29,9 @@ import {
 import { Avatar } from "@chakra-ui/core";
 import { useHistory } from "react-router-dom";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const UserTab: React.FC = () => {
   const [user, setUser] = useState({
     name: "",
@@ -38,27 +40,23 @@ const UserTab: React.FC = () => {
   });
 
   let auth_dev = sessionStorage.getItem("auth.dev") || "0";
-  const [darkMode, setDarkMode] = useState(sessionStorage.getItem("darkMode") === 'true' || false);
+  const [darkMode, setDarkMode] = useState(
+    sessionStorage.getItem("darkMode") === "true" || false
+  );
 
   const [clickForDevMode, setClickForDevMode] = useState(0);
-  const [toastVisible, setToastVisible] = useState(false);
-  const [toastMsg, setToastMsg] = useState(
-    `You're ${clickForDevMode} steps away from Dev Mode. 🔨`
-  );
   const [developperMode, setDevelopperMode] = useState(auth_dev === "1");
 
   const handleDarkMode = (checked: boolean) => {
     setDarkMode(checked);
     sessionStorage.setItem("darkMode", `${checked}`);
     document.body.classList.toggle("dark", checked);
-
-
   };
 
   const login = async () => {
     let auth_json = JSON.parse(
       sessionStorage.getItem("auth") ||
-      `{"user": {"name": "","email": ""},"token": ""}`
+        `{"user": {"name": "","email": ""},"token": ""}`
     );
     setUser({
       name: auth_json.user.name,
@@ -94,15 +92,38 @@ const UserTab: React.FC = () => {
 
   const handleClickForDevMode = () => {
     setClickForDevMode(clickForDevMode + 1);
-    setToastVisible(true);
     if (developperMode) {
-      setToastMsg("You're already a developper");
+      toast.info(`You're already a developper`, {
+        position: "bottom-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
     } else if (clickForDevMode === 7) {
       setDevelopperMode(true);
       sessionStorage.setItem("auth.dev", "1");
-      setToastMsg("You're now a developper! Congrats 🤴");
+      toast.success(`You're now a developper! Congrats 🤴`, {
+        position: "bottom-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
     } else {
-      setToastMsg(`You're ${7 - clickForDevMode} steps away from Dev Mode. 🔨`);
+      toast(`You're ${7 - clickForDevMode} steps away from Dev Mode. 🔨`, {
+        position: "bottom-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
     }
   };
 
@@ -173,14 +194,14 @@ const UserTab: React.FC = () => {
             </IonItemOptions>
           </IonItemSliding>
 
-          <IonItem button onClick={() => { }}>
+          <IonItem button onClick={() => {}}>
             <IonIcon icon={settingsOutline} slot="start"></IonIcon>
             <IonLabel>Settings</IonLabel>
           </IonItem>
           <IonItem
             button
             onClick={() => {
-              navigateTo('/about');
+              navigateTo("/about");
             }}
           >
             <IonIcon icon={happyOutline} slot="start"></IonIcon>
@@ -193,7 +214,7 @@ const UserTab: React.FC = () => {
               <IonItem
                 button
                 onClick={() => {
-                  navigateTo('/dev');
+                  navigateTo("/dev");
                 }}
               >
                 <IonIcon icon={bugOutline} slot="start"></IonIcon>
@@ -201,15 +222,20 @@ const UserTab: React.FC = () => {
               </IonItem>
             </>
           ) : (
-              ""
-            )}
-
+            ""
+          )}
         </IonCard>
-        <IonToast
-          isOpen={toastVisible}
-          onDidDismiss={() => setToastVisible(false)}
-          message={toastMsg}
-          duration={50}
+        
+        <ToastContainer
+          position="bottom-center"
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
         />
       </IonContent>
     </IonPage>
