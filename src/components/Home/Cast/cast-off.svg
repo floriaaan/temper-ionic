@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   height="1024"
+   width="1024"
+   sodipodi:docname="cast-off.svg"
+   id="svg4"
+   version="1.1"
+   viewBox="0 0 1024 1024"
+   role="img"
+   class="svg-inline--fa fa-chromecast fa-w-16"
+   data-icon="chromecast"
+   data-prefix="fab"
+   focusable="false"
+   aria-hidden="true">
+  <metadata
+     id="metadata10">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     inkscape:current-layer="svg4"
+     inkscape:window-maximized="1"
+     inkscape:window-y="22"
+     inkscape:window-x="-8"
+     inkscape:cy="609.77933"
+     inkscape:cx="577.78728"
+     inkscape:zoom="0.59385921"
+     showgrid="false"
+     id="namedview6"
+     inkscape:window-height="1027"
+     inkscape:window-width="1920"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     bordercolor="#666666"
+     pagecolor="#ffffff" />
+  <path
+     style="fill:#000000;fill-opacity:1;stroke-width:1.28157"
+     id="path2"
+     d="M 768.16727,272.14829 H 276.30194 c -30.24498,0 -54.7229,24.47793 -54.7229,54.7229 v 81.89212 h 54.7229 V 326.87119 H 768.16727 V 709.54703 H 576.9575 v 54.7229 h 191.46608 c 30.24497,0 54.7229,-24.47793 54.7229,-54.7229 V 326.87119 c 0,-30.24497 -24.73424,-54.7229 -54.97921,-54.7229 z M 221.57904,681.73703 v 0 81.89212 h 81.89211 c 0,-45.23931 -36.6528,-81.89212 -81.89211,-81.89212 z m 0,-108.93318 v 54.33844 c 75.48428,0 136.61502,61.64336 136.61502,137.12764 h 54.7229 C 413.04511,658.66883 327.18014,572.93201 221.57904,572.80385 Z m 246.18897,191.46608 h 54.72291 C 521.85013,598.30703 387.54193,463.99884 221.57904,463.61437 v 54.33843 c 135.84608,-0.25632 246.06082,110.47105 246.18897,246.31713 z"
+     fill="currentColor" />
+</svg>

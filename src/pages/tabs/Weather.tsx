@@ -12,7 +12,6 @@ import {
   IonInput,
   IonSpinner,
   IonLabel,
-  IonItemDivider,
   IonRow,
   IonCol,
 } from "@ionic/react";
@@ -20,15 +19,15 @@ import { barcodeOutline, add, qrCodeOutline, arrowUp } from "ionicons/icons";
 import List from "../../components/Weather/Probe/List";
 import Swal from "sweetalert2";
 
-import "./Probe.css";
+import "./Weather.css";
 import { auth_middleware } from "../../middleware/auth";
 import { ToastContainer, toast } from "react-toastify";
 
 import "leaflet/dist/leaflet.css";
 import { Map, TileLayer, Marker } from "react-leaflet";
-import { LatLng, LeafletMouseEvent } from "leaflet";
+import { LeafletMouseEvent } from "leaflet";
 
-const ProbeTab: React.FC = () => {
+const WeatherTab: React.FC = () => {
   auth_middleware();
   const [showAddModal, setShowAddModal] = useState(false);
   const [inputName, setInputName] = useState<string>();
@@ -284,4 +283,4 @@ const ProbeTab: React.FC = () => {
   );
 };
 
-export default ProbeTab;
+export default WeatherTab;

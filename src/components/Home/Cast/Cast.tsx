@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react'
 
-import "./Light.css";
 import { IonSkeletonText, IonItem, IonCardContent, IonButton, IonIcon } from '@ionic/react';
 import { menuOutline } from 'ionicons/icons';
 import { Heading, Box, Spinner } from '@chakra-ui/core';
 
-import BulbOn from './bulb-on.svg';
-import BulbOff from './bulb-off.svg';
+
+import CastOn from './cast-on.svg';
+import CastOff from './cast-off.svg';
+import "./Cast.css";
+
 
 
 interface ContainerProps {
@@ -16,11 +18,12 @@ interface ContainerProps {
         name: string,
         category: string,
         state: boolean,
+        status: string
     };
 }
 
-const Light: React.FC<ContainerProps> = ({ data }) => {
-    const [light, setLight] = useState(data);
+const Cast: React.FC<ContainerProps> = ({ data }) => {
+    const [cast, setCast] = useState(data);
 
     const [state, setState] = useState({
         loading: true,
@@ -31,7 +34,7 @@ const Light: React.FC<ContainerProps> = ({ data }) => {
     const handleToggle = () => {
         setState({ ...state, spinner: true });
         setTimeout(() => {
-            setLight({ ...light, state: !light.state });
+            setCast({ ...cast, state: !cast.state });
 
             setState({ ...state, spinner: false });
         }, 1000)
@@ -52,19 +55,19 @@ const Light: React.FC<ContainerProps> = ({ data }) => {
                 <>
                     <IonItem>
                         <Heading as="h6" size="md" style={{fontWeight: 'normal'}}>
-                            {light.name ? light.name : "Light #" + light.token} 
+                            {cast.name ? cast.name : "Cast device #" + cast.token} 
                             {state.spinner ? <Spinner size="xs" className="ml-3" /> : ""}
                         </Heading>
 
 
-                        <IonButton fill="clear" slot="end" onClick={() => { console.log("view " + light.token) }}>
+                        <IonButton fill="clear" slot="end" onClick={() => { console.log("view " + cast.token) }}>
                             <IonIcon icon={menuOutline} size="lg"></IonIcon>
                         </IonButton>
                     </IonItem>
 
                     <IonCardContent>
 
-                        <img className="bulb" src={light.state ? BulbOn : BulbOff} onClick={() => { handleToggle() }} alt="Light icon"></img>
+                        <img className="cast" src={cast.state ? CastOn : CastOff} onClick={() => { handleToggle() }} alt="Light icon"></img>
 
 
                     </IonCardContent>
@@ -81,7 +84,7 @@ const Light: React.FC<ContainerProps> = ({ data }) => {
     )
 }
 
-export default Light;
+export default Cast;
 
 /*
 <IonButton

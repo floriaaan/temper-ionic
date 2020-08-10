@@ -103,7 +103,7 @@ const Register: React.FC = () => {
 
   const succesfullyLogged = () => {
     sessionStorage.setItem("auth.logged", "1");
-    window.location.pathname = "/probes";
+    window.location.pathname = "/weather";
   };
 
   const handlePost = () => {

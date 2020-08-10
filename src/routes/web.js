@@ -1,4 +1,4 @@
-import Probe from "../pages/tabs/Probe";
+import Weather from "../pages/tabs/Weather";
 import MapC from "../pages/tabs/Map";
 import User from "../pages/tabs/User";
 import Home from "../pages/tabs/Home";
@@ -30,7 +30,7 @@ export const tabs = [
   },
   {
     path: "/weather",
-    component: Probe,
+    component: Weather,
     icon: cloudyOutline,
     label: "Weather",
   },

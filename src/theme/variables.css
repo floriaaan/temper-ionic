@@ -253,3 +253,7 @@ html.ios,
 body {
   font-family: Nunito, sans-serif !important;
 }
+
+:host {
+  margin: initial!important;
+}

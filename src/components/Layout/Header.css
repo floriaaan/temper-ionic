@@ -1,0 +1,40 @@
+.header--props {
+  height: 10vh;
+  top: 0;
+  flex: initial !important;
+}
+
+.header--logo {
+  width: 60px;
+  height: 60px;
+}
+
+.header--title {
+  font-weight: bolder;
+  font-size: 3rem;
+  font-family: "Nunito", sans-serif;
+}
+
+.headerv2-title{
+  font-size: 4rem;
+}
+
+.header--avatar {
+  cursor: pointer;
+}
+
+.headerv2--avatar {
+  width: 0.5rem!important;
+  height: 0.5rem!important;
+}
+
+.headercategory--title {
+  font-weight: bolder;
+  font-size: 1rem;
+  font-family: "Nunito", sans-serif;
+}
+
+
+.headercategory--popover--wrapper {
+    --width: 40%;
+}
