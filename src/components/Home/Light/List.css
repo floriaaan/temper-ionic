@@ -6,8 +6,8 @@
 .list--inline--item {
     height: 200px;
 }
-.content--height {
-    height: 50vh;
+.light--content--height {
+    height: 450px;
 }
 
 ::-webkit-scrollbar{

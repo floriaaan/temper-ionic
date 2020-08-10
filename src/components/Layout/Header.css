@@ -36,5 +36,7 @@
 
 
 .headercategory--popover--wrapper {
-    --width: 40%;
+    --width: 70%;
+    --height: 50%
+
 }

@@ -26,7 +26,7 @@ const Header: React.FC<ContainerProps> = ({ title, version }) => {
 
     if (version === 1) {
         return (
-            <div className="row mx-1 p-3 align-items-center header--props">
+            <div className="row mx-1 align-items-center header--props">
                 <div className="col-2">
                     <img src={Logo} className="header--logo" alt="Temper"></img>
                 </div>
@@ -50,12 +50,12 @@ const Header: React.FC<ContainerProps> = ({ title, version }) => {
         );
     } else if (version === 2) {
         return (
-            <div className="row mx-1 p-3 align-items-center header--props">
-                <div className="col-8 header--title headerv2-title">
+            <div className="row mx-1 my-3 align-items-center header--props">
+                <div className="col-6 header--title headerv2-title">
                     {title}
                 </div>
 
-                <div className="col-4 d-flex flex-row-reverse">
+                <div className="col-6 d-flex flex-row-reverse">
                     <ul className="navbar-nav">
                         <li className="nav-item">
                             <IonButton fill="clear" onClick={() => console.log("change dispositions to list")}>
@@ -81,6 +81,21 @@ const Header: React.FC<ContainerProps> = ({ title, version }) => {
 
             </div>
         )
+    } else if (version === -1) {
+        return (
+            <div className="row mx-1 p-5 align-items-center header--props">
+                <div className="col-2">
+                    <img src={Logo} className="header--logo" alt="Temper"></img>
+                </div>
+
+                <div className="col-8 p-5 header--title">
+                    {title}
+                </div>
+
+                
+
+            </div>
+        );
     }
 
     return (
@@ -105,7 +120,7 @@ const Header: React.FC<ContainerProps> = ({ title, version }) => {
             </div>
 
         </div>
-    )
+    );
 
 
 };

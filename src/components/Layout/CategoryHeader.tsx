@@ -24,7 +24,7 @@ const Header: React.FC<ContainerProps> = ({ title, icon, menu, chip }) => {
                     <FontAwesomeIcon icon={icon} color="var(--ion-color-primary)"></FontAwesomeIcon>
                 </div>
 
-                <div className="col-10">
+                <div className="col-9">
                     <span className="headercategory--title">{title}</span>
                     {chip !== '' ?
                         <span className="badge bg-dark ml-3">{chip}</span> :
@@ -32,7 +32,7 @@ const Header: React.FC<ContainerProps> = ({ title, icon, menu, chip }) => {
                     }
                 </div>
                 <div className="col-1">
-                    <IonButton fill="clear" slot="end" onClick={() => { setPopover(true) }}>
+                    <IonButton fill="clear" onClick={() => { setPopover(true) }}>
                         <IonIcon icon={addOutline} size="lg"></IonIcon>
                     </IonButton>
                 </div>

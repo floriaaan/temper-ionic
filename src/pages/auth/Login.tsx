@@ -11,6 +11,7 @@ import {
 } from "@ionic/react";
 import { Image, Heading } from "@chakra-ui/core";
 import { defaultRoute } from "../../routes/web";
+import Header from "../../components/Layout/Header";
 
 const Login: React.FC = () => {
   const succesfullyLogged = () => {
@@ -65,15 +66,8 @@ const Login: React.FC = () => {
   return (
     <IonPage>
       <IonContent>
-        <div className="row justify-content-center p-4 mt-3">
-          <Image
-            alt="Temper App"
-            src="/assets/icon/favicon.png"
-            style={{ height: "20vh", width: "20vh", marginBottom: "40px" }}
-          />
-          <Heading as="h3" size="2xl" textAlign="center">
-            Login
-          </Heading>
+        <Header title="Login" version={-1}></Header>
+        <div className="row justify-content-center p-4 my-5">
           <div className="p-4 my-2">
             <IonItem>
               <IonLabel position="floating">Name</IonLabel>

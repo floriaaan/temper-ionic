@@ -15,6 +15,7 @@ import {
 } from "@ionic/react";
 import zxcvbn from "zxcvbn";
 import { Heading, Image, Text } from "@chakra-ui/core";
+import Header from "../../components/Layout/Header";
 
 const Register: React.FC = () => {
   const [login, setLogin] = useState<string>();
@@ -144,27 +145,8 @@ const Register: React.FC = () => {
   return (
     <IonPage>
       <IonContent>
-        <div className="row justify-content-center p-4 mt-3">
-          <IonGrid>
-            <IonRow>
-              <IonCol>
-                <Image
-                  alt="Temper App"
-                  src="/assets/icon/favicon.png"
-                  style={{
-                    height: "20vh",
-                    width: "20vh",
-                    marginBottom: "40px",
-                  }}
-                />
-              </IonCol>
-              <IonCol className="ion-align-self-center">
-                <Heading as="h3" size="2xl" textAlign="center">
-                  Register
-                </Heading>
-              </IonCol>
-            </IonRow>
-          </IonGrid>
+      <Header title="Register" version={-1}></Header>
+        <div className="row justify-content-center p-4 my-5">
           <div className="p-4 my-2">
             <IonItem>
               <IonLabel position="floating">Name</IonLabel>
