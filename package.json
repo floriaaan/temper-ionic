@@ -30,6 +30,7 @@
     "@types/zxcvbn": "^4.4.0",
     "animejs": "^3.2.0",
     "bootstrap": "^5.0.0-alpha1",
+    "dotenv-webpack": "^2.0.0",
     "emotion-theming": "^10.0.27",
     "ionicons": "^5.0.0",
     "leaflet": "^1.6.0",

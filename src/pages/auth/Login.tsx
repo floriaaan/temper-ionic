@@ -9,7 +9,6 @@ import {
   IonAlert,
   IonSpinner,
 } from "@ionic/react";
-import { Image, Heading } from "@chakra-ui/core";
 import { defaultRoute } from "../../routes/web";
 import Header from "../../components/Layout/Header";
 

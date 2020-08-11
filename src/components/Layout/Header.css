@@ -24,8 +24,8 @@
 }
 
 .headerv2--avatar {
-  width: 0.5rem!important;
-  height: 0.5rem!important;
+  font-size: 1rem!important;
+
 }
 
 .headercategory--title {

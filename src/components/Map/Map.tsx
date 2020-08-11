@@ -51,7 +51,7 @@ const MapComponent: React.FC<ContainerProps> = ({ token }) => {
   }, [token]);
 
   const gpsElements = JSON.stringify(gpsArray) !== JSON.stringify([{ lon: 999, lat: 999 }]) ?
-    (<Map center={[43, 1]} zoom={3} style={{ height: '98%', width: '99%' }}>
+    (<Map center={[43, 1]} zoom={3} style={{ height: '90%', width: '99%' }}>
       <TileLayer
         attribution='Temper 💞'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

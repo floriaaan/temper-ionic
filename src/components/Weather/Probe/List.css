@@ -1,0 +1,23 @@
+.list--inline--wrapper {
+  overflow-x: scroll !important;
+  white-space: nowrap;
+}
+
+.list--inline--item {
+  height: 200px;
+}
+
+.probes--content--height {
+  height: 450px;
+}
+
+::-webkit-scrollbar{
+    height: 2px;
+    width: 2px;
+    background: gray;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:horizontal{
+    background: #000;
+    border-radius: 10px;
+}

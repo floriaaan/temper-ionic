@@ -12,9 +12,10 @@
 }
 
 ::-webkit-scrollbar{
-    height: 4px;
-    width: 4px;
+    height: 2px;
+    width: 2px;
     background: gray;
+    border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:horizontal{
     background: #000;

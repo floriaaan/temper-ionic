@@ -48,7 +48,7 @@ const CastList: React.FC<ContainerProps> = ({ token }) => {
       </li>
     );
   });
-  const [cardState, setCState] = useState({
+  const [casts, setCastsState] = useState({
     loading: true,
     content: CastCards,
     addmodal: {
@@ -63,23 +63,23 @@ const CastList: React.FC<ContainerProps> = ({ token }) => {
   });
 
   const addPost = () => {
-    setCState({
-      ...cardState,
-      addmodal: { ...cardState.addmodal, show: false },
+    setCastsState({
+      ...casts,
+      addmodal: { ...casts.addmodal, show: false },
     });
   };
 
   const tokenPost = () => {
-    setCState({
-      ...cardState,
-      addtokenmodal: { ...cardState.addtokenmodal, show: false },
+    setCastsState({
+      ...casts,
+      addtokenmodal: { ...casts.addtokenmodal, show: false },
     });
   };
   const [search, setSearch] = useState<string>();
 
   useEffect(() => {
     setTimeout(() => {
-      setCState({ ...cardState, loading: false });
+      setCastsState({ ...casts, loading: false });
     }, 1000);
     //eslint-disable-next-line
   }, []);
@@ -94,9 +94,9 @@ const CastList: React.FC<ContainerProps> = ({ token }) => {
         <IonItem
           button
           onClick={() =>
-            setCState({
-              ...cardState,
-              addmodal: { ...cardState.addmodal, show: true },
+            setCastsState({
+              ...casts,
+              addmodal: { ...casts.addmodal, show: true },
             })
           }
         >
@@ -106,9 +106,9 @@ const CastList: React.FC<ContainerProps> = ({ token }) => {
         <IonItem
           button
           onClick={() =>
-            setCState({
-              ...cardState,
-              addtokenmodal: { ...cardState.addtokenmodal, show: true },
+            setCastsState({
+              ...casts,
+              addtokenmodal: { ...casts.addtokenmodal, show: true },
             })
           }
         >
@@ -134,10 +134,10 @@ const CastList: React.FC<ContainerProps> = ({ token }) => {
           showCancelButton="focus"
           animated
         ></IonSearchbar>
-        {!cardState.loading ? (
+        {!casts.loading ? (
           <>
             <div className="row align-content-center p-4 list--inline--wrapper mr-3">
-              <ul className="list-inline mr-5">{cardState.content}</ul>
+              <ul className="list-inline mr-5">{casts.content}</ul>
             </div>
           </>
         ) : (
@@ -147,14 +147,14 @@ const CastList: React.FC<ContainerProps> = ({ token }) => {
         )}
       </IonContent>
 
-      <IonModal isOpen={cardState.addmodal.show} cssClass="modal-create">
+      <IonModal isOpen={casts.addmodal.show} cssClass="modal-create">
         <IonContent>
           <div className="p-3">
             <hr className="mx-2 my-4" />
 
             <IonButton color="success" onClick={() => addPost()}>
               Validate
-              {cardState.addmodal.spinner ? (
+              {casts.addmodal.spinner ? (
                 <IonSpinner name="crescent" className="ml-3" />
               ) : (
                 ""
@@ -164,9 +164,9 @@ const CastList: React.FC<ContainerProps> = ({ token }) => {
               color="secondary"
               slot="end"
               onClick={() =>
-                setCState({
-                  ...cardState,
-                  addmodal: { ...cardState.addmodal, show: false },
+                setCastsState({
+                  ...casts,
+                  addmodal: { ...casts.addmodal, show: false },
                 })
               }
             >
@@ -176,18 +176,18 @@ const CastList: React.FC<ContainerProps> = ({ token }) => {
         </IonContent>
       </IonModal>
 
-      <IonModal isOpen={cardState.addtokenmodal.show}>
+      <IonModal isOpen={casts.addtokenmodal.show}>
         <IonContent className="ion-padding">
           <div className="p-3">
             <IonItem>
               <IonInput
-                value={cardState.addtokenmodal.inputtoken}
+                value={casts.addtokenmodal.inputtoken}
                 placeholder="Access token"
                 onIonChange={(e) =>
-                  setCState({
-                    ...cardState,
+                  setCastsState({
+                    ...casts,
                     addtokenmodal: {
-                      ...cardState.addtokenmodal,
+                      ...casts.addtokenmodal,
                       inputtoken: e.detail.value!,
                     },
                   })
@@ -197,7 +197,7 @@ const CastList: React.FC<ContainerProps> = ({ token }) => {
             </IonItem>
             <IonButton color="success" onClick={() => tokenPost()}>
               Validate
-              {cardState.addtokenmodal.spinner ? (
+              {casts.addtokenmodal.spinner ? (
                 <IonSpinner name="crescent" className="ml-3" />
               ) : (
                 ""
@@ -208,9 +208,9 @@ const CastList: React.FC<ContainerProps> = ({ token }) => {
               fill="outline"
               slot="end"
               onClick={() =>
-                setCState({
-                  ...cardState,
-                  addtokenmodal: { ...cardState.addtokenmodal, show: false },
+                setCastsState({
+                  ...casts,
+                  addtokenmodal: { ...casts.addtokenmodal, show: false },
                 })
               }
             >

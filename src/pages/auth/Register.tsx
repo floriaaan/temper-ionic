@@ -7,14 +7,11 @@ import {
   IonInput,
   IonButton,
   IonProgressBar,
-  IonGrid,
-  IonRow,
-  IonCol,
   IonAlert,
   IonSpinner,
 } from "@ionic/react";
 import zxcvbn from "zxcvbn";
-import { Heading, Image, Text } from "@chakra-ui/core";
+import { Text } from "@chakra-ui/core";
 import Header from "../../components/Layout/Header";
 
 const Register: React.FC = () => {

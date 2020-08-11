@@ -1,5 +1,5 @@
 import React from "react";
-import { IonPage } from "@ionic/react";
+import { IonPage, IonContent } from "@ionic/react";
 import MapComponent from "../../components/Map/Map";
 import { auth_middleware } from "../../middleware/auth";
 import Header from "../../components/Layout/Header";
@@ -14,8 +14,10 @@ const MapTab: React.FC = () => {
 
   return (
     <IonPage>
-      <Header title="Map" version={1}></Header>
-      <MapComponent token={auth_json.token}></MapComponent>
+      <IonContent>
+        <Header title="Map" version={2}></Header>
+        <MapComponent token={auth_json.token}></MapComponent>
+      </IonContent>
     </IonPage>
   );
 };

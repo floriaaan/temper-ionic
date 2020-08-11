@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { auth_middleware } from '../../middleware/auth';
 import { IonPage, IonContent} from "@ionic/react";
 import LightList from "../../components/Home/Light/List";
@@ -10,11 +10,7 @@ export default function Home() {
     let auth_json = JSON.parse(
         sessionStorage.getItem("auth") ||
         `{"user": {"name": "","email": ""},"token": ""}`
-    );
-
-    const [auth_token, setAuthToken] = useState(auth_json.token);
-
-    
+    ); 
 
     return (
         <IonPage>
@@ -23,8 +19,8 @@ export default function Home() {
 
 
 
-                <LightList token={auth_token}></LightList>
-                <CastList token ={auth_token}></CastList>
+                <LightList token={auth_json.token}></LightList>
+                <CastList token ={auth_json.token}></CastList>
 
 
             </IonContent>
