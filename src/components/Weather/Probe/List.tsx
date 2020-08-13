@@ -69,7 +69,7 @@ const ProbeList: React.FC<ContainerProps> = ({ token }) => {
   );
 
   const reRender = () => {
-    console.log("### RE-RENDERING ###");
+    //console.log("### RE-RENDERING ###");
     const cards = dataList.map((obj, key) => {
       return (
         <li className="list-inline-item list--inline--item" key={key}>
@@ -89,17 +89,18 @@ const ProbeList: React.FC<ContainerProps> = ({ token }) => {
       "http://" + window.location.hostname + ":8000/api/v1/probe/user/" + token
     );
     const body = await response.json();
-    
+
     tokens = body.response.data;
     let data = await Promise.all(tokens.map(async (tok, key) => {
       let responseProbe = await fetch("http://" + window.location.hostname + ":8000/api/v1/probe/" + tok)
       let bodyProbe = await responseProbe.json();
       //console.log(bodyProbe);
-      
+
       return bodyProbe.response.data
     })) || [];
     //console.log('probes', data);
     setDataList(data);
+    //console.log(dataList)
     setProbesState({ ...probes, loading: false });
     reRender();
   }
@@ -107,8 +108,8 @@ const ProbeList: React.FC<ContainerProps> = ({ token }) => {
 
   useEffect(() => {
     fetchData();
-    // eslint-disable-next-line
-  }, []);
+    //eslint-disable-next-line
+  }, [probes.loading]);
 
 
   const handleSearch = (value: string) => {
@@ -171,7 +172,10 @@ const ProbeList: React.FC<ContainerProps> = ({ token }) => {
           setProbesState({
             ...probes,
             addmodal: {
-              ...probes.addmodal, input: {
+              ...probes.addmodal,
+              spinner: false,
+              show: false,
+              input: {
                 ...probes.addmodal.input,
                 name: '',
                 category: ''
@@ -199,10 +203,6 @@ const ProbeList: React.FC<ContainerProps> = ({ token }) => {
             progress: undefined,
           });
         }
-        setProbesState({
-          ...probes,
-          addmodal: { ...probes.addmodal, spinner: false, show: false },
-        })
 
       });
   };

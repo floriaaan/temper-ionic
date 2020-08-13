@@ -70,6 +70,7 @@ const ProbePage: React.FC = () => {
   let location = useLocation();
   let id = location.pathname.split("/")[2];
 
+
   const history = useHistory();
   const navigateTo = (url: string) => history.push(url);
 

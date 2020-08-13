@@ -3,17 +3,19 @@ import "./Probe.css";
 import "leaflet/dist/leaflet.css"
 
 import {
-  IonCard,
   IonItem,
   IonButton,
   IonCardContent,
   IonSkeletonText,
+  IonIcon,
 } from "@ionic/react";
 
-import moment from "moment";
+//import moment from "moment";
+import cx from 'classnames';
 
 import { useHistory } from "react-router-dom";
-import { Heading } from "@chakra-ui/core";
+import { Heading, Box, Spinner } from "@chakra-ui/core";
+import { menuOutline } from "ionicons/icons";
 
 
 
@@ -24,7 +26,7 @@ interface ContainerProps {
     name: string,
     state: boolean,
     category: string,
-    lastMeasure: {
+    lastmeasure: {
       temperature: number,
       humidity: number,
       date: string
@@ -57,45 +59,49 @@ const Probe: React.FC<ContainerProps> = ({ token, data }) => {
 
   };
 
-  
+
 
   const history = useHistory();
   const navigateTo = () => history.push('/probe/' + token);
 
   return (
-    <IonCard>
+    <Box maxW="sm" borderWidth="0px" rounded="lg" overflow="hidden" style={{ height: '200px' }}>
       {!state.loading ? (
         <>
           <IonItem>
-            <Heading as="h3" size="md">
-              {probe.name ? probe.name : "Probe #" + probe.id}
+            <Heading as="h6" size="md" style={{ fontWeight: 'normal' }}>
+              {probe.name ? probe.name : "Probe #" + token}
+              {probe.state ? <span className="dot dot-active"> </span> : <span className="dot dot-disabled"></span>}
+              {state.spinner ? <Spinner size="xs" className="ml-3" /> : ""}
             </Heading>
-            
-            <IonButton fill="outline" slot="end" onClick={() => navigateTo()}>
-              VIEW
+
+
+            <IonButton fill="clear" slot="end" onClick={() => { navigateTo() }}>
+              <IonIcon icon={menuOutline} size="lg"></IonIcon>
             </IonButton>
           </IonItem>
 
-          <IonCardContent>
+          <IonCardContent className="weather-container">
+            <div className={cx("weather-card", { "weather-sunny": probe.state, "weather-cloudy": !probe.state })} onClick={() => handleToggle()}>
+              {probe.lastmeasure?.temperature ?
+                (<><div className={cx('weather-icon', { sun: probe.state, cloud: !probe.state })} />
+                  <h1>{probe.lastmeasure?.temperature}°C</h1>
+                  <p>{probe.lastmeasure?.humidity} %</p></>)
+                : ""}
 
+            </div>
           </IonCardContent>
         </>
       ) : (
           <>
-            <IonItem>
-              <IonSkeletonText animated></IonSkeletonText>
-            </IonItem>
-
-            <IonCardContent>
-              <IonSkeletonText
-                animated
-                style={{ heigth: "100px" }}
-              ></IonSkeletonText>
-            </IonCardContent>
+            <IonSkeletonText
+              animated
+              style={{ heigth: "25vh", width: "30%" }}
+            ></IonSkeletonText>
           </>
         )}
-    </IonCard>
-  );
+    </Box>
+  )
 };
 
 export default Probe;
