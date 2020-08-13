@@ -3,6 +3,7 @@ import { auth_middleware } from '../../middleware/auth';
 import { IonPage, IonContent} from "@ionic/react";
 import Header from '../../components/Layout/Header';
 import ProbeList from '../../components/Weather/Probe/List';
+import PlaceList from '../../components/Weather/Place/List';
 
 export default function Weather() {
     auth_middleware();
@@ -18,6 +19,7 @@ export default function Weather() {
 
 
 
+                <PlaceList token={auth_json.token}></PlaceList>
                 <ProbeList token={auth_json.token}></ProbeList>
 
 

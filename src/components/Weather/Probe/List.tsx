@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./Probe.css";
+import "./List.css";
 import {
   IonRow,
   IonCol,
