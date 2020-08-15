@@ -66,7 +66,7 @@ const PlaceList: React.FC<ContainerProps> = ({ token }) => {
     const cards = dataList.map((obj, key) => {
       return (
         <li className="list-inline-item list--inline--item" key={key}>
-          <Place data={obj} token={tokens[key]} />
+          <Place data={obj} />
         </li>
       );
     });
@@ -79,6 +79,7 @@ const PlaceList: React.FC<ContainerProps> = ({ token }) => {
       "http://" + window.location.hostname + ":8000/api/v1/place/user/" + token
     );
     const body = await response.json();
+    
     setDataList(body.response.data || []);
     setPlacesState({ ...places, loading: false });
     reRender();

@@ -12,17 +12,12 @@ import {
 
 import cx from "classnames";
 import { Heading, Box } from "@chakra-ui/core";
-import {
-  trash,
-  heart,
-  close,
-  ellipsisVertical,
-} from "ionicons/icons";
+import { trash, heart, close, ellipsisVertical } from "ionicons/icons";
 
 interface ContainerProps {
-  token: string;
   data: {
     id: number;
+    token: string;
     name: string;
     state: boolean;
     category: string;
@@ -80,7 +75,7 @@ interface ApiResponse {
   cod: number | null;
 }
 
-const Place: React.FC<ContainerProps> = ({ token, data }) => {
+const Place: React.FC<ContainerProps> = ({ data }) => {
   const [place, setPlaceData] = useState(data);
   const [api, setApiResponse] = useState<ApiResponse>();
   const [state, setState] = useState({
@@ -105,6 +100,24 @@ const Place: React.FC<ContainerProps> = ({ token, data }) => {
     apiCall();
   }, []);
 
+  const handleDelete = async () => {
+    const resp = await fetch(
+      "http://" + window.location.hostname + ":8000/api/v1/place/",
+      {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          _token: place.token,
+        }),
+      }
+    );
+    const body = await resp.json();
+    console.log(body);
+  };
+
   return (
     <>
       <Box
@@ -118,7 +131,7 @@ const Place: React.FC<ContainerProps> = ({ token, data }) => {
           <>
             <IonItem>
               <Heading as="h6" size="md" style={{ fontWeight: "normal" }}>
-                {place.name ? place.name : "Place #" + token}
+                {place.name ? place.name : "Place #" + place.token}
               </Heading>
 
               <IonButton
@@ -136,23 +149,20 @@ const Place: React.FC<ContainerProps> = ({ token, data }) => {
               <div
                 className={cx("weather-card", {
                   "weather-sunny":
-                    api?.weather[0].main === "Sunny" ||
-                    api?.weather[0].id === 800,
-                  "weather-cloudy":
-                    api?.weather[0].main !== "Sunny" &&
-                    api?.weather[0].id !== 800,
+                    api?.weather[0].id === 800 || api?.weather[0].id === 802,
+                  "weather-cloudy": api?.weather[0].id === 803,
+                  "weather-rainy": api?.weather[0].id === 805,
                 })}
               >
                 {api?.main ? (
                   <>
                     <div
                       className={cx("weather-icon", {
-                        sun:
-                          api?.weather[0].main === "Sunny" ||
-                          api?.weather[0].id === 800,
-                        cloud:
-                          api?.weather[0].main !== "Sunny" &&
-                          api?.weather[0].id !== 800,
+                        sunny:
+                          api?.weather[0].id === 800 ||
+                          api?.weather[0].id === 802,
+                        cloudy: api?.weather[0].id === 803,
+                        rainy: api?.weather[0].id === 805,
                       })}
                     />
                     <h1>
@@ -186,7 +196,7 @@ const Place: React.FC<ContainerProps> = ({ token, data }) => {
             role: "destructive",
             icon: trash,
             handler: () => {
-              console.log("Delete clicked");
+              handleDelete();
             },
           },
           {

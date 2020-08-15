@@ -31,7 +31,7 @@
   );
 }
 
-.weather-cloudy {
+.weather-rainy {
   background-image: linear-gradient(
     to top,
     #92949c,
@@ -39,6 +39,16 @@
     #81838a,
     #797a81,
     #717278
+  );
+}
+.weather-cloudy {
+  background-image: linear-gradient(
+    to left bottom,
+    #c6c9cb,
+    #a0bcd2,
+    #79aedb,
+    #4f9ee3,
+    #0a8deb
   );
 }
 
@@ -77,7 +87,7 @@
   animation: weather-icon-move 5s ease-in-out infinite;
 }
 
-.sun {
+.sunny {
   background: #ffcd41;
   border-radius: 50%;
   box-shadow: rgba(255, 255, 0, 0.1) 0 0 0 4px;
@@ -85,7 +95,7 @@
     weather-icon-move 5s ease-in-out infinite;
 }
 
-.cloud {
+.rainy {
   margin-right: 60px;
   background: #b6cede;
   border-radius: 20px;
@@ -94,7 +104,7 @@
   box-shadow: #b6cede 24px -6px 0 2px, #b6cede 10px 5px 0 5px,
     #b6cede 30px 5px 0 2px, #b6cede 11px -8px 0 -3px, #b6cede 25px 11px 0 -1px;
 }
-.cloud:after {
+.rainy:after {
   content: "";
   position: absolute;
   border-radius: 10px;
@@ -168,4 +178,14 @@
 
 .dot-disabled {
   background-color: #eb445a;
+}
+
+.cloudy {
+  margin-right: 60px;
+  background: #b6cede;
+  border-radius: 20px;
+  width: 25px;
+  height: 25px;
+  box-shadow: #b6cede 24px -6px 0 2px, #b6cede 10px 5px 0 5px,
+    #b6cede 30px 5px 0 2px, #b6cede 11px -8px 0 -3px, #b6cede 25px 11px 0 -1px;
 }
