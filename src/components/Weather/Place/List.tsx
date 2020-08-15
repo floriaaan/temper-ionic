@@ -35,7 +35,6 @@ interface ContainerProps {
 }
 
 const PlaceList: React.FC<ContainerProps> = ({ token }) => {
-  let tokens: string[] = [];
   let any: any[] = [];
   const [dataList, setDataList] = useState(any);
   const [places, setPlacesState] = useState({
@@ -216,12 +215,12 @@ const PlaceList: React.FC<ContainerProps> = ({ token }) => {
         <IonContent>
           <div className="p-3">
             <IonRow>
-              <IonCol sizeLg="6">
+              <IonCol sizeLg="12">
                 <div className="display-5" style={{ fontFamily: "Nunito" }}>
                   Details of{" "}
                   {places.addmodal.input.name
                     ? places.addmodal.input.name
-                    : "probe"}
+                    : "place"}
                 </div>
 
                 <IonItem>
@@ -263,12 +262,12 @@ const PlaceList: React.FC<ContainerProps> = ({ token }) => {
                 </IonItem>
               </IonCol>
 
-              <IonCol sizeLg="6">
+              <IonCol sizeLg="12">
                 <div className="display-6" style={{ fontFamily: "Nunito" }}>
                   Location of{" "}
                   {places.addmodal.input.name
                     ? places.addmodal.input.name
-                    : "probe"}
+                    : "place"}
                 </div>
                 <Map
                   center={[43, 1]}

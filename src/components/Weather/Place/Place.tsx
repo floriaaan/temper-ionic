@@ -76,6 +76,7 @@ interface ApiResponse {
 }
 
 const Place: React.FC<ContainerProps> = ({ data }) => {
+  // eslint-disable-next-line
   const [place, setPlaceData] = useState(data);
   const [api, setApiResponse] = useState<ApiResponse>();
   const [state, setState] = useState({
@@ -98,6 +99,7 @@ const Place: React.FC<ContainerProps> = ({ data }) => {
 
   useEffect(() => {
     apiCall();
+    // eslint-disable-next-line
   }, []);
 
   const handleDelete = async () => {
