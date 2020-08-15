@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[9],{66:function(n){n.exports=JSON.parse('{"allTagsPath":"/temper/blog/tags","slug":"documentation","name":"documentation","count":1,"permalink":"/temper/blog/tags/documentation"}')}}]);
