@@ -69,10 +69,10 @@ const Login: React.FC = () => {
         <div className="row justify-content-center p-4 my-5">
           <div className="p-4 my-2">
             <IonItem>
-              <IonLabel position="floating">Name</IonLabel>
+              <IonLabel position="floating">Email</IonLabel>
               <IonInput
                 required
-                type="text"
+                type="email"
                 onIonChange={(e) => setLogin(e.detail.value!)}
               ></IonInput>
             </IonItem>

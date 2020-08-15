@@ -7,14 +7,17 @@ import {
   IonCardContent,
   IonSkeletonText,
   IonIcon,
+  IonActionSheet,
 } from "@ionic/react";
 
-//import moment from "moment";
 import cx from "classnames";
-
-import { useHistory } from "react-router-dom";
-import { Heading, Box, Spinner } from "@chakra-ui/core";
-import { menuOutline } from "ionicons/icons";
+import { Heading, Box } from "@chakra-ui/core";
+import {
+  trash,
+  heart,
+  close,
+  ellipsisVertical,
+} from "ionicons/icons";
 
 interface ContainerProps {
   token: string;
@@ -45,7 +48,7 @@ interface ApiResponse {
     main: string | null;
     description: string | null;
     icon: string | null;
-  };
+  }[];
   base: string | null;
   main: {
     temp: number | null;
@@ -83,13 +86,16 @@ const Place: React.FC<ContainerProps> = ({ token, data }) => {
   const [state, setState] = useState({
     loading: false,
     spinner: false,
+    actions: false,
   });
 
   const apiCall = async () => {
     const resp = await fetch(
       "https://api.openweathermap.org/data/2.5/weather?q=" +
         place.name +
-        "&appid="+ process.env.OWEATHER_API_KEY +""
+        "&appid=" +
+        process.env.REACT_APP_OWEATHER_API_KEY +
+        ""
     );
     const body = await resp.json();
     setApiResponse(body);
@@ -100,64 +106,107 @@ const Place: React.FC<ContainerProps> = ({ token, data }) => {
   }, []);
 
   return (
-    <Box
-      maxW="sm"
-      borderWidth="0px"
-      rounded="lg"
-      overflow="hidden"
-      style={{ height: "200px" }}
-    >
-      {!state.loading ? (
-        <>
-          <IonItem>
-            <Heading as="h6" size="md" style={{ fontWeight: "normal" }}>
-              {place.name ? place.name : "Place #" + token}
-            </Heading>
+    <>
+      <Box
+        maxW="sm"
+        borderWidth="0px"
+        rounded="lg"
+        overflow="hidden"
+        style={{ height: "200px" }}
+      >
+        {!state.loading ? (
+          <>
+            <IonItem>
+              <Heading as="h6" size="md" style={{ fontWeight: "normal" }}>
+                {place.name ? place.name : "Place #" + token}
+              </Heading>
 
-            <IonButton
-              fill="clear"
-              slot="end"
-              onClick={() => {
-                console.log("actions");
-              }}
-            >
-              <IonIcon icon={menuOutline} size="lg"></IonIcon>
-            </IonButton>
-          </IonItem>
+              <IonButton
+                fill="clear"
+                slot="end"
+                onClick={() => {
+                  setState({ ...state, actions: true });
+                }}
+              >
+                <IonIcon icon={ellipsisVertical} size="lg"></IonIcon>
+              </IonButton>
+            </IonItem>
 
-          <IonCardContent className="weather-container">
-            <div
-              className={cx("weather-card", {
-                "weather-sunny": place.state,
-                "weather-cloudy": !place.state,
-              })}
-            >
-              {api?.main ? (
-                <>
-                  <div
-                    className={cx("weather-icon", {
-                      sun: place.state,
-                      cloud: !place.state,
-                    })}
-                  />
-                  <h1>{Math.round((api.main.temp! - 273.15) * 100) / 100}°C</h1>
-                  <p>{api.main.humidity} %</p>
-                </>
-              ) : (
-                ""
-              )}
-            </div>
-          </IonCardContent>
-        </>
-      ) : (
-        <>
-          <IonSkeletonText
-            animated
-            style={{ heigth: "25vh", width: "30%" }}
-          ></IonSkeletonText>
-        </>
-      )}
-    </Box>
+            <IonCardContent className="weather-container">
+              <div
+                className={cx("weather-card", {
+                  "weather-sunny":
+                    api?.weather[0].main === "Sunny" ||
+                    api?.weather[0].id === 800,
+                  "weather-cloudy":
+                    api?.weather[0].main !== "Sunny" &&
+                    api?.weather[0].id !== 800,
+                })}
+              >
+                {api?.main ? (
+                  <>
+                    <div
+                      className={cx("weather-icon", {
+                        sun:
+                          api?.weather[0].main === "Sunny" ||
+                          api?.weather[0].id === 800,
+                        cloud:
+                          api?.weather[0].main !== "Sunny" &&
+                          api?.weather[0].id !== 800,
+                      })}
+                    />
+                    <h1>
+                      {Math.round((api.main.temp! - 273.15) * 100) / 100}°C
+                    </h1>
+                    <p>{api.main.humidity} %</p>
+                  </>
+                ) : (
+                  ""
+                )}
+              </div>
+            </IonCardContent>
+          </>
+        ) : (
+          <>
+            <IonSkeletonText
+              animated
+              style={{ heigth: "25vh", width: "30%" }}
+            ></IonSkeletonText>
+          </>
+        )}
+      </Box>
+
+      <IonActionSheet
+        isOpen={state.actions}
+        onDidDismiss={() => setState({ ...state, actions: false })}
+        cssClass="my-custom-class"
+        buttons={[
+          {
+            text: "Delete",
+            role: "destructive",
+            icon: trash,
+            handler: () => {
+              console.log("Delete clicked");
+            },
+          },
+          {
+            text: "Favorite",
+            icon: heart,
+            handler: () => {
+              console.log("Favorite clicked");
+            },
+          },
+          {
+            text: "Cancel",
+            icon: close,
+            role: "cancel",
+            handler: () => {
+              setState({ ...state, actions: false });
+            },
+          },
+        ]}
+      ></IonActionSheet>
+    </>
   );
 };
 

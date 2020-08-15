@@ -154,7 +154,7 @@ const Register: React.FC = () => {
               ></IonInput>
             </IonItem>
             <IonItem>
-              <IonLabel position="floating">Email (not required)</IonLabel>
+              <IonLabel position="floating">Email</IonLabel>
               <IonInput
                 type="email"
                 onIonChange={(e) => setEmail(e.detail.value!)}
