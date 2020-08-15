@@ -21,7 +21,7 @@ Temper is a powerful open-source domotic application to have full power of all y
 
 - **With less.** No matter who you are, you can easily develop your module to unleash the power of your home.
 
-[**SOON** | **Visit the Documentation** : Learn how to make modules for Temper and Temper API ](https://floriaaan.github.io)
+[**Visit the Documentation** : Learn how to make modules for Temper and Temper API ](https://floriaaan.github.io/temper)
 
 ## 🚀 Run a Temper project
 
@@ -64,7 +64,7 @@ You're ready to rock ! 🎉
 
 Full documentation will be here **soon**
 
-**Start Learning Temper** : [**Read the Docs**](https://floriaaan.github.io)
+**Start Learning Temper** : [**Read the Docs**](https://floriaaan.github.io/temper)
 
 ## 📕 Before contributing, the Code of Conduct
 
