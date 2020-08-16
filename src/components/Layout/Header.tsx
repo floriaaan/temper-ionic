@@ -51,16 +51,47 @@ const Header: React.FC<ContainerProps> = ({ title, version }) => {
     } else if (version === 2) {
         return (
             <div className="row mx-1 my-3 align-items-center header--props">
-                <div className="col-6 header--title headerv2-title">
+                <div className="col-8 header--title headerv2-title">
                     {title}
                 </div>
 
-                <div className="col-6 d-flex flex-row-reverse">
+                <div className="col-4 d-flex flex-row-reverse">
                     <ul className="navbar-nav">
                         <li className="nav-item">
                             <IonButton fill="clear" onClick={() => console.log("change dispositions to list")}>
                                 <IonIcon icon={listOutline}></IonIcon>
                             </IonButton>
+                            <IonButton fill="clear" onClick={() => console.log("view setttings")}>
+                                <IonIcon icon={settingsOutline}></IonIcon>
+                            </IonButton>
+                            <Avatar
+                                className="p-4 header--avatar headerv2--avatar mx-2"
+                                size="xs"
+                                name={user.name}
+                                src=""
+                                textAlign="center"
+                                onClick={() => navigateToUser()}
+                            />
+
+
+                        </li>
+                    </ul>
+
+                </div>
+
+            </div>
+        )
+    } else if (version === 2.1) {
+        return (
+            <div className="row mx-1 my-3 align-items-center header--props">
+                <div className="col-8 header--title headerv2-title">
+                    {title}
+                </div>
+
+                <div className="col-4 d-flex flex-row-reverse">
+                    <ul className="navbar-nav">
+                        <li className="nav-item">
+                            
                             <IonButton fill="clear" onClick={() => console.log("view setttings")}>
                                 <IonIcon icon={settingsOutline}></IonIcon>
                             </IonButton>

@@ -153,7 +153,8 @@ const Place: React.FC<ContainerProps> = ({ data }) => {
                   "weather-sunny":
                     api?.weather[0].id === 800 || api?.weather[0].id === 802,
                   "weather-cloudy": api?.weather[0].id === 803,
-                  "weather-rainy": api?.weather[0].id === 805,
+                  "weather-rainy":
+                    api?.weather[0].id === 500 || api?.weather[0].id === 501,
                 })}
               >
                 {api?.main ? (
@@ -164,7 +165,9 @@ const Place: React.FC<ContainerProps> = ({ data }) => {
                           api?.weather[0].id === 800 ||
                           api?.weather[0].id === 802,
                         cloudy: api?.weather[0].id === 803,
-                        rainy: api?.weather[0].id === 805,
+                        rainy:
+                          api?.weather[0].id === 500 ||
+                          api?.weather[0].id === 501,
                       })}
                     />
                     <h1>

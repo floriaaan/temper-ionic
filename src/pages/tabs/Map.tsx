@@ -15,7 +15,7 @@ const MapTab: React.FC = () => {
   return (
     <IonPage>
       <IonContent>
-        <Header title="Map" version={2}></Header>
+        <Header title="Map" version={2.1}></Header>
         <MapComponent token={auth_json.token}></MapComponent>
       </IonContent>
     </IonPage>
