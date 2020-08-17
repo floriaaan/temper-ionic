@@ -30,6 +30,7 @@ import {
   IonRadio,
   IonList,
   IonText,
+  IonAlert,
 } from "@ionic/react";
 import { useLocation, useHistory } from "react-router-dom";
 import {
@@ -43,7 +44,6 @@ import {
   close,
   chevronBackOutline,
   ellipsisVerticalOutline,
-  personOutline,
 } from "ionicons/icons";
 
 import {
@@ -56,6 +56,8 @@ import {
   StatHelpText,
   StatNumber,
   Box,
+  Avatar,
+  AvatarBadge,
 } from "@chakra-ui/core";
 
 import moment from "moment";
@@ -68,33 +70,48 @@ import "./Probe.css";
 
 const ProbePage: React.FC = () => {
   let location = useLocation();
-  let id = location.pathname.split("/")[2];
+  let token = location.pathname.split("/")[2];
 
 
   const history = useHistory();
   const navigateTo = (url: string) => history.push(url);
 
-  const [name, setName] = useState();
-  const [createdAt, setCreatedAt] = useState("");
-  const [state, setState] = useState();
-  const [category, setCategory] = useState();
+  const [probe, setProbe] = useState({
+    id: 0,
+    name: '',
+    state: false,
+    category: '',
+    gps: {
+      lon: 0,
+      lat: 0,
+    },
+    created_at: ''
+  }
+  )
+  const [owner, setOwner] = useState({
+    name: "", email: "", loading: true, isLogged: false
+  })
+  const [state, setState] = useState({
+    deletemeasure: {
+      show: false,
+      id: 0
+    },
+    qr: {
+      show: false,
+      data: { token: token, duration: "1day" }
+    },
+    actionsheet: false
+  });
   const [measures, setMeasures] = useState([
     {
       temperature: null,
       humidity: null,
       date: null,
+      id: null
     },
   ]);
-  const [gps, setGPS] = useState({
-    lon: 0,
-    lat: 0,
-  });
-  const [owner, setOwner] = useState({ name: "", email: "", loading: true });
   const [loading, setLoading] = useState(true);
 
-  const [showActionSheet, setShowActionSheet] = useState(false);
-  const [showQR, setShowQR] = useState(false);
-  const [qrJson, setQRJSON] = useState({ token: id, duration: "1day" });
 
   /*const handleScroll = (e: any) => {
     let scroll = document.querySelector("#scroll")!;
@@ -111,27 +128,23 @@ const ProbePage: React.FC = () => {
       "http://" +
       window.location.hostname +
       ":8000/api/v1/measure/probe/" +
-      id +
+      token +
       "_limit=6"
     )
       .then((res) => res.json())
       .then((res) => {
         setMeasures(
-          res.response.data || [{ temperature: 0, humidity: 0, date: "" }]
+          res.response.data || [{ temperature: 0, humidity: 0, date: "", id: null }]
         );
       });
   };
   const fetchData = async () => {
     await fetch(
-      "http://" + window.location.hostname + ":8000/api/v1/probe/" + id
+      "http://" + window.location.hostname + ":8000/api/v1/probe/" + token
     )
       .then((res) => res.json())
       .then((res) => {
-        setName(res.response.data.name);
-        setState(res.response.data.state);
-        setCategory(res.response.data.category);
-        setGPS(res.response.data.gps);
-        setCreatedAt(res.response.data.created_at);
+        setProbe(res.response.data);
         setLoading(false);
       });
   };
@@ -140,18 +153,12 @@ const ProbePage: React.FC = () => {
       "http://" +
       window.location.hostname +
       ":8000/api/v1/probe/" +
-      id +
+      token +
       "/owner"
     )
       .then((res) => res.json())
       .then((res) => {
-        setOwner(
-          {
-            name: res.response.data.name,
-            email: res.response.data.email,
-            loading: false,
-          } || { name: "Unable to fetch", email: "", loading: false }
-        );
+        setOwner(res.response.data);
       });
   };
 
@@ -172,6 +179,11 @@ const ProbePage: React.FC = () => {
     });
   };
 
+  const handleDeleteMeasure = async (id: number) => {
+    if (id === 0) return;
+    console.log("fetch post delete measure : " + id);
+  }
+
   const isGPS = (
     <Map center={[43, 1]} zoom={12} style={{ height: "50vh", width: "99%" }}>
       <TileLayer
@@ -180,14 +192,14 @@ const ProbePage: React.FC = () => {
       />
       <React.Fragment>
         {""}
-        <Marker position={[gps.lon, gps.lat]}></Marker>
+        <Marker position={[probe.gps.lon, probe.gps.lat]}></Marker>
       </React.Fragment>
     </Map>
   );
 
   const notGPS = "";
 
-  const map = gps.lon && gps.lat ? isGPS : notGPS;
+  const map = probe.gps.lon && probe.gps.lat ? isGPS : notGPS;
 
   return (
     <IonPage>
@@ -225,12 +237,12 @@ const ProbePage: React.FC = () => {
                         ></IonIcon>
                       </IonButton>
                       <div className="display-4 ml-3" style={{ fontFamily: 'Nunito' }}>
-                        {name ? name : "Sonde #" + id}
+                        {probe.name ? probe.name : "Sonde #" + probe.id}
                       </div>
 
                       <IonButton
                         fill="clear"
-                        onClick={() => setShowActionSheet(true)}
+                        onClick={() => setState({ ...state, actionsheet: true })}
                         slot="end"
                       >
                         <IonIcon
@@ -251,11 +263,11 @@ const ProbePage: React.FC = () => {
                   {!loading ? (
                     <>
                       <IonChip outline={true} className="mx-3" color="warning">
-                        {category}
+                        {probe.category}
                       </IonChip>
 
-                      <IonChip color={state ? "success" : "danger"}>
-                        {state ? "Active" : "Disabled"}
+                      <IonChip color={probe.state ? "success" : "danger"}>
+                        {probe.state ? "Active" : "Disabled"}
                       </IonChip>
                     </>
                   ) : (
@@ -288,26 +300,24 @@ const ProbePage: React.FC = () => {
                       animated
                       style={{ width: "60%" }}
                     ></IonSkeletonText>
-                  ) : createdAt ? (
-                    "Created " + moment(createdAt).fromNow()
+                  ) : probe.created_at ? (
+                    "Created " + moment(probe.created_at).fromNow()
                   ) : (
                         ""
                       )}
                 </IonCol>
-                <IonCol>
-                  <IonIcon
-                    icon={personOutline}
-                    className="mx-2"
-                    color="tertiary"
-                  ></IonIcon>
-                  Owner :{" "}
+                <IonCol className="">
+
                   {owner.loading ? (
                     <IonSkeletonText
                       animated
                       style={{ width: "60%" }}
                     ></IonSkeletonText>
-                  ) : (
-                      owner.name + (owner.email ? " - " + owner.email : "")
+                  ) : (<>
+                    <Avatar size="sm" name={owner.name} className="mt-n1">
+                      <AvatarBadge size="1em" borderColor={owner.isLogged ? "green.600" : "red.600"} bg={owner.isLogged ? "green.500" : "red.500"} />
+                    </Avatar>
+                    {owner.email ? <span className="ml-1">{owner.email}</span> : ""}</>
                     )}
                 </IonCol>
               </IonRow>
@@ -323,7 +333,7 @@ const ProbePage: React.FC = () => {
               <IonCardHeader>
                 <IonCardTitle>
                   <Heading as="h1" size="2xl" className="ml-3">
-                    Measures of {name}
+                    Measures of {probe.name}
                   </Heading>
                 </IonCardTitle>
               </IonCardHeader>
@@ -343,81 +353,96 @@ const ProbePage: React.FC = () => {
                     hPercent = Math.round(hPercent * 100) / 100;
 
                     return (
-                      <Box p={5} borderWidth="1px" key={key}>
-                        <StatGroup>
-                          <Stat>
-                            <StatLabel>
-                              <IonIcon
-                                icon={thermometer}
-                                className="mr-2"
-                                color="primary"
-                              ></IonIcon>
+                      <Box p={5} borderWidth="1px" borderRadius="5px" key={key}>
+                        <IonRow>
+                          <IonCol size="11">
+                            <StatGroup>
+                              <Stat>
+                                <StatLabel>
+                                  <IonIcon
+                                    icon={thermometer}
+                                    className="mr-2"
+                                    color="primary"
+                                  ></IonIcon>
                               Temperature
                             </StatLabel>
-                            <StatNumber
-                              style={{
-                                fontSize: "1.5rem",
-                                fontWeight: "bold",
-                              }}
-                            >
-                              {obj.temperature} °C
+                                <StatNumber
+                                  style={{
+                                    fontSize: "1.5rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {obj.temperature} °C
                             </StatNumber>
-                            <StatHelpText>
-                              <StatArrow
-                                type={tPercent >= 0 ? "increase" : "decrease"}
-                              />
-                              {tPercent} %
+                                <StatHelpText>
+                                  <StatArrow
+                                    type={tPercent >= 0 ? "increase" : "decrease"}
+                                  />
+                                  {tPercent} %
                             </StatHelpText>
-                          </Stat>
+                              </Stat>
 
-                          <Stat>
-                            <StatLabel>
-                              <IonIcon
-                                icon={rainy}
-                                className="mr-2"
-                                color="secondary"
-                              ></IonIcon>
+                              <Stat>
+                                <StatLabel>
+                                  <IonIcon
+                                    icon={rainy}
+                                    className="mr-2"
+                                    color="secondary"
+                                  ></IonIcon>
                               Humidty
                             </StatLabel>
-                            <StatNumber
-                              style={{
-                                fontSize: "1.5rem",
-                                fontWeight: "bold",
-                              }}
-                            >
-                              {obj.humidity} %
+                                <StatNumber
+                                  style={{
+                                    fontSize: "1.5rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {obj.humidity} %
                             </StatNumber>
-                            <StatHelpText>
-                              <StatArrow
-                                type={hPercent >= 0 ? "increase" : "decrease"}
-                              />
-                              {hPercent} %
+                                <StatHelpText>
+                                  <StatArrow
+                                    type={hPercent >= 0 ? "increase" : "decrease"}
+                                  />
+                                  {hPercent} %
                             </StatHelpText>
-                          </Stat>
-                          <Stat>
-                            <StatLabel>
-                              <IonIcon
-                                icon={time}
-                                className="mr-2"
-                                color="tertiary"
-                              ></IonIcon>
+                              </Stat>
+                              <Stat>
+                                <StatLabel>
+                                  <IonIcon
+                                    icon={time}
+                                    className="mr-2"
+                                    color="tertiary"
+                                  ></IonIcon>
                               Date
                             </StatLabel>
-                            <StatNumber
-                              style={{
-                                fontSize: "1.5rem",
-                                fontWeight: "bold",
+                                <StatNumber
+                                  style={{
+                                    fontSize: "1.5rem",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {moment(obj.date).fromNow()}
+                                </StatNumber>
+                                <StatHelpText>
+                                  {moment(obj.date).format(
+                                    "MMMM Do YYYY, h:mm:ss a"
+                                  )}
+                                </StatHelpText>
+                              </Stat>
+                            </StatGroup>
+                          </IonCol>
+                          <IonCol>
+                            <IonButton
+                              fill="clear"
+                              color="danger"
+                              onClick={() => {
+                                setState({ ...state, deletemeasure: { ...state.deletemeasure, show: true, id: obj.id || 0 } });
                               }}
                             >
-                              {moment(obj.date).fromNow()}
-                            </StatNumber>
-                            <StatHelpText>
-                              {moment(obj.date).format(
-                                "MMMM Do YYYY, h:mm:ss a"
-                              )}
-                            </StatHelpText>
-                          </Stat>
-                        </StatGroup>
+                              <IonIcon icon={trash} color="danger" size="lg"></IonIcon>
+                            </IonButton>
+                          </IonCol>
+                        </IonRow>
                       </Box>
                     );
                   })}
@@ -440,7 +465,7 @@ const ProbePage: React.FC = () => {
           </IonFabButton>
         </IonFab>
 
-        <IonModal isOpen={showQR} cssClass="modal-qrcode">
+        <IonModal isOpen={state.qr.show} cssClass="modal-qrcode">
           <div className="p-5">
 
 
@@ -450,7 +475,7 @@ const ProbePage: React.FC = () => {
 
             <div className="w-100 mt-3">
               <QRCode
-                value={JSON.stringify(qrJson)}
+                value={JSON.stringify(state.qr.data)}
                 size={150}
                 includeMargin={true}
                 bgColor={"#eeeeee"}
@@ -459,9 +484,9 @@ const ProbePage: React.FC = () => {
             </div>
             <IonList>
               <IonRadioGroup
-                value={qrJson.duration}
+                value={state.qr.data.duration}
                 onIonChange={(e) =>
-                  setQRJSON({ token: id, duration: e.detail.value })
+                  setState({ ...state, qr: { ...state.qr, data: { token: token, duration: e.detail.value } } })
                 }
               >
                 <IonListHeader>
@@ -494,7 +519,7 @@ const ProbePage: React.FC = () => {
               fill="outline"
               color="danger"
               expand="block"
-              onClick={() => setShowQR(false)}
+              onClick={() => setState({ ...state, qr: { ...state.qr, show: false } })}
             >
               <IonIcon icon={close}></IonIcon>
               Close
@@ -503,8 +528,9 @@ const ProbePage: React.FC = () => {
         </IonModal>
 
         <IonActionSheet
-          isOpen={showActionSheet}
-          onDidDismiss={() => setShowActionSheet(false)}
+          isOpen={state.actionsheet}
+          header={"Probe - " + probe.name}
+          onDidDismiss={() => setState({ ...state, actionsheet: false })}
           buttons={[
             {
               text: "Delete",
@@ -518,7 +544,7 @@ const ProbePage: React.FC = () => {
               text: "Share with your friends",
               icon: share,
               handler: () => {
-                setShowQR(true);
+                setState({ ...state, qr: { ...state.qr, show: true } })
               },
             },
             {
@@ -533,11 +559,32 @@ const ProbePage: React.FC = () => {
               icon: close,
               role: "cancel",
               handler: () => {
-                setShowActionSheet(false);
+                setState({ ...state, actionsheet: false });
               },
             },
           ]}
         ></IonActionSheet>
+
+        <IonAlert
+          isOpen={state.deletemeasure.show}
+          onDidDismiss={() => setState({ ...state, deletemeasure: { ...state.deletemeasure, show: false } })}
+          header={'Delete measure #' + state.deletemeasure.id}
+          message={'Are you sure to delete measure #' + state.deletemeasure.id}
+          buttons={[
+            {
+              text: 'Cancel',
+              role: 'cancel',
+              handler: () => setState({ ...state, deletemeasure: { ...state.deletemeasure, show: false } })
+            },
+            {
+              text: 'Delete',
+              role: 'destructive',
+              handler: () => {
+                handleDeleteMeasure(state.deletemeasure.id)
+              }
+            }
+          ]}
+        />
       </IonContent>
     </IonPage>
   );

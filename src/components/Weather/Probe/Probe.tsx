@@ -47,10 +47,10 @@ const Probe: React.FC<ContainerProps> = ({ token, data }) => {
     setState({ ...state, spinner: true });
     fetch(
       "http://" +
-        window.location.hostname +
-        ":8000/api/v1/probe/" +
-        token +
-        "/toggle",
+      window.location.hostname +
+      ":8000/api/v1/probe/" +
+      token +
+      "/toggle",
       {
         method: "PUT",
       }
@@ -81,8 +81,8 @@ const Probe: React.FC<ContainerProps> = ({ token, data }) => {
               {probe.state ? (
                 <span className="dot dot-active"> </span>
               ) : (
-                <span className="dot dot-disabled"></span>
-              )}
+                  <span className="dot dot-disabled"></span>
+                )}
               {state.spinner ? <Spinner size="xs" className="ml-3" /> : ""}
             </Heading>
 
@@ -105,37 +105,42 @@ const Probe: React.FC<ContainerProps> = ({ token, data }) => {
               })}
               onClick={() => handleToggle()}
             >
-              {probe.lastmeasure?.temperature ? (
-                <>
-                  {probe.state ? (
-                    <>
-                      <div className="icon icon-anim">
-                        <div className="bolt"></div>
-                        <div className="bolt"></div>
-                      </div>
-                    </>
-                  ) : (
+              <>
+                {probe.state ? (
+                  <>
+                    <div className="icon icon-anim">
+                      <div className="bolt"></div>
+                      <div className="bolt"></div>
+                    </div>
+                  </>
+                ) : (
                     <div className="icon">
                       <div className="unbolt"></div>
                     </div>
                   )}
+              </>
+              {probe.lastmeasure?.temperature ? (
+                <>
                   <h1>{probe.lastmeasure?.temperature}°C</h1>
                   <p>{probe.lastmeasure?.humidity} %</p>
                 </>
               ) : (
-                ""
-              )}
+                  <>
+                    <h1> </h1>
+                    <p><span role="img" aria-label="No measure">❌</span>&nbsp;No measure</p>
+                  </>
+                )}
             </div>
           </IonCardContent>
         </>
       ) : (
-        <>
-          <IonSkeletonText
-            animated
-            style={{ heigth: "25vh", width: "30%" }}
-          ></IonSkeletonText>
-        </>
-      )}
+          <>
+            <IonSkeletonText
+              animated
+              style={{ heigth: "25vh", width: "30%" }}
+            ></IonSkeletonText>
+          </>
+        )}
     </Box>
   );
 };

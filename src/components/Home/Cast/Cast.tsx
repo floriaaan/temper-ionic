@@ -17,7 +17,7 @@ interface ContainerProps {
         token: string,
         name: string,
         category: string,
-        state: boolean,
+        state: number,
         status: string
     };
 }
@@ -34,7 +34,8 @@ const Cast: React.FC<ContainerProps> = ({ data }) => {
     const handleToggle = () => {
         setState({ ...state, spinner: true });
         setTimeout(() => {
-            setCast({ ...cast, state: !cast.state });
+
+            cast.state === 1 ? setCast({ ...cast, state: 2 }) : setCast({ ...cast, state: 1 })
 
             setState({ ...state, spinner: false });
         }, 1000)
@@ -49,13 +50,21 @@ const Cast: React.FC<ContainerProps> = ({ data }) => {
         //eslint-disable-next-line
     }, [])
 
+    let dotState = <></>;
+    let castState;
+
+    if (cast.state === 0) { dotState = <span className="dot dot-disabled"> </span>; castState = CastOff };
+    if (cast.state === 1) { dotState = <span className="dot dot-active"> </span>; castState = CastOn };
+    if (cast.state === 2) { dotState = <span className="dot dot-idle"> </span>; castState = CastOff };
+
     return (
-        <Box maxW="sm" borderWidth="1px" rounded="lg" overflow="hidden" style={{height: '200px'}}>
+        <Box maxW="sm" borderWidth="1px" rounded="lg" overflow="hidden" style={{ height: '200px' }}>
             {!state.loading ? (
                 <>
                     <IonItem>
-                        <Heading as="h6" size="md" style={{fontWeight: 'normal'}}>
-                            {cast.name ? cast.name : "Cast device #" + cast.token} 
+                        <Heading as="h6" size="md" style={{ fontWeight: 'normal' }}>
+                            {cast.name ? cast.name : "Cast device #" + cast.token}
+                            {dotState}
                             {state.spinner ? <Spinner size="xs" className="ml-3" /> : ""}
                         </Heading>
 
@@ -67,7 +76,7 @@ const Cast: React.FC<ContainerProps> = ({ data }) => {
 
                     <IonCardContent>
 
-                        <img className="cast" src={cast.state ? CastOn : CastOff} onClick={() => { handleToggle() }} alt="Light icon"></img>
+                        <img className="cast" src={castState} onClick={() => { handleToggle() }} alt="Light icon"></img>
 
 
                     </IonCardContent>

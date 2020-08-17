@@ -41,7 +41,7 @@ const CastList: React.FC<ContainerProps> = ({ token }) => {
             token: token,
             name: "Token " + token,
             category: "Category",
-            state: true,
+            state: 0,
             status: "Idle",
           }}
         />

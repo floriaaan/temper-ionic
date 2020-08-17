@@ -161,7 +161,7 @@ const ProbeList: React.FC<ContainerProps> = ({ token }) => {
       body: JSON.stringify({
         user: auth_json.token,
         name: probes.addmodal.input.name,
-        category: probes.addmodal.input.name,
+        category: probes.addmodal.input.category,
         gps_lon: probes.addmodal.input.gps.lng === 9999 ? null : probes.addmodal.input.gps.lng,
         gps_lat: probes.addmodal.input.gps.lat === 9999 ? null : probes.addmodal.input.gps.lat,
       }),

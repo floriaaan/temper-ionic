@@ -8,6 +8,7 @@ import {
   IonSkeletonText,
   IonIcon,
   IonActionSheet,
+  IonAlert,
 } from "@ionic/react";
 
 import cx from "classnames";
@@ -83,15 +84,16 @@ const Place: React.FC<ContainerProps> = ({ data }) => {
     loading: false,
     spinner: false,
     actions: false,
+    alert: false,
   });
 
   const apiCall = async () => {
     const resp = await fetch(
       "https://api.openweathermap.org/data/2.5/weather?q=" +
-        place.name +
-        "&appid=" +
-        process.env.REACT_APP_OWEATHER_API_KEY +
-        ""
+      place.name +
+      "&appid=" +
+      process.env.REACT_APP_OWEATHER_API_KEY || null +
+      ""
     );
     const body = await resp.json();
     setApiResponse(body);
@@ -148,13 +150,20 @@ const Place: React.FC<ContainerProps> = ({ data }) => {
             </IonItem>
 
             <IonCardContent className="weather-container">
-              <div
+              {api?.name ? <><div
                 className={cx("weather-card", {
                   "weather-sunny":
-                    api?.weather[0].id === 800 || api?.weather[0].id === 802,
-                  "weather-cloudy": api?.weather[0].id === 803,
+                    api?.weather[0].id === 800 ||
+                    api?.weather[0].id === 801 ||
+                    api?.weather[0].id === 802,
+                  "weather-cloudy":
+                    api?.weather[0].id === 803 ||
+                    api?.weather[0].id === 804,
                   "weather-rainy":
-                    api?.weather[0].id === 500 || api?.weather[0].id === 501,
+                    api?.weather[0].id === 500 ||
+                    api?.weather[0].id === 501 ||
+                    api?.weather[0].id === 520 ||
+                    api?.weather[0].id === 521,
                 })}
               >
                 {api?.main ? (
@@ -163,11 +172,15 @@ const Place: React.FC<ContainerProps> = ({ data }) => {
                       className={cx("weather-icon", {
                         sunny:
                           api?.weather[0].id === 800 ||
+                          api?.weather[0].id === 801 ||
                           api?.weather[0].id === 802,
-                        cloudy: api?.weather[0].id === 803,
+                        cloudy: api?.weather[0].id === 803 ||
+                          api?.weather[0].id === 804,
                         rainy:
                           api?.weather[0].id === 500 ||
-                          api?.weather[0].id === 501,
+                          api?.weather[0].id === 501 ||
+                          api?.weather[0].id === 520 ||
+                          api?.weather[0].id === 521,
                       })}
                     />
                     <h1>
@@ -176,23 +189,38 @@ const Place: React.FC<ContainerProps> = ({ data }) => {
                     <p>{api.main.humidity} %</p>
                   </>
                 ) : (
-                  ""
-                )}
-              </div>
+                    ""
+                  )}
+              </div></> :
+                <>{api?.cod === 401 ? <>
+                  <div className="weather-card weather-rainy">
+                    <h1><span role="img" aria-label="No measure">❌</span>&nbsp;.env</h1>
+                    <p>Wrong API key</p>
+                  </div>
+                </> : <>
+                    <div className="weather-card weather-rainy">
+                      <h1><span role="img" aria-label="No measure">❌</span>&nbsp;{place.name}</h1>
+                      <p>Can't find {place.name} datas.</p>
+                    </div>
+                  </>
+                }</>
+              }
+
             </IonCardContent>
           </>
         ) : (
-          <>
-            <IonSkeletonText
-              animated
-              style={{ heigth: "25vh", width: "30%" }}
-            ></IonSkeletonText>
-          </>
-        )}
+            <>
+              <IonSkeletonText
+                animated
+                style={{ heigth: "25vh", width: "30%" }}
+              ></IonSkeletonText>
+            </>
+          )}
       </Box>
 
       <IonActionSheet
         isOpen={state.actions}
+        header={"Place - " + place.name}
         onDidDismiss={() => setState({ ...state, actions: false })}
         cssClass="my-custom-class"
         buttons={[
@@ -201,7 +229,7 @@ const Place: React.FC<ContainerProps> = ({ data }) => {
             role: "destructive",
             icon: trash,
             handler: () => {
-              handleDelete();
+              setState({...state, alert: true})
             },
           },
           {
@@ -221,6 +249,27 @@ const Place: React.FC<ContainerProps> = ({ data }) => {
           },
         ]}
       ></IonActionSheet>
+
+      <IonAlert
+        isOpen={state.alert}
+        onDidDismiss={() => setState({ ...state, alert: false })}
+        header={'Delete Place ' + place.name}
+        message={'Are you sure to delete ' + place.name}
+        buttons={[
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            handler: () => setState({ ...state, alert: false })
+          },
+          {
+            text: 'Delete',
+            role: 'destructive',
+            handler: () => {
+              handleDelete()
+            }
+          }
+        ]}
+      />
     </>
   );
 };

@@ -4,3 +4,24 @@
   margin-left: auto;
   margin-right: auto;
 }
+
+.dot {
+  height: 7px;
+  width: 7px;
+  border-radius: 50%;
+  position: absolute;
+  margin-left: 5px;
+  top: 18px;
+}
+
+.dot-active {
+  background-color: #2dd36f;
+}
+
+.dot-disabled {
+  background-color: #eb445a;
+}
+
+.dot-idle {
+  background-color: #ffc409;
+}

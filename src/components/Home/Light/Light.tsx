@@ -15,7 +15,7 @@ interface ContainerProps {
         token: string,
         name: string,
         category: string,
-        state: boolean,
+        state: number,
     };
 }
 
@@ -31,7 +31,7 @@ const Light: React.FC<ContainerProps> = ({ data }) => {
     const handleToggle = () => {
         setState({ ...state, spinner: true });
         setTimeout(() => {
-            setLight({ ...light, state: !light.state });
+            light.state === 1 ? setLight({ ...light, state: 2 }) : setLight({ ...light, state: 1 })
 
             setState({ ...state, spinner: false });
         }, 1000)
@@ -46,13 +46,21 @@ const Light: React.FC<ContainerProps> = ({ data }) => {
         //eslint-disable-next-line
     }, [])
 
+    let dotState = <></>;
+    let bulbState;
+
+    if (light.state === 0) { dotState = <span className="dot dot-disabled"> </span>; bulbState = BulbOff };
+    if (light.state === 1) { dotState = <span className="dot dot-active"> </span>; bulbState = BulbOn };
+    if (light.state === 2) { dotState = <span className="dot dot-idle"> </span>; bulbState = BulbOff };
+
     return (
-        <Box maxW="sm" borderWidth="1px" rounded="lg" overflow="hidden" style={{height: '200px'}}>
+        <Box maxW="sm" borderWidth="1px" rounded="lg" overflow="hidden" style={{ height: '200px' }}>
             {!state.loading ? (
                 <>
                     <IonItem>
-                        <Heading as="h6" size="md" style={{fontWeight: 'normal'}}>
-                            {light.name ? light.name : "Light #" + light.token} 
+                        <Heading as="h6" size="md" style={{ fontWeight: 'normal' }}>
+                            {light.name ? light.name : "Light #" + light.token}
+                            {dotState}
                             {state.spinner ? <Spinner size="xs" className="ml-3" /> : ""}
                         </Heading>
 
@@ -64,7 +72,7 @@ const Light: React.FC<ContainerProps> = ({ data }) => {
 
                     <IonCardContent>
 
-                        <img className="bulb" src={light.state ? BulbOn : BulbOff} onClick={() => { handleToggle() }} alt="Light icon"></img>
+                        <img className="bulb" src={bulbState} onClick={() => { handleToggle() }} alt="Light icon"></img>
 
 
                     </IonCardContent>

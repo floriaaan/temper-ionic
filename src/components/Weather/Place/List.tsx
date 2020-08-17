@@ -15,6 +15,7 @@ import {
   IonIcon,
   IonListHeader,
   IonList,
+  IonToast,
 } from "@ionic/react";
 import Place from "./Place";
 import { ToastContainer, toast } from "react-toastify";
@@ -53,11 +54,12 @@ const PlaceList: React.FC<ContainerProps> = ({ token }) => {
       },
     },
     search: "",
+    toast: { show: false, message: "", duration: 3000 }
   });
 
   let auth_json = JSON.parse(
     sessionStorage.getItem("auth") ||
-      `{"user": {"name": "","email": ""},"token": ""}`
+    `{"user": {"name": "","email": ""},"token": ""}`
   );
 
   const reRender = () => {
@@ -78,7 +80,7 @@ const PlaceList: React.FC<ContainerProps> = ({ token }) => {
       "http://" + window.location.hostname + ":8000/api/v1/place/user/" + token
     );
     const body = await response.json();
-    
+
     setDataList(body.response.data || []);
     setPlacesState({ ...places, loading: false });
     reRender();
@@ -147,26 +149,42 @@ const PlaceList: React.FC<ContainerProps> = ({ token }) => {
             },
           });
           fetchData();
-          toast.success("✅ Place is successfully added", {
+          /*toast.success("✅ Place is successfully added", {
             position: "top-right",
-            autoClose: 5000,
+            autoClose: 3000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-          });
+          });*/
+          setPlacesState({...places, toast: {...places.toast, show: true, duration: 3000, message: '✅ Place is successfully added'}})
         } else {
-          toast.error("⛔ Error while adding the place", {
+          /*toast.error("⛔ Error while adding the place", {
             position: "top-right",
-            autoClose: 5000,
+            autoClose: 3000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-          });
+          });*/
+          
+          setPlacesState({...places, toast: {...places.toast, show: true, duration: 3000, message: '⛔ Error while adding the place'}})
         }
+        setPlacesState({
+          ...places,
+          addmodal: {
+            ...places.addmodal,
+            spinner: false,
+            show: false,
+            input: {
+              ...places.addmodal.input,
+              name: "",
+              category: "",
+            },
+          },
+        });
       });
   };
 
@@ -205,10 +223,10 @@ const PlaceList: React.FC<ContainerProps> = ({ token }) => {
             </div>
           </>
         ) : (
-          <>
-            <IonSkeletonText animated style={{ height: "30vh" }} />
-          </>
-        )}
+            <>
+              <IonSkeletonText animated style={{ height: "30vh" }} />
+            </>
+          )}
       </IonContent>
 
       <IonModal isOpen={places.addmodal.show} cssClass="modal-create">
@@ -280,16 +298,16 @@ const PlaceList: React.FC<ContainerProps> = ({ token }) => {
                     attribution="Temper 💞"
                   />
                   {places.addmodal.input.gps.lat !== 9999 &&
-                  places.addmodal.input.gps.lng !== 9999 ? (
-                    <Marker
-                      position={[
-                        places.addmodal.input.gps.lat!,
-                        places.addmodal.input.gps.lng!,
-                      ]}
-                    ></Marker>
-                  ) : (
-                    ""
-                  )}
+                    places.addmodal.input.gps.lng !== 9999 ? (
+                      <Marker
+                        position={[
+                          places.addmodal.input.gps.lat!,
+                          places.addmodal.input.gps.lng!,
+                        ]}
+                      ></Marker>
+                    ) : (
+                      ""
+                    )}
                 </Map>
               </IonCol>
             </IonRow>
@@ -300,8 +318,8 @@ const PlaceList: React.FC<ContainerProps> = ({ token }) => {
               {places.addmodal.spinner ? (
                 <IonSpinner name="crescent" className="ml-3" />
               ) : (
-                ""
-              )}
+                  ""
+                )}
             </IonButton>
             <IonButton
               color="secondary"
@@ -318,6 +336,31 @@ const PlaceList: React.FC<ContainerProps> = ({ token }) => {
           </div>
         </IonContent>
       </IonModal>
+
+      <IonToast
+        isOpen={places.toast.show}
+        duration={places.toast.duration}
+        onDidDismiss={() => setPlacesState({ ...places, toast: { ...places.toast, show: false } })}
+        message={places.toast.message}
+        position="bottom"
+        buttons={[
+          {
+            side: 'start',
+            icon: 'star',
+            text: 'Favorite',
+            handler: () => {
+              console.log('Favorite clicked');
+            }
+          },
+          {
+            text: 'Done',
+            role: 'cancel',
+            handler: () => {
+              console.log('Cancel clicked');
+            }
+          }
+        ]}
+      />
 
       <ToastContainer
         position="top-right"

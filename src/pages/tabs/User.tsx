@@ -117,7 +117,7 @@ const UserTab: React.FC = () => {
     } else {
       toast(`You're ${7 - clickForDevMode} steps away from Dev Mode. 🔨`, {
         position: "bottom-center",
-        autoClose: 2000,
+        autoClose: 500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
