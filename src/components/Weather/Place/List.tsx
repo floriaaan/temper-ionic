@@ -18,7 +18,7 @@ import {
   IonToast,
 } from "@ionic/react";
 import Place from "./Place";
-import { ToastContainer, toast } from "react-toastify";
+//import { ToastContainer, toast } from "react-toastify";
 import { addOutline } from "ionicons/icons";
 import CategoryHeader from "../../Layout/CategoryHeader";
 
@@ -62,18 +62,15 @@ const PlaceList: React.FC<ContainerProps> = ({ token }) => {
     `{"user": {"name": "","email": ""},"token": ""}`
   );
 
-  const reRender = () => {
-    //console.log("### RE-RENDERING ###");
-    const cards = dataList.map((obj, key) => {
+  const createList = (data: any) => {
+    return data.map((obj: any, key: any) => {
       return (
         <li className="list-inline-item list--inline--item" key={key}>
           <Place data={obj} />
         </li>
       );
     });
-
-    setPlacesState({ ...places, content: cards, loading: false });
-  };
+  }
 
   const fetchData = async () => {
     const response = await fetch(
@@ -82,8 +79,7 @@ const PlaceList: React.FC<ContainerProps> = ({ token }) => {
     const body = await response.json();
 
     setDataList(body.response.data || []);
-    setPlacesState({ ...places, loading: false });
-    reRender();
+    setPlacesState({ ...places, content: createList(body.response.data), loading: false });
   };
 
   useEffect(() => {
@@ -92,8 +88,30 @@ const PlaceList: React.FC<ContainerProps> = ({ token }) => {
   }, [places.loading]);
 
   const handleSearch = (value: string) => {
-    setPlacesState({ ...places, search: value });
+    if (value !== '') {
+      let newContent = dataList.filter(data => {
+        /*console.log('data',data);
+        console.log('filters', data.name.toLowerCase(), value.toLowerCase());
+        console.log('boolean', data.name.toLowerCase().startsWith(value.toLowerCase()));
+        console.log('#########################');*/
+        if (data.name.toLowerCase().startsWith(value.toLowerCase())) {
+          return data;
+        }
+      });
+      setPlacesState({
+        ...places,
+        content: createList(newContent),
+        search: value
+      });
+    } else {
+      setPlacesState({
+        ...places,
+        content: createList(dataList),
+        search: value
+      });
+    }
   };
+
   const placePopover = (
     <>
       <IonList>
@@ -149,16 +167,19 @@ const PlaceList: React.FC<ContainerProps> = ({ token }) => {
             },
           });
           fetchData();
+
+          setTimeout(() => {
+            setPlacesState({ ...places, content: createList(dataList), toast: { ...places.toast, show: true, duration: 3000, message: '✅ Place is successfully added' } })
+          }, 1000);
           /*toast.success("✅ Place is successfully added", {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });*/
-          setPlacesState({...places, toast: {...places.toast, show: true, duration: 3000, message: '✅ Place is successfully added'}})
+                      position: "top-right",
+                      autoClose: 3000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                    });*/
         } else {
           /*toast.error("⛔ Error while adding the place", {
             position: "top-right",
@@ -169,8 +190,8 @@ const PlaceList: React.FC<ContainerProps> = ({ token }) => {
             draggable: true,
             progress: undefined,
           });*/
-          
-          setPlacesState({...places, toast: {...places.toast, show: true, duration: 3000, message: '⛔ Error while adding the place'}})
+
+          setPlacesState({ ...places, toast: { ...places.toast, show: true, duration: 3000, message: '⛔ Error while adding the place' } })
         }
         setPlacesState({
           ...places,
@@ -362,17 +383,7 @@ const PlaceList: React.FC<ContainerProps> = ({ token }) => {
         ]}
       />
 
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
+
     </>
   );
 };

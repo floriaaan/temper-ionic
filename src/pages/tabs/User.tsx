@@ -39,9 +39,9 @@ const UserTab: React.FC = () => {
     email: "",
   });
 
-  let auth_dev = sessionStorage.getItem("auth.dev") || "0";
+  let auth_dev = localStorage.getItem("auth.dev") || "0";
   const [darkMode, setDarkMode] = useState(
-    sessionStorage.getItem("darkMode") === "true" || false
+    localStorage.getItem("darkMode") === "true" || false
   );
 
   const [clickForDevMode, setClickForDevMode] = useState(0);
@@ -49,7 +49,7 @@ const UserTab: React.FC = () => {
 
   const handleDarkMode = (checked: boolean) => {
     setDarkMode(checked);
-    sessionStorage.setItem("darkMode", `${checked}`);
+    localStorage.setItem("darkMode", `${checked}`);
     document.body.classList.toggle("dark", checked);
   };
 
@@ -104,7 +104,7 @@ const UserTab: React.FC = () => {
         });
     } else if (clickForDevMode === 7) {
       setDevelopperMode(true);
-      sessionStorage.setItem("auth.dev", "1");
+      localStorage.setItem("auth.dev", "1");
       toast.success(`You're now a developper! Congrats 🤴`, {
         position: "bottom-center",
         autoClose: 2000,
@@ -194,7 +194,9 @@ const UserTab: React.FC = () => {
             </IonItemOptions>
           </IonItemSliding>
 
-          <IonItem button onClick={() => {}}>
+          <IonItem button onClick={() => {
+                  navigateTo("/settings");
+                }}>
             <IonIcon icon={settingsOutline} slot="start"></IonIcon>
             <IonLabel>Settings</IonLabel>
           </IonItem>

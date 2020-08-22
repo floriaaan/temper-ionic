@@ -22,7 +22,7 @@ const Header: React.FC<ContainerProps> = ({ title, version }) => {
 
 
     const history = useHistory();
-    const navigateToUser = () => history.push('/user/');
+    const navigateTo = (url: string) => { if (url !== window.location.pathname) history.push(url) };
 
     if (version === 1) {
         return (
@@ -42,7 +42,7 @@ const Header: React.FC<ContainerProps> = ({ title, version }) => {
                         name={user.name}
                         src=""
                         textAlign="center"
-                        onClick={() => navigateToUser()}
+                        onClick={() => navigateTo('/user')}
                     />
                 </div>
 
@@ -51,7 +51,7 @@ const Header: React.FC<ContainerProps> = ({ title, version }) => {
     } else if (version === 2) {
         return (
             <div className="row mx-1 my-3 align-items-center header--props">
-                <div className="col-8 header--title headerv2-title">
+                <div className="col-8 header--title">
                     {title}
                 </div>
 
@@ -61,7 +61,7 @@ const Header: React.FC<ContainerProps> = ({ title, version }) => {
                             <IonButton fill="clear" onClick={() => console.log("change dispositions to list")}>
                                 <IonIcon icon={listOutline}></IonIcon>
                             </IonButton>
-                            <IonButton fill="clear" onClick={() => console.log("view setttings")}>
+                            <IonButton fill="clear" onClick={() => navigateTo('/settings')}>
                                 <IonIcon icon={settingsOutline}></IonIcon>
                             </IonButton>
                             <Avatar
@@ -70,7 +70,7 @@ const Header: React.FC<ContainerProps> = ({ title, version }) => {
                                 name={user.name}
                                 src=""
                                 textAlign="center"
-                                onClick={() => navigateToUser()}
+                                onClick={() => navigateTo('/user')}
                             />
 
 
@@ -84,15 +84,17 @@ const Header: React.FC<ContainerProps> = ({ title, version }) => {
     } else if (version === 2.1) {
         return (
             <div className="row mx-1 my-3 align-items-center header--props">
-                <div className="col-8 header--title headerv2-title">
+                <div className="col-8 header--title">
                     {title}
                 </div>
 
                 <div className="col-4 d-flex flex-row-reverse">
                     <ul className="navbar-nav">
                         <li className="nav-item">
-                            
-                            <IonButton fill="clear" onClick={() => console.log("view setttings")}>
+
+                            <IonButton fill="clear" onClick={() => {
+                                navigateTo("/settings");
+                            }}>
                                 <IonIcon icon={settingsOutline}></IonIcon>
                             </IonButton>
                             <Avatar
@@ -101,7 +103,7 @@ const Header: React.FC<ContainerProps> = ({ title, version }) => {
                                 name={user.name}
                                 src=""
                                 textAlign="center"
-                                onClick={() => navigateToUser()}
+                                onClick={() => navigateTo('/user')}
                             />
 
 
@@ -123,7 +125,7 @@ const Header: React.FC<ContainerProps> = ({ title, version }) => {
                     {title}
                 </div>
 
-                
+
 
             </div>
         );
@@ -146,7 +148,7 @@ const Header: React.FC<ContainerProps> = ({ title, version }) => {
                     name={user.name}
                     src=""
                     textAlign="center"
-                    onClick={() => navigateToUser()}
+                    onClick={() => navigateTo('/user')}
                 />
             </div>
 

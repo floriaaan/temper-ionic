@@ -68,21 +68,15 @@ const ProbeList: React.FC<ContainerProps> = ({ token }) => {
     `{"user": {"name": "","email": ""},"token": ""}`
   );
 
-  const reRender = () => {
-    //console.log("### RE-RENDERING ###");
-    const cards = dataList.map((obj, key) => {
+  const createList = (data: any)=> {
+    return data.map((obj: any, key: any) => {
       return (
         <li className="list-inline-item list--inline--item" key={key}>
-          <Probe data={obj} token={tokens[key]}
-          />
+          <Probe data={obj} />
         </li>
       );
     });
-
-    setProbesState({ ...probes, content: cards, loading: false })
-
-
-  };
+  }
 
   const fetchData = async () => {
     const response = await fetch(
@@ -98,11 +92,9 @@ const ProbeList: React.FC<ContainerProps> = ({ token }) => {
 
       return bodyProbe.response.data
     })) || [];
-    //console.log('probes', data);
+
     setDataList(data);
-    //console.log(dataList)
-    setProbesState({ ...probes, loading: false });
-    reRender();
+    setProbesState({ ...probes, loading: false, content: createList(data) });
   }
 
 
@@ -113,7 +105,21 @@ const ProbeList: React.FC<ContainerProps> = ({ token }) => {
 
 
   const handleSearch = (value: string) => {
-    setProbesState({ ...probes, search: value });
+    if (value !== '') {
+      let newContent = dataList.filter(data => {
+        /*console.log('data',data);
+        console.log('filters', data.name.toLowerCase(), value.toLowerCase());
+        console.log('boolean', data.name.toLowerCase().startsWith(value.toLowerCase()));
+        console.log('#########################');*/
+        if (data.name.toLowerCase().startsWith(value.toLowerCase())) {
+          return data;
+        }
+      });
+      setProbesState({ ...probes, content: createList(newContent), search: value });
+    } else {
+      
+      setProbesState({ ...probes, content: createList(dataList), search: value });
+    }
   };
   const castPopover = (
     <>

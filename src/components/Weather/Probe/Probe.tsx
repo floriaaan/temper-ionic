@@ -18,7 +18,6 @@ import { Heading, Box, Spinner } from "@chakra-ui/core";
 import { menuOutline } from "ionicons/icons";
 
 interface ContainerProps {
-  token: string;
   data: {
     id: number;
     name: string;
@@ -29,6 +28,7 @@ interface ContainerProps {
       humidity: number;
       date: string;
     } | null;
+    token: string;
     gps: {
       lon: number | null;
       lat: number | null;
@@ -36,7 +36,7 @@ interface ContainerProps {
   };
 }
 
-const Probe: React.FC<ContainerProps> = ({ token, data }) => {
+const Probe: React.FC<ContainerProps> = ({ data }) => {
   const [probe, setProbeData] = useState(data);
   const [state, setState] = useState({
     loading: false,
@@ -49,7 +49,7 @@ const Probe: React.FC<ContainerProps> = ({ token, data }) => {
       "http://" +
       window.location.hostname +
       ":8000/api/v1/probe/" +
-      token +
+      probe.token +
       "/toggle",
       {
         method: "PUT",
@@ -63,7 +63,7 @@ const Probe: React.FC<ContainerProps> = ({ token, data }) => {
   };
 
   const history = useHistory();
-  const navigateTo = () => history.push("/probe/" + token);
+  const navigateTo = () => history.push("/probe/" + probe.token);
 
   return (
     <Box
@@ -77,7 +77,7 @@ const Probe: React.FC<ContainerProps> = ({ token, data }) => {
         <>
           <IonItem>
             <Heading as="h6" size="md" style={{ fontWeight: "normal" }}>
-              {probe.name ? probe.name : "Probe #" + token}
+              {probe.name ? probe.name : "Probe #" + probe.token}
               {probe.state ? (
                 <span className="dot dot-active"> </span>
               ) : (

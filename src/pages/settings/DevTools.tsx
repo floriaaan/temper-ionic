@@ -3,11 +3,8 @@ import {
   IonPage,
   IonContent,
   IonList,
-  IonItemSliding,
   IonItem,
   IonLabel,
-  IonItemOptions,
-  IonItemOption,
   IonToggle,
 } from "@ionic/react";
 import Header from "../../components/Layout/Header";

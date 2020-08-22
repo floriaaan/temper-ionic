@@ -5,6 +5,10 @@ import Home from "../pages/tabs/Home";
 
 import ProbePage from "../pages/Probe";
 
+import DevTools from "../pages/settings/DevTools";
+import About from "../pages/settings/About";
+import Settings from "../pages/settings/Settings";
+
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import Forgot from "../pages/auth/Forgot";
@@ -18,8 +22,6 @@ import {
   personCircleOutline,
   homeOutline,
 } from "ionicons/icons";
-import DevTools from "../pages/settings/DevTools";
-import About from "../pages/settings/About";
 
 export const tabs = [
   {
@@ -62,6 +64,10 @@ export const routes = [
     path: "/about",
     component: About,
   },
+  {
+    path: "/settings",
+    component: Settings
+  }
 ];
 
 export const auth = [
